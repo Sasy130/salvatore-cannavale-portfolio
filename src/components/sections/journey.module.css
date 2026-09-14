@@ -1,0 +1,105 @@
+.journey { padding: 0 var(--page-gutter); position: relative; scroll-margin-top: 24px; }
+.connection { height: 108px; display: flex; flex-direction: column; align-items: center; width: 1px; margin-left: 50%; }
+.connection span { flex: 1; width: 1px; background: linear-gradient(transparent, #a9dce270); }
+.connection i { width: 5px; height: 5px; border-radius: 50%; background: var(--color-accent); }
+.sectionLabel { display: flex; justify-content: space-between; margin-top: 32px; font: 9px var(--font-mono); letter-spacing: 1.5px; color: var(--color-muted); }
+.sectionLabel > span:first-child { color: var(--color-accent); }
+.introduction { display: grid; grid-template-columns: 1fr 1fr; gap: 9%; padding: 58px 0 95px; align-items: center; }
+.introduction h2 { margin: 0; font-weight: 480; font-size: clamp(44px, 5.1vw, 90px); letter-spacing: -.055em; line-height: 1.08; }
+.introduction h2 span { color: var(--color-accent); }
+.lead { font-size: clamp(20px, 2vw, 31px); line-height: 1.4; letter-spacing: -.035em; margin: 0 0 20px; }
+.introText { font-size: 13px; line-height: 1.9; color: var(--color-muted); max-width: 390px; margin: 0; }
+.progression { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 9%; position: relative; align-items: start; }
+.instrument { position: sticky; top: max(32px, calc((100svh - 620px) / 2)); }
+.instrumentHeader, .instrumentFooter { display: flex; align-items: center; justify-content: space-between; font: 9px var(--font-mono); letter-spacing: 1px; color: var(--color-muted); padding: 18px 0; border-top: 1px solid var(--hairline); }
+.instrumentFooter { justify-content: flex-start; gap: 12px; color: var(--color-accent); }
+.instrumentCross { margin-left: auto; font-size: 17px; }
+.instrumentNote { color: var(--color-muted); font-size: 11px; margin: 7px 0; }
+.signal { height: 4px; width: 4px; background: var(--color-accent); }
+.chart svg { display: block; width: 100%; max-height: 58svh; }
+.chart :global(.journey-field) { opacity: 0; transition: opacity 650ms ease; }
+.progression[data-stage="0"] :global([data-field="0"]), .progression[data-stage="1"] :global([data-field="1"]), .progression[data-stage="2"] :global([data-field="2"]), .progression[data-stage="3"] :global([data-field="3"]), .progression[data-stage="4"] :global([data-field="4"]), .progression[data-stage="5"] :global([data-field="5"]) { opacity: 1; }
+.chart :global(.journey-system-route) { opacity: 0; transition: opacity 650ms; }
+.chart :global(.journey-organic-route) { transition: opacity 650ms; }
+.progression[data-stage="3"] :global(.journey-system-route) { opacity: .3; }
+.progression[data-stage="3"] :global(.journey-organic-route) { opacity: .7; }
+.progression[data-stage="4"] :global(.journey-system-route) { opacity: .7; }
+.progression[data-stage="4"] :global(.journey-organic-route) { opacity: .3; }
+.progression[data-stage="5"] :global(.journey-system-route) { opacity: 1; }
+.progression[data-stage="5"] :global(.journey-organic-route) { opacity: 0; }
+.waypoints { list-style: none; padding: 0; margin: 0; }
+.waypoint { position: relative; padding: 0 0 96px 58px; min-height: 270px; }
+.waypoint:before, .waypoint:after { content: ""; position: absolute; top: 25px; bottom: -3px; left: 14px; width: 1px; background: #a9dce222; }
+.waypoint:after { background: #a9dce299; transform: scaleY(0); transform-origin: top; transition: transform 500ms ease; }
+.waypoint[data-reached="true"]:after { transform: scaleY(1); }
+.waypoint:last-child:before, .waypoint:last-child:after { bottom: 35px; }
+.marker { width: 29px; height: 29px; position: absolute; top: 0; left: 0; display: grid; place-items: center; border: 1px solid #64848e77; border-radius: 50%; font: 9px var(--font-mono); color: var(--color-muted); background: var(--color-depth); z-index: 1; transition: border-color 350ms, box-shadow 350ms; }
+.waypoint[data-active="true"] .marker { border-color: var(--color-accent); color: var(--color-ink); box-shadow: 0 0 0 6px #a9dce20a; }
+.waypoint:last-child .marker { border-radius: 2px; }
+.waypoint h3 { font: 11px var(--font-mono); letter-spacing: 1.6px; text-transform: uppercase; margin: 7px 0 22px; color: var(--color-accent); }
+.copy { font-size: clamp(17px, 1.5vw, 23px); line-height: 1.65; letter-spacing: -.02em; color: #b4c0c4; margin: 0; max-width: 445px; transition: color 400ms; }
+.waypoint[data-active="true"] .copy { color: var(--color-ink); }
+.marine { margin-top: 30px; padding-top: 21px; border-top: 1px solid var(--hairline); }
+.marineLabel { font: 8px var(--font-mono); letter-spacing: 1px; color: var(--color-muted); margin: 0 0 12px; }
+.role { font-size: 12px; color: #c0cbcf; margin: 0; }
+.marine ul { list-style: none; padding: 0; margin: 20px 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px 20px; font-size: 10px; color: var(--color-muted); }
+.marine li:before { content: "+"; margin-right: 8px; color: #77949d; }
+.turning { padding-top: 28px; padding-bottom: 100px; }
+.turning .marker { top: 26px; }
+.turning .waypointContent { border-top: 1px solid #a9dce24d; padding-top: 22px; }
+.turning h3 { margin-top: 0; }
+.turning .copy { font-size: 14px; max-width: 380px; line-height: 1.8; }
+.turning blockquote { font-size: clamp(29px, 3vw, 48px); line-height: 1.25; letter-spacing: -.045em; color: var(--color-accent); margin: 30px 0; }
+.friction { list-style: none; padding: 0; margin: 0; color: var(--color-muted); font-size: 12px; line-height: 2.1; }
+.realization { font-size: 12px; line-height: 1.8; color: #d0dadd; margin: 17px 0 0; }
+.systemFlow { display: flex; align-items: center; gap: 14px; margin-top: 29px; font: 8px var(--font-mono); letter-spacing: .7px; color: var(--color-accent); }
+.systemFlow span { padding: 9px 0; border-top: 1px solid #a9dce24d; border-bottom: 1px solid #a9dce24d; }
+.systemFlow svg { width: 13px; }
+.ending { position: relative; border-top: 1px solid var(--hairline); padding: 90px 0 0; }
+.endingLabel { font: 9px var(--font-mono); letter-spacing: 1.5px; color: var(--color-muted); }
+.ending h2 { margin: 32px 0 26px; font-weight: 480; font-size: clamp(35px, 4.6vw, 80px); letter-spacing: -.045em; line-height: 1.17; }
+.ending h2 span { color: var(--color-accent); }
+.ending > p { font-size: 13px; color: var(--color-muted); line-height: 1.9; }
+.mobileBreak { display: none; }
+.nextChapter { display: flex; align-items: center; gap: 15px; margin-top: 75px; padding: 30px 0 45px; font: 9px var(--font-mono); letter-spacing: 1px; color: var(--color-accent); scroll-margin-top: 32px; }
+.nextNode { height: 7px; width: 7px; border: 1px solid var(--color-accent); }
+.nextRule { flex: 1; height: 1px; background: var(--hairline); margin: 0 15px; }
+.nextChapter > span:nth-last-child(2) { color: var(--color-muted); font-size: 8px; }
+@media (max-width: 1000px) { .progression { column-gap: 5%; } .waypoint { padding-left: 46px; } .instrumentHeader { font-size: 7px; letter-spacing: .4px; } .marine ul { grid-template-columns: 1fr; } .introduction { gap: 6%; } }
+@media (max-width: 760px) {
+  .connection { height: 68px; margin-left: 14px; }
+  .sectionLabel { font-size: 8px; letter-spacing: .7px; margin-top: 26px; }
+  .sectionLabel > span:last-child { font-size: 6px; }
+  .introduction { grid-template-columns: 1fr; gap: 28px; padding: 36px 0 40px; }
+  .introduction h2 { font-size: clamp(43px, 10vw, 67px); }
+  .lead { font-size: 21px; margin-bottom: 15px; }
+  .introText { font-size: 12px; }
+  .progression { display: block; }
+  .instrument { top: 0; z-index: 3; display: grid; grid-template-columns: 96px 1fr; grid-template-rows: 1fr 1fr; height: 100px; background: var(--color-depth); border-block: 1px solid var(--hairline); margin-bottom: 40px; }
+  .chart { grid-column: 1; grid-row: 1 / 3; width: 96px; }
+  .chart svg { height: 96px; }
+  .instrumentHeader { grid-column: 2; grid-row: 1; padding: 20px 0 5px 12px; border: 0; font-size: 6px; letter-spacing: .4px; }
+  .instrumentFooter { grid-column: 2; grid-row: 2; padding: 5px 0 20px 12px; border: 0; gap: 7px; font-size: 7px; letter-spacing: .4px; }
+  .instrumentNote, .instrumentCross { display: none; }
+  .waypoint { padding: 0 0 64px 46px; min-height: 240px; scroll-margin-top: 125px; }
+  .waypoint h3 { font-size: 10px; letter-spacing: 1.2px; }
+  .copy { font-size: 18px; line-height: 1.7; }
+  .marine ul { grid-template-columns: 1fr 1fr; font-size: 9px; gap: 14px 10px; line-height: 1.6; }
+  .marine li:before { margin-right: 4px; }
+  .role { font-size: 10px; }
+  .turning { padding-top: 20px; }
+  .turning .marker { top: 20px; }
+  .turning blockquote { font-size: 30px; }
+  .turning .copy { font-size: 13px; }
+  .friction, .realization { font-size: 11px; }
+  .systemFlow { font-size: 6px; gap: 9px; }
+  .ending { padding-top: 55px; }
+  .ending h2 { font-size: clamp(28px, 7vw, 45px); margin-top: 26px; }
+  .endingLabel { font-size: 8px; }
+  .mobileBreak { display: block; }
+  .nextChapter { margin-top: 40px; gap: 10px; font-size: 8px; }
+  .nextRule { margin: 0 5px; }
+  .nextChapter > span:nth-last-child(2) { font-size: 7px; }
+}
+@media (prefers-reduced-motion: reduce) { .journey *, .journey *:before, .journey *:after { transition: none !important; } }
+

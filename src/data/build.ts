@@ -1,0 +1,20 @@
+export const developmentStages = [
+  { name: "Problem", label: "DEFINE / THE NEED", text: "A business needs to create quotations using products already stored in inventory.", decision: "Start with the business relationship, not an isolated document.", output: "A quotation connected to existing business data." },
+  { name: "Understand", label: "REQUIREMENTS / BEFORE CODE", text: "Define what the quotation needs: customer, products, quantities, prices, discounts and totals.", decision: "Clarify pricing rules and the information the user needs.", output: "Focused requirements and expected behaviours." },
+  { name: "Design", label: "STRUCTURE / CONNECTIONS", text: "Plan how quotation data connects to customer and inventory data.", decision: "Decide where data belongs and how relationships stay consistent.", output: "Customer → quotation → quotation items → inventory." },
+  { name: "Codex", label: "INTENT / INTO IMPLEMENTATION", text: "Translate the requirements and architecture into focused implementation tasks with Codex.", decision: "Provide context, evaluate proposed changes and review their fit with the application.", output: "Small, reviewable changes guided by the requirements." },
+  { name: "Implement", label: "MODULES / WORKING TOGETHER", text: "Build the interface, application logic and database interactions.", decision: "Review how the pieces connect, not just whether the code runs.", output: "A connected interface, calculation flow and persistence layer." },
+  { name: "Test", label: "EXPECTED / ACTUAL", text: "Check calculations, data persistence and expected user flows.", decision: "Verify quantities, discounts and totals. Save and reopen a quotation to check its data.", output: "Evidence that the feature behaves as intended." },
+  { name: "Debug", label: "OBSERVE / TRACE / CORRECT", text: "Identify unexpected behaviour and refine the implementation.", decision: "Reproduce the issue, trace its cause and check the correction with Codex assistance where useful.", output: "A correction that addresses the cause, followed by another test." },
+  { name: "Iterate", label: "REVIEW / REFINE", text: "Improve usability and edge cases based on testing.", decision: "Revisit unclear interactions, missing data and invalid quantities before considering the feature ready.", output: "A more usable feature with clearer feedback." },
+  { name: "Ship", label: "VALIDATE / WORKING FEATURE", text: "Turn the requirement into a working feature inside the application.", decision: "Validate the complete flow against the original requirements before delivery.", output: "The target: quotations connected to customers, products and business logic." },
+];
+export const caseStudySteps = [
+  { title: "The challenge", text: "Build a quotation system connected to inventory. A quotation needs to interact with products, customer information, pricing and business logic." },
+  { title: "Requirements", text: "Identify the customer, choose inventory products, enter quantities and prices, apply discounts and calculate totals. Define expected behaviour before implementation." },
+  { title: "Architecture", text: "Connect customers to quotations and quotations to line items. Reference inventory products while keeping quotation-specific quantities and prices in quotation items." },
+  { title: "Codex-assisted implementation", text: "Break the architecture into focused tasks: product selection, calculation logic, persistence and interface feedback. Use Codex to explore and implement changes; review the decisions and their integration." },
+  { title: "Testing", text: "Check totals with and without discounts, missing customer data and invalid quantities. Save and reopen the quotation. Reproduce failures, correct them and repeat the flow." },
+  { title: "Result", text: "The feature target is a quotation connected to the business system, rather than a standalone document. Readiness depends on validated calculations, persisted data and a usable end-to-end flow." },
+];
+export const buildTechnologies = [["RUNTIME", "ELECTRON"], ["LOGIC", "JAVASCRIPT / NODE.JS"], ["DATA", "SQLITE"], ["INTERFACE", "HTML / CSS"], ["AI DEV", "CODEX"]];
