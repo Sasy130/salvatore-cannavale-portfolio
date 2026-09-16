@@ -35,6 +35,6 @@ export const businessProject = {
   ],
 };
 export const futureProjects = [
-  { number: "02", name: "AI Business Assistant", category: "AI application", status: "In development", description: "An AI-powered application designed to explore how small businesses can interact with operational information using natural language and automate repetitive tasks.", techLabel: "PLANNED TECHNOLOGY", technologies: ["Next.js", "TypeScript", "Node.js", "LLM API"] },
+  { number: "02", name: "OPERAI", category: "AI Operations Assistant", status: "Working MVP · Demo mode", description: "A working application that turns sample operational requests into structured details, editable responses and downloadable tasks. A real API and processor abstraction prepare it for future LLM integration. No live AI is connected.", techLabel: "BUILT WITH", technologies: ["Next.js", "TypeScript", "Tailwind CSS", "REST API", "Codex"] },
   { number: "03", name: "AI Workflow Automation", category: "Automation", status: "In development / exploration", description: "An exploration of intelligent workflows connecting APIs, webhooks and AI to process incoming business requests.", techLabel: "TECHNOLOGY BEING EXPLORED", technologies: ["n8n", "REST APIs", "Webhooks", "LLM"] },
 ];

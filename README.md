@@ -1,5 +1,9 @@
 # Salvatore Cannavale — Portfolio
 
+## OPERAI demo
+
+OPERAI is available at `/operai`, linked from project 02. It has a separate root layout and styles, with code in `src/features/operai` and an API at `/api/operai/requests`. Existing portfolio URLs are unchanged. All initial data is fictional, extraction matches documented examples, and changes are session-only. No live LLM, database or external task integration is enabled.
+
 An English-language Next.js portfolio connecting marine operations, problem solving, software and AI-assisted development. Includes Hero, Journey, Build/Codex, Projects, Capabilities, Contact and footer. The business-management case study remains an outline. No AI assistant or additional project pages are included.
 
 ## Run and validate
