@@ -129,7 +129,7 @@ section[id]{scroll-margin-top:0}
 .project-meta p{font-size:14px;color:var(--muted);line-height:1.6}
 .project-tags{display:flex;flex-wrap:wrap;gap:6px;align-self:center}
 .project-tags span{font:8px/1.4 var(--mono);letter-spacing:.02em;padding:7px 9px;border:1px solid #4a4944;border-radius:30px;white-space:nowrap}
-.project-type{font:8px/1.5 var(--mono);letter-spacing:.04em;justify-self:end;padding-top:4px;color:var(--muted)}
+.project-type{font:10px/1.5 var(--mono);letter-spacing:.04em;justify-self:end;min-height:44px;padding:0;border:0;background:transparent;color:var(--muted);cursor:pointer}
 .project-note{display:grid;grid-template-columns:1.1fr 1fr .6fr;gap:30px;margin-top:34px;align-items:start}
 .project-note>span{font:8px/1.7 var(--mono);letter-spacing:.04em}
 .project-note p{max-width:330px;font-size:14px;line-height:1.8;color:var(--muted)}
@@ -266,7 +266,7 @@ to{opacity:1;transform:translateY(0)}
 .project-enter{bottom:28px;gap:14px;font-size:8px}
 .project-enter i{width:44px;height:44px}
 .project-meta{grid-template-columns:1.1fr 1fr}
-.project-type{display:none}
+.project-type{display:inline-flex;align-items:center;grid-column:1/-1;justify-self:start}
 .project-note{grid-template-columns:1.1fr 1fr}
 .project-note a{grid-column:2}
 .contact-main{gap:20px}

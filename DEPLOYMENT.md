@@ -32,4 +32,4 @@ Il deployment Vercel corrispondente è https://vercel.com/oneman-0b39/salvatore-
 ## Contatti e demo
 
 Il modulo della home prepara una bozza email per `sasycannavale1999@gmail.com`; non invia né salva richieste sul server.
-Velmora è presentato attraverso il caso studio e screenshot locali. La demo interattiva è disponibile su richiesta via email, perché il prototipo Sites originale ha accesso privato.
+Velmora è esplorabile direttamente da `/velmora/index.html`, una copia statica pubblica in `public/velmora/`. La scheda progetto apre tour 3D e configuratore in una nuova scheda; il pulsante separato “Il caso studio” apre i dettagli. Il Site originale resta gestito separatamente. La demo non richiede login né invia richieste: preferenze nel browser e riepilogo scaricabile.
