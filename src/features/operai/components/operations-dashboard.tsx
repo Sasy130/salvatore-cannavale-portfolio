@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef, useState } from "react";
-import Link from "next/link";
 import { DEMO_EXAMPLES, DEMO_REQUESTS } from "@/features/operai/data/demo";
 import { MAX_INPUT_LENGTH } from "@/features/operai/lib/validation";
 import { generateResponse, generateTask } from "@/features/operai/lib/workflows";
@@ -651,7 +650,7 @@ export function OperationsDashboard() {
             <span>
               OPERAI <span>/</span> AI Operations Assistant
             </span>
-          <Link href="/#projects">Back to portfolio ↗</Link>
+          <a href="/#work">Back to portfolio ↗</a>
           </footer>
         </main>
       </div>

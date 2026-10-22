@@ -1,4 +1,8 @@
-# Salvatore Cannavale — Portfolio
+# ONE MAN — Salvatore Cannavale
+
+Portfolio in produzione su https://www.salvatorecannavale.it/, nel progetto Vercel `oneman-0b39/salvatore-cannavale-portfolio` collegato al branch `main` di questo repository.
+
+La nuova home statica è in `public/one-man/` e viene servita alla root tramite `next.config.ts`. Le pagine Next.js e la demo OPERAI restano nello stesso progetto. Per aggiornamenti, controlli e ripristino seguire [DEPLOYMENT.md](DEPLOYMENT.md).
 
 ## OPERAI demo
 

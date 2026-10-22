@@ -7,3 +7,8 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+
+## Pubblicazione di produzione
+
+Destinazione del progetto: `https://www.salvatorecannavale.it/`, progetto Vercel `oneman-0b39/salvatore-cannavale-portfolio`, repository `Sasy130/salvatore-cannavale-portfolio`, branch `main`.
+Leggere `DEPLOYMENT.md` prima degli aggiornamenti. La home ONE MAN si modifica in `public/one-man/`; preservare le route OPERAI e il case study esistenti. Pubblicare gli aggiornamenti autorizzati attraverso questo collegamento GitHub → Vercel e verificarli sul dominio reale.
