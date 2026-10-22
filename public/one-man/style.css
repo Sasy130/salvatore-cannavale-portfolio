@@ -484,3 +484,11 @@ html{scroll-padding-top:84px}
 
 /* Selected project: VANTA */
 .project + .project{margin-top:70px}.project-vanta .project-visual{background:#151b10}.project-vanta .project-visual img{object-position:50% 50%}.project-vanta .project-visual-shade{background:linear-gradient(180deg,rgba(0,0,0,.35),transparent 30%,rgba(0,0,0,.72))}@media(max-width:700px){.project + .project{margin-top:45px}.project-vanta .project-visual img{object-position:58% 50%}}
+
+/* LUNÉA keeps its own, quiet editorial tone within the selected work. */
+.project-lunea .project-visual{background:#e8ded1}
+.project-lunea .project-visual img{object-position:60% 50%}
+.project-lunea .project-visual-shade{background:linear-gradient(180deg,rgba(26,17,13,.36),transparent 30%,rgba(26,17,13,.62))}
+.project-lunea .project-big-name{font-family:Georgia,'Times New Roman',serif;font-weight:400;letter-spacing:-.055em;line-height:.9}
+.project-lunea .project-enter i{border-color:rgba(237,233,223,.8)}
+@media(max-width:760px){.project-lunea .project-visual img{object-position:66% 50%}.project-lunea .project-big-name{font-size:clamp(62px,16.5vw,108px)}}

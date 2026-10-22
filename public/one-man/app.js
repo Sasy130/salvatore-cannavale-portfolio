@@ -267,6 +267,7 @@ function startPortfolio() {
   };
   document.querySelector('#open-case')?.addEventListener('click', event => openDialog('case-dialog', event.currentTarget));
   document.querySelector('#open-vanta-case')?.addEventListener('click', event => openDialog('vanta-case-dialog', event.currentTarget));
+  document.querySelector('#open-lunea-case')?.addEventListener('click', event => openDialog('lunea-case-dialog', event.currentTarget));
   for (const button of document.querySelectorAll('[data-open-brief]')) {
     button.addEventListener('click', event => openDialog('brief-dialog', event.currentTarget));
   }
