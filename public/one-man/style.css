@@ -481,3 +481,6 @@ html{scroll-padding-top:84px}
 .cursor-label{display:none!important}
 }
 
+
+/* Selected project: VANTA */
+.project + .project{margin-top:70px}.project-vanta .project-visual{background:#151b10}.project-vanta .project-visual img{object-position:50% 50%}.project-vanta .project-visual-shade{background:linear-gradient(180deg,rgba(0,0,0,.35),transparent 30%,rgba(0,0,0,.72))}@media(max-width:700px){.project + .project{margin-top:45px}.project-vanta .project-visual img{object-position:58% 50%}}
