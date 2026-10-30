@@ -23,4 +23,25 @@ Aggiornamento del 30 ottobre 2026 su `www.salvatorecannavale.it`, repository `Sa
 ## Pubblicazione
 
 Base verificata: `3c90090e94a0872884515266d61c65a916f68cac`.
-Seguire il flusso GitHub → anteprima Vercel → main → dominio di produzione, come da `DEPLOYMENT.md`. Esito finale della pubblicazione da registrare dopo la conferma sul dominio reale.
+Pubblicazione completata attraverso GitHub → anteprima Vercel → main → dominio reale, come da `DEPLOYMENT.md`. Dettagli e verifica finale riportati sotto.
+
+## Anteprima verificata
+
+Commit preparato: `679f530f106b2ce8aabacf2364c94aa127fffad7`, branch `codex/portfolio-19-projects`. Build/deployment Vercel Preview: successo, deployment `7432188815`. La URL di anteprima richiede login Vercel: il contenuto non è stato dichiarato verificato anonimamente. I controlli visivi e funzionali sono stati eseguiti localmente; la verifica finale viene svolta sul dominio reale dopo la pubblicazione autorizzata.
+
+## Pubblicazione di produzione
+
+- Commit `679f530f106b2ce8aabacf2364c94aa127fffad7` promosso su `main` con verifica del riferimento precedente, senza forzare la cronologia.
+- Deployment Vercel Production `7432224547`: successo. URL tecnico: https://salvatore-cannavale-portfolio-ck8mt4l6b-oneman-0b39.vercel.app.
+- Dominio reale: https://www.salvatorecannavale.it/#work. HTML di produzione verificato: tre progetti originali presenti e 16 nuove schede.
+- Moduli/anteprime pubblicati verificati con hash Git: nessuna differenza rispetto ai file locali testati.
+- La verifica automatica sul dominio reale conferma filtri, apertura dettagli, Escape e ritorno focus, immagini, quattro larghezze e zero violazioni axe sulla raccolta. Le route delle tre demo originali e delle pagine legacy rispondono 200.
+- La GET dell'API OPERAI risponde 405 sia in locale sia sul dominio reale. Non è stata eseguita alcuna POST e il codice di tale API non è stato modificato.
+- Il risultato di produzione è aggiunto a questo registro locale dopo la pubblicazione; nessun file applicativo è stato cambiato dopo il deploy.
+
+## Aggiornamento richiesto: raccolta e dominio
+
+- Rimossi dalla raccolta NØ/STATIC, MORSO, AEVUM, FORGIA e OMBRA; mantenuti i tre progetti originali e 11 aggiunti.
+- Copie statiche locali di NERÈA, Sulla Via, FUORIGIOCO e ORBITA sotto `/demos/`, collegate dalla raccolta. Gli altri sette progetti restano temporaneamente su Sites: non sono stati presentati come trasferiti.
+- Le demo Sites originali rimangono separate e non sono state eliminate.
+- Restano da trasferire ÉTERNA, MARÉ, BLACK LABEL, APEX KARTING, Rent Car Station, A&J Rent Car e NOIR: richiedono adattamenti di build, percorsi o servizi; completare il trasferimento e verificare ogni pagina prima di sostituire i link.

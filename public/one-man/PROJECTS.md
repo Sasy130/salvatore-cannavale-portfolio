@@ -7,3 +7,7 @@ Immagini: catture dei progetti restituite dal servizio Sites; per ÉTERNA usata 
 Il proprietario ha autorizzato esplicitamente la pubblicazione delle 16 demo Sites collegate. La pubblicazione delle schede non modifica i tre progetti originari né le loro copie sul dominio.
 
 Dati modificabili in `projects-data.js`; le schede HTML sono presenti anche senza JavaScript.
+
+## Aggiornamento raccolta
+
+Rimossi dalla raccolta NØ/STATIC, MORSO, AEVUM, FORGIA e OMBRA. Rimangono 11 progetti aggiunti oltre ai tre originali. NERÈA, Sulla Via, FUORIGIOCO e ORBITA sono copie statiche locali in `public/demos/`; le altre sette demo continuano temporaneamente a usare gli indirizzi Sites originali. Le rispettive fonti e licenze degli asset sono documentate nei repository sorgente dei progetti.

@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#11120f">
+  <meta name="description" content="ORBITA Cinema. Storie da vivere sul grande schermo. Esplora i film, scopri le rassegne e scegli il tuo posto in un altro mondo. Un progetto di cinema indipendente.">
+  <meta property="og:title" content="ORBITA Cinema — Ci vediamo in un altro mondo.">
+  <meta property="og:description" content="Il grande cinema, le rassegne e tutto quello che succede quando si spengono le luci.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.salvatorecannavale.it/demos/orbita">
+  <meta property="og:image" content="https://www.salvatorecannavale.it/demos/orbita/assets/dune-cinema.jpg">
+  <title>ORBITA Cinema — Ci vediamo in un altro mondo.</title>
+  <link rel="icon" type="image/svg+xml" href="/demos/orbita/assets/favicon.svg">
+  <link rel="preload" as="image" href="/demos/orbita/assets/dune-cinema.jpg">
+  <link rel="stylesheet" href="/demos/orbita/style.css">
+  <link rel="stylesheet" href="/demos/orbita/cinema.css">
+  <script src="/demos/orbita/app.js" defer></script>
+  <script src="/demos/orbita/cinema.js" defer></script>
+</head>
+<body>
+  <svg class="svg-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 19 19 5M5 5h14v14"/></symbol>
+    <symbol id="i-right" viewBox="0 0 24 24"><path d="M4 12h15m-6-6 6 6-6 6"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></symbol>
+    <symbol id="i-ticket" viewBox="0 0 24 24"><path d="M3 7h18v4a2 2 0 0 0 0 4v4H3v-4a2 2 0 0 0 0-4V7Zm12 0v3m0 3v2m0 2v2"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m5 5 14 14M19 5 5 19"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="m8 4 12 8-12 8V4Z"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+    <symbol id="i-orbit" viewBox="0 0 64 64"><circle cx="32" cy="32" r="22"/><ellipse cx="32" cy="32" rx="30" ry="11" transform="rotate(-35 32 32)"/><path d="M32 10c-14 14-14 30 0 44M32 10c14 14 14 30 0 44"/></symbol>
+    <symbol id="i-star" viewBox="0 0 64 64"><path d="M32 6v52M6 32h52M13.6 13.6l36.8 36.8M13.6 50.4l36.8-36.8" stroke-width="6"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  </svg>
+  <a class="skip-link" href="#programmazione">Vai alla programmazione</a>
+  <div class="utility-bar">
+    <span><i class="status-dot"></i> CINEMA INDIPENDENTE · MILANO</span>
+    <span class="utility-message">LE LUCI SI SPENGONO. IL RESTO SI ACCENDE.</span>
+    <button data-info="tariffe">OGGI SI VA AL CINEMA <span aria-hidden="true">↗</span></button>
+  </div>
+  <header class="site-header"><div class="reading-progress" aria-hidden="true"></div>
+    <a class="brand" href="#" aria-label="ORBITA Cinema, home">
+      <svg class="brand-icon"><use href="#i-orbit"/></svg>
+      <span class="brand-word">ORBITA<span class="brand-sub">C I N E M A</span></span>
+    </a>
+    <nav class="desktop-nav" aria-label="Navigazione principale">
+      <a href="#programmazione" class="nav-active">Programmazione</a>
+      <a href="#rassegne">Rassegne & eventi</a>
+      <a href="#esperienza">Il cinema</a>
+      <a href="#club">Orbita Club <span class="tiny-star"><svg class="star-glyph" aria-hidden="true"><use href="#i-star"/></svg></span></a>
+    </nav>
+    <div class="header-actions">
+      <button class="icon-button search-trigger" aria-label="Cerca un film"><svg><use href="#i-search"/></svg></button>
+      <a class="button button-orange header-buy" href="#biglietti">Acquista biglietti <svg><use href="#i-arrow"/></svg></a>
+      <button class="button button-dark ticket-trigger" aria-label="I tuoi biglietti"><svg><use href="#i-ticket"/></svg><span>I tuoi biglietti</span><span class="ticket-count" hidden>0</span></button>
+      <button class="menu-toggle icon-button" aria-label="Apri menu" aria-expanded="false" aria-controls="mobile-nav"><span></span><span></span></button>
+    </div>
+  </header>
+  <nav id="mobile-nav" class="mobile-nav" aria-label="Menu mobile" hidden>
+    <a href="#programmazione">Programmazione <span>01</span></a><a href="#rassegne">Rassegne & eventi <span>02</span></a><a href="#esperienza">Il cinema <span>03</span></a><a href="#club">Orbita Club <span>04</span></a>
+  </nav>
+  <main>
+    <section class="hero-section cinema-stage" data-world="dune" aria-label="ORBITA Cinema: film in evidenza e biglietti">
+      <div class="hero">
+        <div class="cinema-screen-image"><img class="hero-image" src="/demos/orbita/assets/dune-cinema.jpg" width="2400" height="1350" alt="Paul e Chani tra le dune di Arrakis" fetchpriority="high"></div>
+        <div class="hero-shade"></div><div class="cinema-grain" aria-hidden="true"></div>
+        <canvas class="cinema-dust" aria-hidden="true"></canvas>
+        <div class="cinema-aperture aperture-top" aria-hidden="true"></div><div class="cinema-aperture aperture-bottom" aria-hidden="true"></div>
+        <div class="hero-orbital" aria-hidden="true"><svg viewBox="0 0 600 600"><circle class="orbit-outer" cx="300" cy="300" r="275"/><circle class="orbit-inner" cx="300" cy="300" r="260"/><path d="M300 12v26m0 524v26M12 300h26m524 0h26"/><circle class="orbital-point" cx="510" cy="122" r="4"/></svg><span>UN ALTRO MONDO. LO STESSO SCHERMO.</span></div>
+        <div class="hero-topline"><span><i class="status-dot"></i> ORBITA CINEMA · MILANO</span><span>3 SALE. INFINITI MONDI. <span aria-hidden="true">↗</span></span></div>
+        <div class="hero-content">
+          <span class="eyebrow light hero-kicker"><span class="live-line"></span> ORA SUL GRANDE SCHERMO <span class="hero-format">4K LASER</span></span>
+          <div class="hero-title-wrap" aria-live="polite" aria-atomic="true"><h1 id="hero-film-title">DUNE</h1><span id="hero-film-subtitle">PARTE DUE</span></div>
+          <p class="hero-film-tagline" id="hero-film-tagline">Il deserto chiama.<br><span>Rispondi dal grande schermo.</span></p>
+          <p class="hero-film-meta" id="hero-film-meta">DENIS VILLENEUVE <span>·</span> FANTASCIENZA <span>·</span> 166 MIN</p>
+          <div class="hero-actions"><button class="button button-orange hero-buy" id="hero-buy">Acquista biglietti <svg><use href="#i-ticket"/></svg></button><button class="hero-trailer" data-trailer="dune"><span class="trailer-play"><svg><use href="#i-play"/></svg></span> Guarda il trailer</button></div>
+          <p class="hero-price">Intero 10,50 € <span>·</span> Under 26 a 7 € <button class="feature-film" data-film="dune">Scopri il film <span aria-hidden="true">↗</span></button></p>
+        </div>
+        <div class="hero-reel" role="group" aria-label="Film in evidenza"><span class="reel-label">SCEGLI IL TUO UNIVERSO</span><div class="reel-films"><button class="reel-film active" data-hero-index="0" aria-pressed="true"><span class="reel-number">01</span><img src="/demos/orbita/assets/dune.jpg" alt="" width="45" height="60"><span>Dune<span>PARTE DUE</span></span><i></i></button><button class="reel-film" data-hero-index="1" aria-pressed="false"><span class="reel-number">02</span><img src="/demos/orbita/assets/interstellar.jpg" alt="" width="45" height="60"><span>Interstellar<span>ORBITA REWIND</span></span><i></i></button><button class="reel-film" data-hero-index="2" aria-pressed="false"><span class="reel-number">03</span><img src="/demos/orbita/assets/budapest.jpg" alt="" width="45" height="60"><span>Grand Budapest<span>MONDI D’AUTORE</span></span><i></i></button></div><div class="hero-pagination"><span class="feature-index">01 / 03</span><button data-hero-step="-1" aria-label="Film in evidenza precedente"><svg class="hero-prev"><use href="#i-right"/></svg></button><button data-hero-step="1" aria-label="Film in evidenza successivo"><svg><use href="#i-right"/></svg></button></div></div>
+        <form class="quick-booking" id="biglietti" aria-label="Biglietteria rapida"><div class="quick-topline"><span><svg><use href="#i-ticket"/></svg> IL TUO PROSSIMO BIGLIETTO</span><span>DEMO · NESSUN ADDEBITO</span></div><div class="quick-fields"><label class="quick-field"><span>01 <b>IL FILM</b></span><span class="quick-select"><select id="quick-film" aria-label="Scegli il film per il biglietto"><option value="dune">Dune: Parte due</option></select><svg><use href="#i-chevron"/></svg></span></label><label class="quick-field"><span>02 <b>IL GIORNO</b></span><span class="quick-select"><select id="quick-day" aria-label="Scegli il giorno del biglietto"></select><svg><use href="#i-chevron"/></svg></span></label><label class="quick-field"><span>03 <b>L'ORARIO</b></span><span class="quick-select"><select id="quick-time" aria-label="Scegli l'orario del biglietto"></select><svg><use href="#i-chevron"/></svg></span></label><button class="button button-orange quick-buy" type="submit"><span>Scegli i posti<small id="quick-price">Intero 10,50 € · ridotti da 7 €</small></span><svg><use href="#i-arrow"/></svg></button></div><p id="quick-status" class="sr-only" role="status" aria-live="polite"></p></form>
+        <span class="hero-edge-caption" aria-hidden="true">ORBITA / NON TUTTO ENTRA IN UN PICCOLO SCHERMO.</span>
+      </div>
+    </section>
+
+    <div class="cinema-manifesto"><span><i class="status-dot"></i> LE LUCI SI SPENGONO. TU TI ACCENDI.</span><p>Il film giusto. <i>Il tuo posto.</i> Una serata diversa.</p><a href="#programmazione">TUTTI I FILM <svg><use href="#i-right"/></svg></a></div>
+
+    <section id="programmazione" class="program-section section-pad">
+      <div class="section-heading">
+        <div><span class="eyebrow"><span class="section-number">01 /</span> ADESSO AL CINEMA</span><h2>Stasera, <span class="serif-word">cinema.</span></h2></div>
+        <div class="section-intro"><p>Scegli il film. Clicca un orario.<br>Il tuo posto ti aspetta.</p><span class="program-week" id="program-week">IL GRANDE SCHERMO, OGNI GIORNO <span aria-hidden="true">↙</span></span></div>
+      </div>
+      <div class="program-toolbar">
+        <div class="dates" id="date-tabs" role="group" aria-label="Scegli il giorno"></div>
+        <div class="program-controls"><label class="select-wrap"><span class="sr-only">Filtra per genere</span><select id="genre-filter"><option value="all">Tutti i generi</option><option value="Fantascienza">Fantascienza</option><option value="Drammatico">Drammatico</option><option value="Commedia">Commedia</option><option value="Musical">Musical</option><option value="Fantastico">Fantastico</option></select><svg><use href="#i-chevron"/></svg></label><button class="icon-button search-trigger" aria-label="Cerca nella programmazione"><svg><use href="#i-search"/></svg></button></div>
+      </div>
+      <div class="program-subbar"><span id="film-results" aria-live="polite">6 STORIE. IL TUO PROSSIMO VIAGGIO.</span><label class="language-toggle"><input type="checkbox" id="original-filter"><span class="toggle-track"></span> Solo lingua originale <span class="original-label">V.O.</span></label></div>
+      <p class="showtime-guide"><svg><use href="#i-ticket"/></svg> Clicca un orario per scegliere i posti <span>· Intero 10,50 € · Under 26 a 7 €</span></p>
+      <div class="film-grid" id="film-grid"></div>
+      <div class="program-empty" id="program-empty" hidden><svg><use href="#i-orbit"/></svg><h3>Un altro genere di giornata.</h3><p>Nessun film corrisponde ai filtri selezionati.</p><button class="text-link" id="reset-filters">Mostra tutti i film <span>↗</span></button></div>
+      <div class="program-bottom"><span><i class="status-dot"></i> LE PORTE APRONO 30 MINUTI PRIMA DEL PRIMO SPETTACOLO.</span><button class="button button-outline" id="more-films">Tutta la programmazione <svg><use href="#i-arrow"/></svg></button></div>
+    </section>
+
+    <div class="cinema-strip" aria-hidden="true"><div>GOOD FILMS. GREAT FEELINGS. <span><svg class="star-glyph" aria-hidden="true"><use href="#i-star"/></svg></span> CI VEDIAMO AL CINEMA. <span><svg class="star-glyph" aria-hidden="true"><use href="#i-star"/></svg></span> GOOD FILMS. GREAT FEELINGS. <span><svg class="star-glyph" aria-hidden="true"><use href="#i-star"/></svg></span> CI VEDIAMO AL CINEMA. <span><svg class="star-glyph" aria-hidden="true"><use href="#i-star"/></svg></span></div></div>
+
+    <section id="esperienza" class="experience-section">
+      <div class="experience-copy"><span class="eyebrow light"><span class="section-number">02 /</span> L'ESPERIENZA ORBITA</span><h2>Non guardare<br>soltanto.<br><span class="serif-word">Sentilo.</span></h2><p>Il buio giusto. Il suono che ti attraversa.<br>La sensazione di essere esattamente<br>dove dovresti essere.</p><button class="button button-cream" data-info="cinema">Entra nel nostro cinema <svg><use href="#i-arrow"/></svg></button><div class="experience-coordinate">45°29′ N 9°11′ E <span>IL CENTRO DEL TUO UNIVERSO.</span></div></div>
+      <div class="experience-visual"><img src="/demos/orbita/assets/cinema.jpg" alt="Una sala cinematografica immersa nel buio, pronta per la proiezione" loading="lazy" width="1200" height="1200"><div class="experience-visual-shade"></div><div class="experience-orbit" aria-hidden="true"><svg viewBox="0 0 400 400"><circle cx="200" cy="200" r="170"/><ellipse cx="200" cy="200" rx="190" ry="72" transform="rotate(-35 200 200)"/><circle cx="340" cy="104" r="7"/></svg></div><div class="experience-image-caption"><span>IL POSTO MIGLIORE?<br>QUELLO DAVANTI A UNA BELLA STORIA.</span><span class="outlined-star" aria-hidden="true"><svg class="star-glyph" aria-hidden="true"><use href="#i-star"/></svg></span></div></div>
+      <div class="experience-specs"><div><span class="spec-index">01</span><div><strong>4K LASER</strong><span>Ogni dettaglio, una scoperta.</span></div><svg><use href="#i-arrow"/></svg></div><div><span class="spec-index">02</span><div><strong>SUONO IMMERSIVO</strong><span>La storia, tutto intorno a te.</span></div><svg><use href="#i-arrow"/></svg></div><div><span class="spec-index">03</span><div><strong>COMFORT, DAVVERO.</strong><span>Accomodati. Al resto pensa il film.</span></div><svg><use href="#i-arrow"/></svg></div></div>
+    </section>
+
+    <section id="rassegne" class="events-section section-pad">
+      <div class="section-heading"><div><span class="eyebrow"><span class="section-number">03 /</span> OLTRE LA PROGRAMMAZIONE</span><h2>Non solo<br><span class="serif-word">titoli di coda.</span></h2></div><div class="section-intro"><p>Incontri, ritorni sul grande schermo,<br>notti che vorresti non finissero mai.</p><span class="small-label">APPUNTAMENTI DA SEGNARE. EMOZIONI DA TENERE.</span></div></div>
+      <div class="event-grid">
+        <button class="event-card event-nolan" data-event="nolan"><div class="event-image"><img src="/demos/orbita/assets/interstellar-scene.jpg" alt="Un viaggio nello spazio profondo per la rassegna di Christopher Nolan" loading="lazy" width="1000" height="700"><div class="event-image-shade"></div><span class="event-label">ORBITA REWIND / MARATONA</span><span class="event-art-title">BEYOND<br><i>TIME.</i></span><span class="event-date-badge">31<span>OTT</span></span></div><div class="event-card-bottom"><div><span class="small-label">DALLE 18:00 · VERSIONE ORIGINALE</span><h3>Una notte con Nolan.</h3><p>Tre film. Un solo, meraviglioso viaggio.</p></div><span class="round-button"><svg><use href="#i-arrow"/></svg></span></div></button>
+        <button class="event-card event-wes" data-event="wes"><div class="event-image"><img src="/demos/orbita/assets/wes-scene.jpg" alt="Il mondo simmetrico e colorato di The Grand Budapest Hotel" loading="lazy" width="1000" height="700"><div class="event-image-shade"></div><span class="event-label">MONDI D'AUTORE / WES ANDERSON</span><span class="event-art-title">PERFECTLY<br><i>ODD.</i></span><span class="event-date-badge">07<span>NOV</span></span></div><div class="event-card-bottom"><div><span class="small-label">DALLE 19:30 · FILM & CONVERSAZIONI</span><h3>Il mondo è di Wes.</h3><p>La bellezza di essere fuori posto.</p></div><span class="round-button"><svg><use href="#i-arrow"/></svg></span></div></button>
+      </div>
+    </section>
+
+    <section id="club" class="club-section">
+      <div class="club-title"><span class="eyebrow">PER CHI HA SEMPRE VOGLIA DI UN ALTRO FILM.</span><h2>ENTRA<br>IN <span class="serif-word">ORBITA.</span></h2><p>Il cinema diventa un'abitudine bellissima.<br>Biglietti ridotti, anteprime e un posto nel nostro club.</p><button class="button button-dark" data-info="club">Scopri Orbita Club <svg><use href="#i-arrow"/></svg></button></div>
+      <div class="club-art" aria-hidden="true"><div class="club-orbit-line"></div><div class="membership-card"><div class="membership-top"><svg><use href="#i-orbit"/></svg><span>ORBITA<br><small>CINEMA CLUB</small></span><span class="membership-star"><svg class="star-glyph" aria-hidden="true"><use href="#i-star"/></svg></span></div><div class="membership-name">YOU BELONG<br><i>HERE.</i></div><div class="membership-bottom"><span>MEMBER NO. 000001</span><span>UNLIMITED FEELINGS.</span></div></div><span class="club-art-caption">NON UNA TESSERA.<br>UN APPUNTAMENTO CON LE TUE PASSIONI.</span></div>
+    </section>
+
+    <section id="informazioni" class="info-section section-pad">
+      <div class="info-heading"><span class="eyebrow"><span class="section-number">04 /</span> PRIMA CHE SI SPENGANO LE LUCI</span><h2>Il tuo posto.<br><span class="serif-word">In città.</span></h2><p>Una serata al cinema comincia<br>ancora prima del film.</p><button class="text-link" data-info="posizione">Milano, quartiere Isola <svg><use href="#i-arrow"/></svg></button></div>
+      <div class="faq-list"><details><summary>Quando ci vediamo? <span>01</span></summary><div>Le porte di ORBITA aprono ogni giorno 30 minuti prima del primo spettacolo. Nel nostro programma dimostrativo trovi proiezioni dal pomeriggio fino a tarda sera. Gli orari dei singoli film sono indicati nella programmazione.</div></details><details><summary>Quanto costa un altro mondo? <span>02</span></summary><div>Intero €10,50 · Ridotto €8,00 · Under 26 €7,00. I soci Orbita Club hanno il 20% di sconto sul biglietto intero. Le rassegne speciali hanno un prezzo indicato nella scheda evento. Tutte le tariffe sono illustrative.</div></details><details><summary>Il cinema è per tutti. Davvero? <span>03</span></summary><div>Il nostro concept prevede accesso senza barriere, posti dedicati alle persone in carrozzina e sedute per accompagnatori. Nella mappa i posti accessibili sono contrassegnati dal simbolo ♿. Le proiezioni in versione originale riportano la sigla V.O. e prevedono sottotitoli in italiano.</div></details><details><summary>Come funziona la prenotazione? <span>04</span></summary><div>Scegli un film, l'orario e i tuoi posti. In questa esperienza di portfolio puoi completare una prenotazione dimostrativa senza pagamenti e scaricare il biglietto. Le prenotazioni vengono salvate solo in questo browser e non danno accesso a proiezioni reali.</div></details><details><summary>Posso organizzare un evento privato? <span>05</span></summary><div>Nel concept ORBITA la sala può ospitare proiezioni private, incontri e presentazioni. Questo è un progetto di portfolio: non vengono raccolte richieste né effettuate prenotazioni reali di sale.</div></details></div>
+    </section>
+  </main>
+
+  <footer class="site-footer"><div class="footer-top"><div class="footer-message">I film finiscono.<br><span>Le storie restano.</span><svg><use href="#i-arrow"/></svg></div><div class="footer-links"><div><span>ESPLORA ORBITA</span><a href="#programmazione">Programmazione</a><a href="#rassegne">Rassegne & eventi</a><a href="#club">Orbita Club</a></div><div><span>CI VEDIAMO QUI</span><a href="#esperienza">Il nostro cinema</a><button data-info="tariffe">Orari & tariffe</button><a href="#informazioni">Domande frequenti</a></div><div class="footer-location"><svg><use href="#i-orbit"/></svg><span>MILANO, TERRA.<br>OVUNQUE, CON LA MENTE.</span></div></div></div><div class="footer-masthead" aria-hidden="true">ORBITA<span><svg class="star-glyph" aria-hidden="true"><use href="#i-star"/></svg></span></div><div class="footer-bottom"><span>© <span id="copyright-year">2026</span> ORBITA CINEMA</span><p>Cinema immaginario · Progetto di portfolio · Film, tariffe e prenotazioni a scopo dimostrativo.</p><button data-info="privacy">Privacy & crediti <span aria-hidden="true">↗</span></button></div></footer>
+
+  <dialog id="film-dialog" class="modal film-modal" aria-label="Scheda film"><button class="modal-close icon-button" data-close aria-label="Chiudi scheda film"><svg><use href="#i-close"/></svg></button><div id="film-detail"></div></dialog>
+  <dialog id="booking-dialog" class="modal booking-modal" aria-label="Prenota i tuoi posti"><div class="modal-dismiss"><button class="modal-close icon-button" data-close aria-label="Chiudi prenotazione"><svg><use href="#i-close"/></svg></button></div><div id="booking-content"></div></dialog>
+  <dialog id="info-dialog" class="modal info-modal" aria-label="Informazioni ORBITA"><button class="modal-close icon-button" data-close aria-label="Chiudi informazioni"><svg><use href="#i-close"/></svg></button><div id="info-content"></div></dialog>
+  <dialog id="tickets-dialog" class="modal tickets-modal" aria-label="I tuoi biglietti"><button class="modal-close icon-button" data-close aria-label="Chiudi biglietti"><svg><use href="#i-close"/></svg></button><div class="tickets-inner"><span class="eyebrow">PROSSIMA FERMATA: IL CINEMA.</span><h2>I tuoi <span class="serif-word">biglietti.</span></h2><div id="tickets-list"></div></div></dialog>
+  <dialog id="search-dialog" class="modal search-modal" aria-label="Cerca un film"><button class="modal-close icon-button" data-close aria-label="Chiudi ricerca"><svg><use href="#i-close"/></svg></button><div class="search-inner"><span class="eyebrow">OGNI GRANDE VIAGGIO COMINCIA DA UNA STORIA.</span><h2>Che mondo <span class="serif-word">cerchi?</span></h2><label class="search-field"><svg><use href="#i-search"/></svg><input id="film-search" type="search" placeholder="Un film, un regista, un genere…" autocomplete="off" aria-label="Cerca per titolo, regista o genere"></label><div id="search-results" aria-live="polite"></div></div></dialog>
+  <dialog id="trailer-dialog" class="modal trailer-modal" aria-label="Trailer del film"><button class="modal-close icon-button" data-close aria-label="Chiudi trailer"><svg><use href="#i-close"/></svg></button><div id="trailer-content"></div></dialog>
+
+  <aside class="booking-dock" aria-label="Biglietteria rapida" aria-hidden="true" inert><button class="dock-film" id="dock-change"><img id="dock-poster" src="/demos/orbita/assets/dune.jpg" alt="" width="42" height="56"><span><small>IL TUO PROSSIMO FILM</small><strong id="dock-title">Dune: Parte due</strong><span id="dock-session">Scegli il tuo spettacolo</span></span><svg><use href="#i-chevron"/></svg></button><div class="dock-price"><span>Intero <strong>10,50 €</strong></span><small>Under 26 a 7 €</small></div><button class="button button-orange" id="dock-buy">Scegli i posti <svg><use href="#i-arrow"/></svg></button></aside>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

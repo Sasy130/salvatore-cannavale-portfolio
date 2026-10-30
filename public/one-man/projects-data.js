@@ -120,7 +120,7 @@ export const projects = [
       "CATALOGO",
       "WEB DESIGN"
     ],
-    "url": "https://riva-selezione-di-mare.one-man13.chatgpt.site",
+    "url": "/demos/nerea/index.html",
     "access": "public",
     "image": "/one-man/assets/projects/nerea.webp",
     "alt": "Anteprima del progetto dimostrativo NERÈA"
@@ -135,7 +135,7 @@ export const projects = [
       "TRAVEL EXPERIENCE",
       "STORYTELLING"
     ],
-    "url": "https://sulla-via-pellegrinaggi.one-man13.chatgpt.site",
+    "url": "/demos/sulla-via/index.html",
     "access": "public",
     "image": "/one-man/assets/projects/sulla-via.webp",
     "alt": "Anteprima del progetto dimostrativo SULLA VIA"
@@ -150,7 +150,7 @@ export const projects = [
       "SPORT EXPERIENCE",
       "BOOKING DEMO"
     ],
-    "url": "https://fuorigioco-play-club.one-man13.chatgpt.site",
+    "url": "/demos/fuorigioco/index.html",
     "access": "public",
     "image": "/one-man/assets/projects/fuorigioco.webp",
     "alt": "Anteprima del progetto dimostrativo FUORIGIOCO"
@@ -166,87 +166,9 @@ export const projects = [
       "CATALOGO",
       "BOOKING DEMO"
     ],
-    "url": "https://orbita-cinema.one-man13.chatgpt.site",
+    "url": "/demos/orbita/index.html",
     "access": "public",
     "image": "/one-man/assets/projects/orbita.webp",
     "alt": "Anteprima del progetto dimostrativo ORBITA"
-  },
-  {
-    "slug": "ombra",
-    "name": "OMBRA",
-    "subtitle": "Burger & Beer",
-    "description": "Un concept food dal carattere deciso, con menu e un’esperienza digitale dedicata al locale.",
-    "category": "Food",
-    "tags": [
-      "FOOD EXPERIENCE",
-      "WEB DESIGN"
-    ],
-    "url": "https://ombra-burger-pub.one-man13.chatgpt.site",
-    "access": "public",
-    "image": "/one-man/assets/projects/ombra.webp",
-    "alt": "Anteprima del progetto dimostrativo OMBRA"
-  },
-  {
-    "slug": "forgia",
-    "name": "FORGIA",
-    "subtitle": "Prova. Dimostra. Cambia.",
-    "description": "Un’app concept con missioni interattive e avanzamento locale per esplorare competenze diverse.",
-    "category": "Esperienze",
-    "tags": [
-      "APP CONCEPT",
-      "MOBILE",
-      "INTERAZIONE"
-    ],
-    "url": "https://forgia-mobile.one-man13.chatgpt.site",
-    "access": "public",
-    "image": "/one-man/assets/projects/forgia.webp",
-    "alt": "Anteprima del progetto dimostrativo FORGIA"
-  },
-  {
-    "slug": "aevum",
-    "name": "AEVUM",
-    "subtitle": "Il Museo dei Futuri Perduti",
-    "description": "Un museo immaginario da esplorare attraverso stanze, epoche e futuri alternativi.",
-    "category": "Esperienze",
-    "tags": [
-      "CULTURE EXPERIENCE",
-      "STORYTELLING",
-      "INTERAZIONE"
-    ],
-    "url": "https://aevum-futuri-perduti.one-man13.chatgpt.site",
-    "access": "public",
-    "image": "/one-man/assets/projects/aevum.webp",
-    "alt": "Anteprima del progetto dimostrativo AEVUM"
-  },
-  {
-    "slug": "no-static",
-    "name": "NØ/STATIC",
-    "subtitle": "Burger Lab",
-    "description": "Un laboratorio digitale di burger, tipografia e interazione, con selezione dimostrativa.",
-    "category": "Food",
-    "tags": [
-      "FOOD CONCEPT",
-      "INTERAZIONE"
-    ],
-    "url": "https://no-static-burger.one-man13.chatgpt.site",
-    "access": "public",
-    "image": "/one-man/assets/projects/no-static.webp",
-    "alt": "Anteprima del progetto dimostrativo NØ/STATIC"
-  },
-  {
-    "slug": "morso",
-    "name": "MORSO",
-    "subtitle": "Panini Fuori Schema",
-    "description": "Un concept food energico, con menu filtrabile, colori netti e una direzione grafica riconoscibile.",
-    "category": "Food",
-    "tags": [
-      "FOOD CONCEPT",
-      "ART DIRECTION",
-      "MENU INTERATTIVO"
-    ],
-    "url": "https://morso-panini.one-man13.chatgpt.site",
-    "access": "public",
-    "image": "/one-man/assets/projects/morso.webp",
-    "alt": "Anteprima del progetto dimostrativo MORSO"
   }
 ];
