@@ -37,3 +37,9 @@ Velmora è esplorabile direttamente da `/velmora/index.html`, una copia statica 
 VANTA è il secondo progetto del portfolio. La demo pubblica autonoma risiede in public/vanta ed è collegata da /vanta/index.html; il Site originale mantiene il suo accesso privato. Tariffe e condizioni illustrative, garage nel localStorage, driving pass locale; nessun invio, pagamento o disponibilità reale.
 
 LUNÉA è il terzo progetto del portfolio. La card e il caso studio sono nella home `public/one-man/index.html`, con immagine `public/projects/lunea.jpg`. La demo autonoma deve essere copiata dal `dist` finale di `work/lunea-atelier` in `public/lunea/` e viene aperta da `/lunea/index.html`, senza login. Conservare gli asset e gli import relativi, controllare tutti i percorsi prima della pubblicazione e mantenere separato il Site originale. Collezione e prezzi dimostrativi, configurazioni e selezione salvate nel browser; nessun ordine o pagamento reale.
+
+## Raccolta ampliata — 30 ottobre 2026
+
+La home conserva VELMORA, VANTA e LUNÉA e aggiunge 16 progetti in una raccolta filtrabile. Schede e dialog in `public/one-man/index.html`, dati in `projects-data.js`, interazioni in `projects.js`, immagini locali WebP in `assets/projects/`. Crediti e limiti in `public/one-man/PROJECTS.md`.
+
+Le 16 nuove demo usano gli indirizzi Sites esistenti, resi pubblici su autorizzazione esplicita del proprietario il 30 ottobre 2026. I visitatori possono aprire i progetti senza account. Le tre demo originali sul dominio restano indipendenti. L'accesso pubblico delle nuove demo è confermato tramite Sites; il campo `access` in `projects-data.js` riflette tale stato.
