@@ -11,3 +11,7 @@ Dati modificabili in `projects-data.js`; le schede HTML sono presenti anche senz
 ## Aggiornamento raccolta
 
 Rimossi dalla raccolta NØ/STATIC, MORSO, AEVUM, FORGIA e OMBRA. Rimangono 11 progetti aggiunti oltre ai tre originali. Tutte le 11 demo aggiunte sono copie statiche locali in `public/demos/`; le fonti e licenze degli asset sono documentate nei rispettivi repository sorgente. Le demo originali rimangono separate. Le versioni statiche di MARÉ e BLACK LABEL non inviano richieste o prenotazioni. ÉTERNA è in modalità dimostrativa.
+
+## Proposte per attività esistenti
+
+Rent Car Station e A&J Rent Car sono nella sezione dedicata ai redesign indipendenti, distinta dai concept originali. Si tratta di proposte non commissionate né approvate dalle aziende. Entrambe hanno una presentazione e una demo pubblica sul dominio; non vengono inviate prenotazioni. I sorgenti ricostruibili sono documentati in `demo-sources/README.md`.

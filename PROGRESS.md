@@ -57,3 +57,10 @@ Commit preparato: `679f530f106b2ce8aabacf2364c94aa127fffad7`, branch `codex/port
 - Le applicazioni Next.js sono state ricompilate con un prefisso dedicato; i rewrite servono le pagine interne senza interferire con le route preesistenti. Per BLACK LABEL il catalogo dimostrativo è stato generato usando un database locale temporaneo con dati di esempio. MARÉ e BLACK LABEL non inviano richieste o prenotazioni dalla copia statica; ÉTERNA usa la modalità demo.
 - In locale verificate le 11 homepage su viewport mobile, immagini caricate, assenza di link Sites nelle pagine controllate e navigazione di una pagina interna per le applicazioni Next.js. Build e TypeScript verificati; controllo finale della pubblicazione da eseguire dopo il deploy.
 - Corretti i percorsi di navigazione interni di ÉTERNA e delle demo di noleggio. La galleria BLACK LABEL è stata verificata in Chromium: sei immagini decodificate senza errori di caricamento.
+
+## Sezione redesign per aziende esistenti
+
+- Separati Rent Car Station e A&J Rent Car dai nove concept aggiunti ideati da zero; entrambe le proposte hanno una sezione dedicata, collegamenti diretti alla demo e alla presentazione, e sono identificate come redesign indipendenti non commissionati né affiliati. VELMORA, VANTA e LUNÉA restano in evidenza; totale invariato di 14 progetti.
+- Aggiunta a entrambe le homepage una panoramica responsive delle scelte di navigazione; A&J ha ora un caso studio dedicato `/demos/aj-rent-car/progetto/` e il menu mobile supporta Escape e gli attributi di accessibilità. Le demo non inviano richieste o prenotazioni.
+- Salvati in `demo-sources/` i sorgenti ricostruibili e le istruzioni per aggiornare le due copie statiche; i file generati sono in `public/demos/`.
+- Build separate delle due demo, TypeScript e build del portfolio completate. Chromium a 390 e 1440 px: nove concept nella raccolta, due redesign separati, filtro Automotive, dialog, Escape, link ai casi studio, assenza di overflow e di errori JavaScript rilevati. Axe sulla sezione redesign: nessuna violazione automatica WCAG A/AA rilevata; non costituisce una certificazione.

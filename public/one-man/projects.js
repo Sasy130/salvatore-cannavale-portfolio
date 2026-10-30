@@ -1,6 +1,6 @@
 import { projects } from './projects-data.js';
 const dialog = document.querySelector('#collection-dialog');
-const cards = [...document.querySelectorAll('.library-card')];
+const cards = [...document.querySelectorAll('.library-grid .library-card')];
 const filters = [...document.querySelectorAll('[data-project-filter]')];
 let trigger = null;
 for (const button of filters) {
@@ -22,7 +22,7 @@ for (const button of document.querySelectorAll('[data-open-project]')) {
     if (!project || !dialog) return;
     trigger = button;
     document.querySelector('#collection-title').textContent = project.name;
-    document.querySelector('#collection-category').textContent = `${project.category.toUpperCase()} / CONCEPT DIGITALE`;
+    document.querySelector('#collection-category').textContent = `${project.category.toUpperCase()} / ${project.kind === 'redesign' ? 'REDESIGN INDIPENDENTE' : 'CONCEPT ORIGINALE'}`;
     document.querySelector('#collection-subtitle').textContent = project.subtitle;
     document.querySelector('#collection-description').textContent = project.description;
     const image = document.querySelector('#collection-image');
@@ -36,7 +36,7 @@ for (const button of document.querySelectorAll('[data-open-project]')) {
     const arrow = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     arrow.setAttribute('viewBox', '0 0 24 24'); arrow.setAttribute('aria-hidden', 'true'); arrow.setAttribute('fill', 'none'); arrow.setAttribute('stroke', 'currentColor'); arrow.setAttribute('stroke-width', '1.5');
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path'); path.setAttribute('d', 'M5 19L19 5M5 5h14v14'); arrow.append(path); link.append(arrow);
-    document.querySelector('#collection-access-note').textContent = project.access === 'public' ? 'Demo pubblica: nessun login richiesto per visitare il progetto.' : 'La demo completa richiede un account autorizzato. Questa anteprima è consultabile da tutti.';
+    document.querySelector('#collection-access-note').textContent = project.kind === 'redesign' ? 'Proposta indipendente non ufficiale, non commissionata né affiliata all’attività.' : project.access === 'public' ? 'Demo pubblica: nessun login richiesto per visitare il progetto.' : 'La demo completa richiede un account autorizzato. Questa anteprima è consultabile da tutti.';
     document.querySelector('#cursor-label')?.classList.remove('is-visible');
     dialog.scrollTop = 0;
     dialog.showModal();

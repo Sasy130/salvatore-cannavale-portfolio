@@ -65,6 +65,7 @@ export const projects = [
   },
   {
     "slug": "rent-car-station",
+    "kind": "redesign",
     "name": "RENT CAR STATION",
     "subtitle": "Napoli, si parte.",
     "description": "Proposta indipendente di redesign per esplorare flotta, servizi e una richiesta dimostrativa.",
@@ -80,6 +81,7 @@ export const projects = [
   },
   {
     "slug": "aj-rent-car",
+    "kind": "redesign",
     "name": "A&J RENT CAR",
     "subtitle": "Napoli, al tuo ritmo",
     "description": "Un concept di redesign dedicato al noleggio e alla scoperta di Napoli, con flotta e percorsi guidati.",

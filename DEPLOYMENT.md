@@ -47,3 +47,7 @@ Le 16 nuove demo usano gli indirizzi Sites esistenti, resi pubblici su autorizza
 ## Copie delle demo sul dominio
 
 Su richiesta del proprietario, NØ/STATIC, MORSO, AEVUM, FORGIA e OMBRA sono stati rimossi dalla raccolta. Gli 11 progetti aggiunti rimanenti sono pubblicati come copie statiche sotto `public/demos/`, oltre alle tre demo originali VELMORA, VANTA e LUNÉA. I progetti sorgente restano separati. Le esportazioni Next.js hanno un `basePath` dedicato; i rewrite `afterFiles` in `next.config.ts` risolvono le pagine interne senza intercettare asset esistenti. MARÉ e BLACK LABEL sono anteprime statiche: richieste e prenotazioni non vengono inviate. ÉTERNA è in modalità demo. Le copie non sostituiscono un backend di produzione.
+
+## Proposte di redesign
+
+Rent Car Station e A&J Rent Car sono presentati separatamente dai concept originali. I sorgenti delle due demo e i passaggi di build sono in `demo-sources/README.md`; i rispettivi casi studio sono `/demos/rent-car-station/progetto/` e `/demos/aj-rent-car/progetto/`. Le proposte sono indipendenti, non ufficiali e non affiliate alle aziende.
