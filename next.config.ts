@@ -9,6 +9,10 @@ const nextConfig: NextConfig = {
         { source: "/", destination: "/one-man/index.html" },
       ],
       afterFiles: [
+        { source: "/demos/black-label", destination: "/demos/black-label/index.html" },
+        { source: "/demos/black-label/:path*", destination: "/demos/black-label/:path*/index.html" },
+        { source: "/demos/mare", destination: "/demos/mare/index.html" },
+        { source: "/demos/mare/:path*", destination: "/demos/mare/:path*/index.html" },
         { source: "/demos/apex-karting", destination: "/demos/apex-karting/index.html" },
         { source: "/demos/apex-karting/:path*", destination: "/demos/apex-karting/:path*/index.html" },
         { source: "/demos/eterna", destination: "/demos/eterna/index.html" },

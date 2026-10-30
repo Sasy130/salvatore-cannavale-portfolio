@@ -50,3 +50,10 @@ Commit preparato: `679f530f106b2ce8aabacf2364c94aa127fffad7`, branch `codex/port
 
 - A&J Rent Car, Rent Car Station e NOIR ricompilati con percorsi sotto `/demos/`, mantenendo navigazione interna e asset separati; aggiunti rewrite per le pagine delle esportazioni statiche.
 - Restano da trasferire ÉTERNA, MARÉ, BLACK LABEL e APEX KARTING. Fino al completamento restano collegamenti Sites.
+
+## Trasferimento completo delle demo sul portfolio
+
+- Aggiunte le copie statiche di ÉTERNA, MARÉ, BLACK LABEL e APEX KARTING; con le copie già pubblicate, tutte le 11 demo aggiunte si aprono sul dominio del portfolio. Rimossi i collegamenti Sites dalla raccolta.
+- Le applicazioni Next.js sono state ricompilate con un prefisso dedicato; i rewrite servono le pagine interne senza interferire con le route preesistenti. Per BLACK LABEL il catalogo dimostrativo è stato generato usando un database locale temporaneo con dati di esempio. MARÉ e BLACK LABEL non inviano richieste o prenotazioni dalla copia statica; ÉTERNA usa la modalità demo.
+- In locale verificate le 11 homepage su viewport mobile, immagini caricate, assenza di link Sites nelle pagine controllate e navigazione di una pagina interna per le applicazioni Next.js. Build e TypeScript verificati; controllo finale della pubblicazione da eseguire dopo il deploy.
+- Corretti i percorsi di navigazione interni di ÉTERNA e delle demo di noleggio. La galleria BLACK LABEL è stata verificata in Chromium: sei immagini decodificate senza errori di caricamento.

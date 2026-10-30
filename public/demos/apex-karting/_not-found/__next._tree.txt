@@ -1,0 +1,6 @@
+:HL["/demos/apex-karting/_next/static/css/6d526554dcef0882.css","style"]
+:HL["/demos/apex-karting/fonts/barlow-900.woff2","font",{"crossOrigin":"anonymous","type":"font/woff2"}]
+:HL["/demos/apex-karting/fonts/barlow-900-italic.woff2","font",{"crossOrigin":"anonymous","type":"font/woff2"}]
+2:[["children",{"s":"__PAGE__","h":160}]]
+1:[["children",{"s":"_not-found","h":96,"c":"$Q2"}]]
+0:{"b":"gXWjt_Q7k6mCd3OKHbq3e","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
