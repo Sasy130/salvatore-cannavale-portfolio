@@ -1,0 +1,4 @@
+User-Agent: *
+Allow: /
+
+Sitemap: https://noir-luxury-automotive-atelier.one-man13.chatgpt.site/sitemap.xml

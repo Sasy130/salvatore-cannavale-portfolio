@@ -45,3 +45,8 @@ Commit preparato: `679f530f106b2ce8aabacf2364c94aa127fffad7`, branch `codex/port
 - Copie statiche locali di NERÈA, Sulla Via, FUORIGIOCO e ORBITA sotto `/demos/`, collegate dalla raccolta. Gli altri sette progetti restano temporaneamente su Sites: non sono stati presentati come trasferiti.
 - Le demo Sites originali rimangono separate e non sono state eliminate.
 - Restano da trasferire ÉTERNA, MARÉ, BLACK LABEL, APEX KARTING, Rent Car Station, A&J Rent Car e NOIR: richiedono adattamenti di build, percorsi o servizi; completare il trasferimento e verificare ogni pagina prima di sostituire i link.
+
+## Ulteriori demo locali
+
+- A&J Rent Car, Rent Car Station e NOIR ricompilati con percorsi sotto `/demos/`, mantenendo navigazione interna e asset separati; aggiunti rewrite per le pagine delle esportazioni statiche.
+- Restano da trasferire ÉTERNA, MARÉ, BLACK LABEL e APEX KARTING. Fino al completamento restano collegamenti Sites.

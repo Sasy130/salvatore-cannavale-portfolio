@@ -1,0 +1,4 @@
+:HL["/demos/aj-rent-car/_next/static/css/8a76416dee9760fb.css","style"]
+:HL["/demos/aj-rent-car/images/hero.webp","image",{"imageSrcSet":"/demos/aj-rent-car/images/hero-mobile.webp 900w, /demos/aj-rent-car/images/hero.webp 2200w","imageSizes":"100vw","fetchPriority":"high"}]
+1:[["children",{"s":"__PAGE__","h":160}]]
+0:{"b":"Qwv_23sA8ZE-g_7JHshex","t":{"t":{"s":"","h":80,"c":"$Q1"}}}

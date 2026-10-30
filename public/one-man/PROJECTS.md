@@ -10,4 +10,4 @@ Dati modificabili in `projects-data.js`; le schede HTML sono presenti anche senz
 
 ## Aggiornamento raccolta
 
-Rimossi dalla raccolta NØ/STATIC, MORSO, AEVUM, FORGIA e OMBRA. Rimangono 11 progetti aggiunti oltre ai tre originali. NERÈA, Sulla Via, FUORIGIOCO e ORBITA sono copie statiche locali in `public/demos/`; le altre sette demo continuano temporaneamente a usare gli indirizzi Sites originali. Le rispettive fonti e licenze degli asset sono documentate nei repository sorgente dei progetti.
+Rimossi dalla raccolta NØ/STATIC, MORSO, AEVUM, FORGIA e OMBRA. Rimangono 11 progetti aggiunti oltre ai tre originali. NERÈA, Sulla Via, FUORIGIOCO ORBITA, A&J Rent Car, Rent Car Station e NOIR sono copie statiche locali in `public/demos/`; le altre quattro demo continuano temporaneamente a usare gli indirizzi Sites originali. Le rispettive fonti e licenze degli asset sono documentate nei repository sorgente dei progetti.

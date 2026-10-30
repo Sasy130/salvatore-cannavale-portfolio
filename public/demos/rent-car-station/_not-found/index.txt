@@ -1,0 +1,27 @@
+1:"$Sreact.fragment"
+2:"static/chunks/875-a100f1be2622bdd9.js"
+3:"static/chunks/724-286fba40eb532953.js"
+4:"static/chunks/627-dfd1247f89b6af21.js"
+5:"static/chunks/app/page-c3c66c98a0df7dc9.js"
+6:I[2627,["875","$2","724","$3","627","$4","974","$5"],"Header"]
+7:I[3638,[],""]
+8:I[6044,[],""]
+9:I[2875,["875","$2","724","$3","627","$4","974","$5"],""]
+a:I[2627,["875","$2","724","$3","627","$4","974","$5"],"Footer"]
+e:I[7631,[],"OutletBoundary"]
+f:"$Sreact.suspense"
+11:"ViewportBoundary"
+12:I[7631,[],"$11"]
+14:"MetadataBoundary"
+15:I[7631,[],"$14"]
+17:I[8222,[],"default",1]
+:HL["/demos/rent-car-station/_next/static/css/b30c31dafdf50f6b.css","style"]
+c:X
+d:[["children",{"s":"__PAGE__","h":512,"d":{"r":["$","$1","c",{"children":[["$","main",null,{"id":"main","className":"section not-found","children":[["$","span",null,{"className":"eyebrow orange-text","children":"404 / CAMBIO DI PERCORSO"}],["$","h1",null,{"children":["Qui la strada",["$","br",null,{}],["$","span",null,{"className":"serif","children":"finisce."}]]}],["$","p",null,{"children":"La prossima partenza è a un clic da qui."}],["$","$L9",null,{"className":"button orange","href":"/","children":"Torna al punto di partenza"}]]}],null,["$","$Le",null,{"children":["$","$f",null,{"name":"Next.MetadataOutlet","children":"$@10"}]}]]}],"p":false,"v":null}}]]
+b:[["children",{"s":"_not-found","h":512,"d":{"r":["$","$1","c",{"children":[null,["$","$L7",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L8",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$c"},"c":"$Qd"}]]
+0:{"P":null,"c":["","_not-found",""],"q":"","i":false,"t":{"t":{"s":"","h":528,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/demos/rent-car-station/_next/static/css/b30c31dafdf50f6b.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","html",null,{"lang":"it","children":["$","body",null,{"children":[["$","a",null,{"href":"#main","className":"skip","children":"Vai al contenuto"}],["$","$L6",null,{}],["$","$L7",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L8",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"id":"main","className":"section not-found","children":[["$","span",null,{"className":"eyebrow orange-text","children":"404 / CAMBIO DI PERCORSO"}],["$","h1",null,{"children":["Qui la strada",["$","br",null,{}],["$","span",null,{"className":"serif","children":"finisce."}]]}],["$","p",null,{"children":"La prossima partenza è a un clic da qui."}],["$","$L9",null,{"className":"button orange","href":"/","children":"Torna al punto di partenza"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","$La",null,{}]]}]}]]}],"p":false,"v":null},"c":"$Qb"},"h":{"r":["$","$1","h",{"children":[["$","meta",null,{"name":"robots","content":"noindex"}],["$","$L12",null,{"children":"$L13"}],["$","$L15",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$f",null,{"name":"Next.Metadata","children":"$L16"}]}],null]}],null]}],"p":false,"v":null}},"m":"$undefined","G":["$17",[]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"jl9hotEtyIDqgT5qI2ZjR"}
+c:C
+13:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+18:I[4302,[],"IconMark"]
+10:null
+16:[["$","title","0",{"children":"Rent Car Station — Napoli, si parte. | Concept"}],["$","meta","1",{"name":"description","content":"Proposta indipendente di redesign per Rent Car Station Napoli. Auto, scooter, deposito bagagli ed esperienze in un nuovo percorso digitale."}],["$","meta","2",{"name":"robots","content":"noindex, nofollow"}],["$","link","3",{"rel":"icon","href":"/icon.svg"}],["$","$L18","4",{}]]

@@ -73,7 +73,7 @@ export const projects = [
       "REDESIGN INDIPENDENTE",
       "RENTAL EXPERIENCE"
     ],
-    "url": "https://rent-car-station-napoli-concept.one-man13.chatgpt.site",
+    "url": "/demos/rent-car-station/",
     "access": "public",
     "image": "/one-man/assets/projects/rent-car-station.webp",
     "alt": "Anteprima del progetto dimostrativo RENT CAR STATION"
@@ -88,7 +88,7 @@ export const projects = [
       "REDESIGN INDIPENDENTE",
       "WEB DESIGN"
     ],
-    "url": "https://aj-rent-napoli-concept.one-man13.chatgpt.site",
+    "url": "/demos/aj-rent-car/",
     "access": "public",
     "image": "/one-man/assets/projects/aj-rent-car.webp",
     "alt": "Anteprima del progetto dimostrativo A&J RENT CAR"
@@ -104,7 +104,7 @@ export const projects = [
       "SHOWROOM",
       "MOTION"
     ],
-    "url": "https://noir-luxury-automotive-atelier.one-man13.chatgpt.site",
+    "url": "/demos/noir/",
     "access": "public",
     "image": "/one-man/assets/projects/noir.webp",
     "alt": "Anteprima del progetto dimostrativo NOIR"
