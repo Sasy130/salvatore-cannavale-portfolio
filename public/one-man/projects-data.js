@@ -10,7 +10,7 @@ export const projects = [
       "EVENT EXPERIENCE",
       "CONCIERGE"
     ],
-    "url": "https://eterna-private-estate.one-man13.chatgpt.site",
+    "url": "/demos/eterna/",
     "access": "public",
     "image": "/one-man/assets/projects/eterna.webp",
     "alt": "Anteprima del progetto dimostrativo ÉTERNA"
@@ -26,7 +26,7 @@ export const projects = [
       "MOTION",
       "CONCIERGE"
     ],
-    "url": "https://mare-private-concierge-atelier.one-man13.chatgpt.site",
+    "url": "/demos/mare/",
     "access": "public",
     "image": "/one-man/assets/projects/mare.webp",
     "alt": "Anteprima del progetto dimostrativo MARÉ"
@@ -42,7 +42,7 @@ export const projects = [
       "WEB DESIGN",
       "BOOKING DEMO"
     ],
-    "url": "https://black-label-grooming-preview.one-man13.chatgpt.site",
+    "url": "/demos/black-label/",
     "access": "public",
     "image": "/one-man/assets/projects/black-label.webp",
     "alt": "Fotografia stock usata nella hero del concept BLACK LABEL"
@@ -58,7 +58,7 @@ export const projects = [
       "MOTION",
       "INTERAZIONE"
     ],
-    "url": "https://apex-karting-racing-experience.one-man13.chatgpt.site",
+    "url": "/demos/apex-karting/",
     "access": "public",
     "image": "/one-man/assets/projects/apex-karting.webp",
     "alt": "Fotografia racing usata nella hero del concept APEX KARTING"

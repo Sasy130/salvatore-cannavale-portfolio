@@ -43,3 +43,7 @@ LUNÉA è il terzo progetto del portfolio. La card e il caso studio sono nella h
 La home conserva VELMORA, VANTA e LUNÉA e aggiunge 16 progetti in una raccolta filtrabile. Schede e dialog in `public/one-man/index.html`, dati in `projects-data.js`, interazioni in `projects.js`, immagini locali WebP in `assets/projects/`. Crediti e limiti in `public/one-man/PROJECTS.md`.
 
 Le 16 nuove demo usano gli indirizzi Sites esistenti, resi pubblici su autorizzazione esplicita del proprietario il 30 ottobre 2026. I visitatori possono aprire i progetti senza account. Le tre demo originali sul dominio restano indipendenti. L'accesso pubblico delle nuove demo è confermato tramite Sites; il campo `access` in `projects-data.js` riflette tale stato.
+
+## Copie delle demo sul dominio
+
+Su richiesta del proprietario, NØ/STATIC, MORSO, AEVUM, FORGIA e OMBRA sono stati rimossi dalla raccolta. Gli 11 progetti aggiunti rimanenti sono pubblicati come copie statiche sotto `public/demos/`, oltre alle tre demo originali VELMORA, VANTA e LUNÉA. I progetti sorgente restano separati. Le esportazioni Next.js hanno un `basePath` dedicato; i rewrite `afterFiles` in `next.config.ts` risolvono le pagine interne senza intercettare asset esistenti. MARÉ e BLACK LABEL sono anteprime statiche: richieste e prenotazioni non vengono inviate. ÉTERNA è in modalità demo. Le copie non sostituiscono un backend di produzione.

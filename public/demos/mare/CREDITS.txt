@@ -1,0 +1,89 @@
+MARÉ — THE ART OF ESCAPE
+Phase 1 / Independent portfolio concept
+
+PHOTOGRAPHY
+Real photographs sourced from Unsplash, used under the Unsplash License:
+https://unsplash.com/license
+The license permits downloading and using images, including commercial use,
+without mandatory attribution. No endorsement or partnership is implied.
+
+All six image delivery URLs returned HTTP 200 when downloaded on 2026-10-28.
+Images are hosted locally and served responsively by Next.js Image.
+
+White yacht / departure / fleet detail:
+https://images.unsplash.com/photo-1567899378494-47b22a2ae96a
+Superyacht / hero / editorial fleet:
+https://images.unsplash.com/photo-1569263979104-865ab7cd8d13
+Sailing:
+https://images.unsplash.com/photo-1540946485063-a40da27545f8
+Greek island village / Aegean coast:
+https://images.unsplash.com/photo-1533105079780-92b9be482077
+Sea at sunset:
+https://images.unsplash.com/photo-1475924156734-496f6cac6ec1
+Ocean / horizon:
+https://images.unsplash.com/photo-1518837695005-2083093ee35b
+
+Photographs are inspirational editorial assets. They do not represent a real
+MARÉ fleet, a verified charter offering, or the availability of any vessel.
+Geographical labels frame the concept; not every image has a verified location.
+
+TYPOGRAPHY
+Cormorant Garamond — Christian Thalmann / Catharsis Fonts
+Manrope — Mikhail Sharanda, Mirko Velimirovic
+SIL Open Font License 1.1. License files: /fonts/Cormorant-OFL.txt and
+/fonts/Manrope-OFL.txt. Font binaries self-hosted from Google Fonts.
+
+ICONS
+Lucide — ISC License. https://lucide.dev/license
+
+
+PHASE 2 — AUTHENTIC DESTINATION PHOTOGRAPHY
+
+bacoli.jpg — Bacoli (NA). Lago Miseno, spiaggia di Miliscola e Capo Miseno.jpg
+Author: Giuseppe Guida
+License: CC BY-SA 4.0 https://creativecommons.org/licenses/by-sa/4.0
+Source: https://commons.wikimedia.org/wiki/File:Bacoli_(NA)._Lago_Miseno,_spiaggia_di_Miliscola_e_Capo_Miseno.jpg
+Changes: Resized and compressed for the web; responsive crops and color grading applied in the interface. Image adaptations remain available under their source license.
+
+capo-miseno.jpg — Da Monte di Procida. Lago e Capo Miseno. 0085.jpg
+Author: Giuseppe Guida
+License: CC BY-SA 4.0 https://creativecommons.org/licenses/by-sa/4.0
+Source: https://commons.wikimedia.org/wiki/File:Da_Monte_di_Procida._Lago_e_Capo_Miseno._0085.jpg
+Changes: Resized and compressed for the web; responsive crops and color grading applied in the interface. Image adaptations remain available under their source license.
+
+procida.jpg — Procida-Corricella-msu-1652-1652.jpg
+Author: Matthias Süßen
+License: CC BY-SA 4.0 https://creativecommons.org/licenses/by-sa/4.0
+Source: https://commons.wikimedia.org/wiki/File:Procida-Corricella-msu-1652-1652.jpg
+Changes: Resized and compressed for the web; responsive crops and color grading applied in the interface. Image adaptations remain available under their source license.
+
+procida-day.jpg — View of Corricella.jpg
+Author: Bernard Gagnon
+License: CC BY 4.0 https://creativecommons.org/licenses/by/4.0
+Source: https://commons.wikimedia.org/wiki/File:View_of_Corricella.jpg
+Changes: Resized and compressed for the web; responsive crops and color grading applied in the interface. Image adaptations remain available under their source license.
+
+ischia.jpg — Castello Aragonese (Ischia).jpg
+Author: Dudva
+License: CC0 http://creativecommons.org/publicdomain/zero/1.0/deed.en
+Source: https://commons.wikimedia.org/wiki/File:Castello_Aragonese_(Ischia).jpg
+Changes: Resized and compressed for the web; responsive crops and color grading applied in the interface. Image adaptations remain available under their source license.
+
+ischia-view.jpg — Ischia-Vista dal Castello Aragonese - panoramio.jpg
+Author: maury3001
+License: CC BY 3.0 https://creativecommons.org/licenses/by/3.0
+Source: https://commons.wikimedia.org/wiki/File:Ischia-Vista_dal_Castello_Aragonese_-_panoramio.jpg
+Changes: Resized and compressed for the web; responsive crops and color grading applied in the interface. Image adaptations remain available under their source license.
+
+golfo-di-napoli.jpg — Bay of Naples and Volcano Vesuvius - Italy - panoramio.jpg
+Author: Sergey Ashmarin
+License: CC BY-SA 3.0 https://creativecommons.org/licenses/by-sa/3.0
+Source: https://commons.wikimedia.org/wiki/File:Bay_of_Naples_and_Volcano_Vesuvius_-_Italy_-_panoramio.jpg
+Changes: Resized and compressed for the web; responsive crops and color grading applied in the interface. Image adaptations remain available under their source license.
+
+capo-detail.jpg — Veduta frontale di capo Miseno.JPG
+Author: Dr.Conati at Italian Wikipedia
+License: Public domain 
+Source: https://commons.wikimedia.org/wiki/File:Veduta_frontale_di_capo_Miseno.JPG
+Changes: Resized and compressed for the web; responsive crops and color grading applied in the interface. Image adaptations remain available under their source license.
+
