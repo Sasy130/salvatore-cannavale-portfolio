@@ -51,3 +51,5 @@ Su richiesta del proprietario, NØ/STATIC, MORSO, AEVUM, FORGIA e OMBRA sono sta
 ## Proposte di redesign
 
 Rent Car Station e A&J Rent Car sono presentati separatamente dai concept originali. I sorgenti delle due demo e i passaggi di build sono in `demo-sources/README.md`; i rispettivi casi studio sono `/demos/rent-car-station/progetto/` e `/demos/aj-rent-car/progetto/`. Le proposte sono indipendenti, non ufficiali e non affiliate alle aziende.
+
+Le proposte indipendenti non compaiono nella homepage: la pagina `/proposte` viene riscritta a `public/one-man/proposte.html` ed è raggiungibile dal menu. Le due demo usano collegamenti HTML diretti per evitare richieste RSC fra applicazioni statiche ospitate sotto il portfolio.

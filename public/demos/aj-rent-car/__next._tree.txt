@@ -1,4 +1,4 @@
 :HL["/demos/aj-rent-car/_next/static/css/92f3f6c04dcbb9d8.css","style"]
 :HL["/demos/aj-rent-car/images/hero.webp","image",{"imageSrcSet":"/demos/aj-rent-car/images/hero-mobile.webp 900w, /demos/aj-rent-car/images/hero.webp 2200w","imageSizes":"100vw","fetchPriority":"high"}]
 1:[["children",{"s":"__PAGE__","h":160}]]
-0:{"b":"h2b8s26syTDy6qs3c6T6c","t":{"t":{"s":"","h":80,"c":"$Q1"}}}
+0:{"b":"iPUY2KB2IdW7pdvUZX_iA","t":{"t":{"s":"","h":80,"c":"$Q1"}}}

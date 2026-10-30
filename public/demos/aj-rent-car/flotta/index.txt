@@ -1,32 +1,29 @@
 1:"$Sreact.fragment"
-2:"static/chunks/500-fc3b64d9ff4a32a7.js"
-3:"static/chunks/50-c433764f916cd786.js"
-4:"static/chunks/396-c0e100da3350889f.js"
-5:"static/chunks/11-5e040ebcd227f2be.js"
-6:"static/chunks/app/flotta/page-f222515c41f63d2f.js"
-7:I[1396,["500","$2","50","$3","396","$4","11","$5","353","$6"],"Navbar"]
-8:I[7121,[],""]
-9:I[4581,[],""]
-a:"static/chunks/app/page-433a7248d53cc5ca.js"
-b:I[8500,["500","$2","50","$3","396","$4","974","$a"],""]
-c:I[1396,["500","$2","50","$3","396","$4","11","$5","353","$6"],"Footer"]
-10:I[4938,["500","$2","50","$3","396","$4","11","$5","353","$6"],"FleetExplorer"]
-11:I[590,["500","$2","50","$3","396","$4","11","$5","353","$6"],"BookingForm"]
-12:I[1396,["500","$2","50","$3","396","$4","11","$5","353","$6"],"Contact"]
-13:I[484,[],"OutletBoundary"]
-14:"$Sreact.suspense"
-16:"ViewportBoundary"
+2:"static/chunks/50-c433764f916cd786.js"
+3:"static/chunks/143-60db7cabb9a0ba23.js"
+4:"static/chunks/11-55159b31379ab307.js"
+5:"static/chunks/app/flotta/page-bb0c1f9c0959f07e.js"
+6:I[8143,["50","$2","143","$3","11","$4","353","$5"],"Navbar"]
+7:I[7121,[],""]
+8:I[4581,[],""]
+9:I[8143,["50","$2","143","$3","11","$4","353","$5"],"Footer"]
+d:I[4938,["50","$2","143","$3","11","$4","353","$5"],"FleetExplorer"]
+e:I[590,["50","$2","143","$3","11","$4","353","$5"],"BookingForm"]
+f:I[8143,["50","$2","143","$3","11","$4","353","$5"],"Contact"]
+10:I[484,[],"OutletBoundary"]
+11:"$Sreact.suspense"
+13:"ViewportBoundary"
+14:I[484,[],"$13"]
+16:"MetadataBoundary"
 17:I[484,[],"$16"]
-19:"MetadataBoundary"
-1a:I[484,[],"$19"]
-1c:I[7123,[],"default",1]
+19:I[7123,[],"default",1]
 :HL["/demos/aj-rent-car/_next/static/css/92f3f6c04dcbb9d8.css","style"]
-e:X
-f:[["children",{"s":"__PAGE__","h":512,"d":{"r":["$","$1","c",{"children":[["$","main",null,{"id":"main","children":[["$","section",null,{"className":"page-intro section","children":[["$","span",null,{"className":"eyebrow","children":"A&J RENT CAR / LA FLOTTA"}],["$","h1",null,{"children":["Il viaggio è tuo.",["$","br",null,{}],["$","em",null,{"children":"Anche la scelta."}]]}],["$","div",null,{"className":"page-intro-bottom","children":[["$","p",null,{"children":["Auto o scooter. Un weekend in città o una nuova strada da scoprire.",["$","br",null,{}],"Trova l’ispirazione per la tua prossima partenza."]}],["$","span",null,{"className":"outline-badge","children":"CATALOGO DIMOSTRATIVO"}]]}]]}],["$","section",null,{"className":"section fleet-catalog","children":[["$","div",null,{"className":"catalog-note","children":[["$","strong",null,{"children":"Una proposta di presentazione della flotta."}],["$","p",null,{"children":"Le categorie e le fotografie seguenti sono illustrative: non rappresentano un inventario verificato. Modelli, caratteristiche, tariffe e disponibilità devono essere confermati dall’attività."}]]}],["$","$L10",null,{}]]}],["$","$L11",null,{}],["$","$L12",null,{}]]}],null,["$","$L13",null,{"children":["$","$14",null,{"name":"Next.MetadataOutlet","children":"$@15"}]}]]}],"p":false,"v":null}}]]
-d:[["children",{"s":"flotta","h":512,"d":{"r":["$","$1","c",{"children":[null,["$","$L8",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L9",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$e"},"c":"$Qf"}]]
-0:{"P":null,"c":["","flotta",""],"q":"","i":false,"t":{"t":{"s":"","h":528,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/demos/aj-rent-car/_next/static/css/92f3f6c04dcbb9d8.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","html",null,{"lang":"it","children":["$","body",null,{"children":[["$","a",null,{"className":"skip-link","href":"#main","children":"Vai al contenuto"}],["$","$L7",null,{}],["$","$L8",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L9",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"id":"main","className":"section page-intro","children":[["$","span",null,{"className":"eyebrow","children":"404 / CAMBIO DI PERCORSO"}],["$","h1",null,{"children":["Questa strada",["$","br",null,{}],["$","em",null,{"children":"non c’è."}]]}],["$","p",null,{"children":"Ritrova la tua direzione nella nostra flotta dimostrativa."}],["$","$Lb",null,{"className":"button primary","href":"/flotta","children":"Esplora la flotta"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","$Lc",null,{}]]}]}]]}],"p":false,"v":null},"c":"$Qd"},"h":{"r":["$","$1","h",{"children":[null,["$","$L17",null,{"children":"$L18"}],["$","$L1a",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$14",null,{"name":"Next.Metadata","children":"$L1b"}]}],null]}],null]}],"p":false,"v":null}},"m":"$undefined","G":["$1c",[]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"h2b8s26syTDy6qs3c6T6c"}
-e:C
-18:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
-1d:I[6869,[],"IconMark"]
-15:null
-1b:[["$","title","0",{"children":"La flotta | A&J Rent Car — Concept"}],["$","meta","1",{"name":"description","content":"Proposta indipendente di redesign per A&J Rent Car a Napoli. Auto, scooter e tour: esplora il concept e prova la richiesta dimostrativa."}],["$","meta","2",{"name":"robots","content":"noindex, nofollow"}],["$","link","3",{"rel":"icon","href":"/icon.svg"}],["$","$L1d","4",{}]]
+b:X
+c:[["children",{"s":"__PAGE__","h":512,"d":{"r":["$","$1","c",{"children":[["$","main",null,{"id":"main","children":[["$","section",null,{"className":"page-intro section","children":[["$","span",null,{"className":"eyebrow","children":"A&J RENT CAR / LA FLOTTA"}],["$","h1",null,{"children":["Il viaggio è tuo.",["$","br",null,{}],["$","em",null,{"children":"Anche la scelta."}]]}],["$","div",null,{"className":"page-intro-bottom","children":[["$","p",null,{"children":["Auto o scooter. Un weekend in città o una nuova strada da scoprire.",["$","br",null,{}],"Trova l’ispirazione per la tua prossima partenza."]}],["$","span",null,{"className":"outline-badge","children":"CATALOGO DIMOSTRATIVO"}]]}]]}],["$","section",null,{"className":"section fleet-catalog","children":[["$","div",null,{"className":"catalog-note","children":[["$","strong",null,{"children":"Una proposta di presentazione della flotta."}],["$","p",null,{"children":"Le categorie e le fotografie seguenti sono illustrative: non rappresentano un inventario verificato. Modelli, caratteristiche, tariffe e disponibilità devono essere confermati dall’attività."}]]}],["$","$Ld",null,{}]]}],["$","$Le",null,{}],["$","$Lf",null,{}]]}],null,["$","$L10",null,{"children":["$","$11",null,{"name":"Next.MetadataOutlet","children":"$@12"}]}]]}],"p":false,"v":null}}]]
+a:[["children",{"s":"flotta","h":512,"d":{"r":["$","$1","c",{"children":[null,["$","$L7",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L8",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],"p":false,"v":"$b"},"c":"$Qc"}]]
+0:{"P":null,"c":["","flotta",""],"q":"","i":false,"t":{"t":{"s":"","h":528,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/demos/aj-rent-car/_next/static/css/92f3f6c04dcbb9d8.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","html",null,{"lang":"it","children":["$","body",null,{"children":[["$","a",null,{"className":"skip-link","href":"#main","children":"Vai al contenuto"}],["$","$L6",null,{}],["$","$L7",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L8",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"id":"main","className":"section page-intro","children":[["$","span",null,{"className":"eyebrow","children":"404 / CAMBIO DI PERCORSO"}],["$","h1",null,{"children":["Questa strada",["$","br",null,{}],["$","em",null,{"children":"non c’è."}]]}],["$","p",null,{"children":"Ritrova la tua direzione nella nostra flotta dimostrativa."}],["$","a",null,{"href":"/demos/aj-rent-car/flotta","className":"button primary","children":"Esplora la flotta"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}],["$","$L9",null,{}]]}]}]]}],"p":false,"v":null},"c":"$Qa"},"h":{"r":["$","$1","h",{"children":[null,["$","$L14",null,{"children":"$L15"}],["$","$L17",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$11",null,{"name":"Next.Metadata","children":"$L18"}]}],null]}],null]}],"p":false,"v":null}},"m":"$undefined","G":["$19",[]],"S":true,"r":"$undefined","s":"$undefined","a":"$undefined","l":"$undefined","p":"$undefined","d":"$undefined","b":"iPUY2KB2IdW7pdvUZX_iA"}
+b:C
+15:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+1a:I[6869,[],"IconMark"]
+12:null
+18:[["$","title","0",{"children":"La flotta | A&J Rent Car — Concept"}],["$","meta","1",{"name":"description","content":"Proposta indipendente di redesign per A&J Rent Car a Napoli. Auto, scooter e tour: esplora il concept e prova la richiesta dimostrativa."}],["$","meta","2",{"name":"robots","content":"noindex, nofollow"}],["$","link","3",{"rel":"icon","href":"/icon.svg"}],["$","$L1a","4",{}]]

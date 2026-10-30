@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import Link from "@/components/static-link";
 import { ArrowUpRight, ArrowRight } from "lucide-react";
 import { PageIntro } from "@/components/layout";
 export const metadata: Metadata = { title: "La proposta di redesign" };

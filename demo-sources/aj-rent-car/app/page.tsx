@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from '@/components/static-link';
 import {ArrowUpRight,ArrowRight,MoveDown,MapPin,Truck,MessagesSquare,CarFront,Star,Quote,Compass} from 'lucide-react';
 import {Reveal,VehicleCard,Contact} from '@/components/site';
 import {AvailabilitySearch,BookingForm} from '@/components/booking';

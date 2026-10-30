@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/static-link";
 export default function NotFound() {
   return (
     <main id="main" className="section not-found">

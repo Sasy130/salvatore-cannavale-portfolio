@@ -1,5 +1,5 @@
 import type {Metadata} from 'next';
-import Link from 'next/link';
+import Link from '@/components/static-link';
 import {ArrowUpRight} from 'lucide-react';
 export const metadata:Metadata={title:'La proposta di redesign',description:'Una proposta indipendente per raccontare A&J Rent Car su ogni schermo.'};
 const points=[{n:'01',title:'Un primo sguardo più chiaro.',text:'Auto, scooter e servizi trovano uno spazio riconoscibile, con un accesso immediato alla flotta.'},{n:'02',title:'La flotta da esplorare.',text:'Categorie, filtri e schede illustrative aiutano a orientarsi. Mezzi e disponibilità reali restano da verificare con l’attività.'},{n:'03',title:'Contatto senza ambiguità.',text:'Il percorso dimostrativo accompagna la scelta e spiega che nessuna prenotazione viene inviata o confermata.'},{n:'04',title:'Pensato per ogni schermo.',text:'Menu, testi e pulsanti si adattano a smartphone e computer, per rendere semplici le azioni principali.'}];

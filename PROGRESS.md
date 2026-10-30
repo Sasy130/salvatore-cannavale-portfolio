@@ -64,3 +64,9 @@ Commit preparato: `679f530f106b2ce8aabacf2364c94aa127fffad7`, branch `codex/port
 - Aggiunta a entrambe le homepage una panoramica responsive delle scelte di navigazione; A&J ha ora un caso studio dedicato `/demos/aj-rent-car/progetto/` e il menu mobile supporta Escape e gli attributi di accessibilità. Le demo non inviano richieste o prenotazioni.
 - Salvati in `demo-sources/` i sorgenti ricostruibili e le istruzioni per aggiornare le due copie statiche; i file generati sono in `public/demos/`.
 - Build separate delle due demo, TypeScript e build del portfolio completate. Chromium a 390 e 1440 px: nove concept nella raccolta, due redesign separati, filtro Automotive, dialog, Escape, link ai casi studio, assenza di overflow e di errori JavaScript rilevati. Axe sulla sezione redesign: nessuna violazione automatica WCAG A/AA rilevata; non costituisce una certificazione.
+
+## Raccolta progetti e pagina Proposte
+
+- Spostate le proposte per Rent Car Station e A&J Rent Car nella pagina `/proposte`, raggiungibile dai menu desktop e mobile, senza schede nella homepage; mantenute le rispettive demo e i casi studio indipendenti.
+- Riordinata la raccolta dei nove concept con griglia desktop a tre colonne e filtri orizzontali su smartphone; i tre progetti in evidenza sono invariati.
+- Sostituita nelle due demo la navigazione Next tra pagine statiche con link diretti sul dominio e corretti i percorsi delle ricerche: evita richieste di prefetch incompatibili con l'hosting del portfolio. Nessuna richiesta di prenotazione reale viene inviata.

@@ -1,5 +1,5 @@
 'use client';
-import Link from 'next/link';
+import Link from '@/components/static-link';
 import {useEffect,useState} from 'react';
 import {ArrowUpRight, ArrowRight, Menu, X, MapPin, Phone, Instagram, MessageCircle, CarFront} from 'lucide-react';
 import {motion,useReducedMotion} from 'motion/react';

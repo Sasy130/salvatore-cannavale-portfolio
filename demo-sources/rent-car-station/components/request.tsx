@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+import Link from "@/components/static-link";
 import { useEffect, useState, FormEvent } from "react";
 import {
   CarFront,

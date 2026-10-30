@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
     return {
       beforeFiles: [
         { source: "/", destination: "/one-man/index.html" },
+        { source: "/proposte", destination: "/one-man/proposte.html" },
       ],
       afterFiles: [
         { source: "/demos/black-label", destination: "/demos/black-label/index.html" },

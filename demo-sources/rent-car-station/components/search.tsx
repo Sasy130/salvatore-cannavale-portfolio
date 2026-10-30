@@ -43,7 +43,7 @@ export function JourneySearch() {
           <MapPin size={14} /> NAPOLI CENTRALE
         </span>
       </div>
-      <form action="/flotta/" onSubmit={submit} className="journey-search">
+      <form action="/demos/rent-car-station/flotta/" onSubmit={submit} className="journey-search">
         <input type="hidden" name="tipo" value={type} />
         <div className="search-place">
           <span className="field-caption">IL TUO PUNTO DI PARTENZA</span>
