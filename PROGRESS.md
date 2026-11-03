@@ -70,3 +70,10 @@ Commit preparato: `679f530f106b2ce8aabacf2364c94aa127fffad7`, branch `codex/port
 - Spostate le proposte per Rent Car Station e A&J Rent Car nella pagina `/proposte`, raggiungibile dai menu desktop e mobile, senza schede nella homepage; mantenute le rispettive demo e i casi studio indipendenti.
 - Riordinata la raccolta dei nove concept con griglia desktop a tre colonne e filtri orizzontali su smartphone; i tre progetti in evidenza sono invariati.
 - Sostituita nelle due demo la navigazione Next tra pagine statiche con link diretti sul dominio e corretti i percorsi delle ricerche: evita richieste di prefetch incompatibili con l'hosting del portfolio. Nessuna richiesta di prenotazione reale viene inviata.
+
+## PROJECT ROULETTE — esperienza interattiva
+
+- Aggiunta una roulette visiva che esplora i 12 progetti originali già presenti nel portfolio, con selezione casuale, pulsanti precedente/successivo, accesso diretto alle demo, selettori nominati e gesto orizzontale su touch. I redesign per attività esistenti restano soltanto nella pagina `/proposte`.
+- Aggiunta una transizione a sipario per i tre progetti in evidenza; l'esperienza non intercetta lo scroll e conserva le sezioni e i collegamenti esistenti. La roulette è opzionale e la raccolta tradizionale resta disponibile senza JavaScript.
+- Animazioni e interazioni rispettano `prefers-reduced-motion`; la roulette è immediata con movimento ridotto. La scultura 3D esistente continua a sospendere il rendering fuori schermo. I file della novità sono `public/one-man/arcade.js`, `index.html` e `style.css`.
+- Verificati localmente TypeScript e build; Chromium a 320, 390, 768 e 1440 px con movimento ridotto e un controllo separato con animazione attiva. Controllati pulsanti, frecce, scelta casuale, stato accessibile, gesto touch, tutti i 12 collegamenti alle demo e le route `/proposte`, `/operai` e del caso studio esistente. Axe sulla roulette non ha rilevato violazioni WCAG 2 A/AA e 2.1 AA; non è una certificazione di accessibilità.

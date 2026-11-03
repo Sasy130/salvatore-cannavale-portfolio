@@ -17,3 +17,5 @@ Rimossi dalla raccolta NØ/STATIC, MORSO, AEVUM, FORGIA e OMBRA. Rimangono 11 pr
 Rent Car Station e A&J Rent Car sono nella sezione dedicata ai redesign indipendenti, distinta dai concept originali. Si tratta di proposte non commissionate né approvate dalle aziende. Entrambe hanno una presentazione e una demo pubblica sul dominio; non vengono inviate prenotazioni. I sorgenti ricostruibili sono documentati in `demo-sources/README.md`.
 
 La raccolta dei progetti originali resta nella homepage; la pagina `/proposte` raccoglie separatamente i redesign per attività esistenti ed è accessibile dal menu.
+
+La PROJECT ROULETTE usa i tre progetti in evidenza e i nove concept originali presenti in `projects-data.js`. I redesign indipendenti rimangono esclusi e continuano a essere disponibili soltanto in `/proposte`.
