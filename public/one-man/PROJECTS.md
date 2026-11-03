@@ -18,4 +18,12 @@ Rent Car Station e A&J Rent Car sono nella sezione dedicata ai redesign indipend
 
 La raccolta dei progetti originali resta nella homepage; la pagina `/proposte` raccoglie separatamente i redesign per attività esistenti ed è accessibile dal menu.
 
-La PROJECT ROULETTE usa i tre progetti in evidenza e i nove concept originali presenti in `projects-data.js`. I redesign indipendenti rimangono esclusi e continuano a essere disponibili soltanto in `/proposte`.
+La PROJECT ROULETTE usa i tre progetti in evidenza e i dieci concept originali presenti in `projects-data.js`, per un totale di tredici progetti. I redesign indipendenti rimangono esclusi e continuano a essere disponibili soltanto in `/proposte`.
+
+## FUOCO — The Living Menu
+
+FUOCO si aggiunge come decimo concept originale della raccolta, nella categoria Food. La demo è ospitata nello stesso progetto alle route `/fuoco`, `/fuoco/menu`, `/fuoco/storia` e `/fuoco/contatti`: la scheda e la roulette aprono direttamente `/fuoco`, senza collegamenti a Sites o GPT.
+
+Il concept presenta sei pizze in Pizza Orbit, un menu rapido con ricerca e filtri e dettagli degli ingredienti. Ricette, prezzi e allergeni sono dimostrativi; non rappresenta un locale reale e non invia prenotazioni, ordini o pagamenti.
+
+L’anteprima `assets/projects/fuoco.webp` è una cattura della hero reale di FUOCO dalla produzione locale, in viewport 1440 × 900 e con movimento ridotto, ridimensionata a 1200 × 750 e convertita in WebP. La fotografia di pizza fa parte della composizione originale: provenienza, licenza e limiti d’uso sono documentati in [FUOCO — crediti fotografici](../images/fuoco/CREDITS.md). Nessuna nuova fotografia o immagine generata è stata introdotta.

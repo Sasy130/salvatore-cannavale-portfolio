@@ -239,3 +239,28 @@ README, FUOCO.md e registro degli asset aggiornati: interazioni, URL rapidi, com
 Confermato salvato l’aggiornamento `start_skill` della bozza cloud con le nuove modalità e verifiche; installazione e policy esistenti preservate. Per applicare la bozza, rivedere e salvare nelle impostazioni, poi pubblicare l’ambiente. La rete attuale continua a non applicare le destinazioni personalizzate salvate: la verifica remota dell’anteprima resta bloccata, e il ripristino su una macchina nuova non è stato verificato.
 
 Destinazione del codice: branch di anteprima esistente `codex/fuoco-restaurant-20261103`, mantenendo `main` invariato. Il link di anteprima precedente è documentato nella sezione sopra; l’aggiornamento del branch non costituisce una verifica del completamento del deployment o dell’accesso anonimo.
+
+
+## FUOCO — integrazione nella raccolta e pubblicazione sul dominio
+
+Richiesta del 3 novembre 2026: completare FUOCO, inserirlo con gli altri progetti e pubblicarlo come parte locale del portfolio, senza collegamenti GPT o Sites.
+
+- Aggiunta FUOCO come decimo concept della raccolta, categoria Food: due progetti Food, tredici progetti originali complessivi con i tre in evidenza. Aggiornati conteggi desktop/mobile, raccolta, filtri e roulette. I due redesign continuano a essere separati in `/proposte`.
+- Dati in `public/one-man/projects-data.js`, card statica `#project-fuoco` nella home, apertura del dialog e demo con `url: "/fuoco"`. Link presente anche senza JavaScript. La roulette include FUOCO dai dati e apre lo stesso percorso. Nessun collegamento a GPT/Sites per questa demo.
+- Anteprima reale `public/one-man/assets/projects/fuoco.webp`, 1200×750 e circa84 KB, catturata dalla nuova hero con movimento ridotto. Crediti e natura di concept documentati in `public/one-man/PROJECTS.md`; riusate le fotografie già licenziate e documentate.
+- URL previsto sul dominio esistente: `https://www.salvatorecannavale.it/fuoco`, con menu, storia e contatti nello stesso progetto Next.js. Nessun nuovo servizio, backend o dominio richiesto.
+
+### Verifiche pre-pubblicazione
+
+- `node --check public/one-man/projects-data.js`, corrispondenza tra dati/card statiche e `git diff --check`: superati.
+- `npm run lint:fuoco`, `npm run typecheck`, `npm run build`: superati. `npm run test:fuoco`:14 test passati, zero falliti o saltati.
+- QA portfolio:229 assert eseguiti,225 superati e4 limitazioni ambiente (Google Fonts preesistente, non modificato, bloccato dalla policy cloud; una per viewport). Il runner grezzo conserva exit1 per tali quattro richieste, non viene descritto come interamente passato. Nessun difetto applicativo osservato.
+- Verificati a320,390,768,1440 px: tre progetti in evidenza, dieci card, tredici selezioni roulette, Food2, filtri, entrambi gli ingressi FUOCO, dialog/Escape/ritorno focus, immagini, navigazione verso la demo sullo stesso origin e assenza di overflow. Fallback no-JS, Quick Menu e quindici route preservate verificati.
+- Dieci scansioni axe su nuova card, dialog, raccolta e roulette: zero violazioni rilevate. Controllo automatico e revisione visiva non costituiscono certificazione.
+- Report e prova delle quattro limitazioni in `/tmp/fuoco-portfolio-qa/`. Build e test in `/tmp/fuoco-publish-*.log`.
+
+### Destinazione della pubblicazione
+
+La richiesta autorizza la promozione su `main` tramite il collegamento GitHub→Vercel già attivo. Base remota di produzione verificata prima della promozione: `341205ac2e5da9944c8a108e7cf354ac0b174b11`. Usare un aggiornamento fast-forward e controllare nuovamente il riferimento remoto per preservare modifiche concorrenti.
+
+La policy cloud corrente consente GitHub Git, ma continua a bloccare API GitHub, dominio pubblico e anteprima. Il check pubblico Vercel Preview Comments non conferma la build. La promozione del codice e l’eventuale completamento Vercel/risposta HTTP sul dominio devono quindi essere riportati separatamente, senza dichiarare una verifica remota non eseguita.

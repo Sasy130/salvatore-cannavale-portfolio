@@ -62,3 +62,10 @@ FUOCO vive nello stesso progetto Next.js alle route `/fuoco`, `/fuoco/menu`, `/f
 Prima di una pubblicazione eseguire `npm run lint:fuoco`, `npm run test:fuoco`, `npm run typecheck` e `npm run build`, poi verificare in anteprima le quattro pagine, filtri, schede, contatti configurati, SEO e route preservate. Installazione Vercel `npm ci`, framework Next.js, build `npm run build`, output automatico; nessun segreto o servizio backend aggiuntivo richiesto. Seguire il collegamento GitHub → Vercel già configurato e il flusso di anteprima/produzione descritto sopra.
 
 Il concept resta demo e noindex finché i dati reali non sono confermati. Nessun deploy di FUOCO è stato eseguito durante la consegna locale delle due fasi. La pubblicazione dello snapshot dell’ambiente cloud è un’operazione separata.
+
+
+## FUOCO nella raccolta ONE MAN
+
+La home include FUOCO come concept Food con anteprima locale, card, dialog e selezione nella roulette. Entrambi gli ingressi aprono `/fuoco` sul dominio del portfolio; nessun link GPT/Sites. Totali aggiornati: tre progetti in evidenza e dieci nella raccolta (tredici nella roulette), con due Food; redesign separati in `/proposte`. Dati in `public/one-man/projects-data.js`, markup in `public/one-man/index.html`, anteprima in `public/one-man/assets/projects/fuoco.webp`.
+
+La pubblicazione autorizzata usa il branch `main` del progetto Vercel esistente. Il collegamento finale è `https://www.salvatorecannavale.it/fuoco`. Stato effettivo di promozione e verifica remota riportati in PROGRESS.md; il blocco di rete del cloud non deve essere confuso con un errore del sito.

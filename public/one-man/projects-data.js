@@ -172,5 +172,21 @@ export const projects = [
     "access": "public",
     "image": "/one-man/assets/projects/orbita.webp",
     "alt": "Anteprima del progetto dimostrativo ORBITA"
+  },
+  {
+    "slug": "fuoco",
+    "name": "FUOCO",
+    "subtitle": "L’arte della pizza",
+    "description": "Un concept di pizzeria con sei pizze in Pizza Orbit, menu rapido con ricerca e dettagli degli ingredienti.",
+    "category": "Food",
+    "tags": [
+      "RESTAURANT EXPERIENCE",
+      "LIVING MENU",
+      "MOTION"
+    ],
+    "url": "/fuoco",
+    "access": "public",
+    "image": "/one-man/assets/projects/fuoco.webp",
+    "alt": "Home del concept FUOCO, tra tipografia editoriale e fotografia di pizza"
   }
 ];
