@@ -33,3 +33,8 @@ Per sostituire gli asset mantenere i nomi dei file oppure aggiornare i percorsi 
 ## Utilizzo nella Fase 2
 
 Le pagine menu, storia e contatti riutilizzano gli stessi asset documentati sopra. Nessuna nuova fotografia è stata acquisita nella Fase 2. Le classiche Margherita, Marinara e Diavola usano le immagini pertinenti; Quattro Formaggi, Capricciosa, Salsiccia e Friarielli, fritti e bevande usano presentazioni tipografiche finché non sono disponibili fotografie corrette. La sezione del locale non mostra una fotografia stock come immagine di un’attività reale: `restaurant.locationImage` resta null fino alla fornitura di un asset autorizzato.
+
+
+## The Living Menu — riuso fotografico
+
+L’upgrade creativo riutilizza gli asset precedenti senza acquisire o generare nuove immagini. Le maschere circolari, i ritagli, i movimenti e gli ingrandimenti di hero, Pizza Orbit e Ingredient Dive sono presentazioni CSS/GSAP delle stesse fotografie, non nuove fotografie macro. Il pannello dettagli non introduce immagini macro non disponibili. Table Reveal usa lo scatto della pizza su legno come atmosfera di repertorio, con etichetta esplicita, e non lo presenta come fotografia del locale reale. Dough Journey riusa gli scatti documentati di impasto, lavorazione, forno e pizza pronta. Le speciali senza fotografia restano composizioni tipografiche.

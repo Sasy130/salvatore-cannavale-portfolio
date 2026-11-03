@@ -1,8 +1,23 @@
-# FUOCO — consegna Fase 2
+# FUOCO — The Living Menu
 
 FUOCO è un concept completo di sito per pizzeria, sviluppato nello stesso progetto Next.js del portfolio. Le pagine sono `/fuoco`, `/fuoco/menu`, `/fuoco/storia` e `/fuoco/contatti`. La home ONE MAN e le altre demo conservano i loro indirizzi.
 
 La configurazione iniziale è dimostrativa: contatti e posizione non sono inventati, i prezzi sono esempi espliciti, gli allergeni sono provvisori. Non ci sono backend, pagamenti, ordini automatici, prenotazioni o invii di messaggi dal server.
+
+## The Living Menu — Creative Experience Upgrade
+
+Il menu ha due modalità sugli stessi dati di `menu-data.ts`:
+
+- **Experience**: Pizza Orbit mostra una delle sei pizze, con fotografia pertinente oppure una composizione tipografica, ingredienti, prezzo e accesso a Ingredient Dive. Pulsanti precedente/successivo, selettori numerati, frecce tastiera, Home/End quando il carosello è focalizzato, swipe e gesto orizzontale del trackpad. Lo scroll verticale del documento resta libero.
+- **Quick Menu**: undici proposte in una lista compatta, con ricerca per nome/descrizione/ingredienti, categorie e prezzi. La ricerca ignora maiuscole e accenti e combina tutti i termini con il filtro. Lo stato senza risultati permette di ripristinare l’intero menu.
+- Le modalità conservano il proprio stato quando si alternano. I dettagli usano un unico dialog nativo, con prezzo, ingredienti, allergeni provvisori, WhatsApp configurabile, Escape e ritorno del focus.
+- `/fuoco/menu?view=quick` apre subito il menu rapido. I collegamenti alle singole proposte possono aggiungere `#margherita`, per esempio. I precedenti link con solo frammento continuano a passare al menu rapido. Senza JavaScript il menu completo e gli allergeni restano leggibili, con i controlli interattivi nascosti.
+
+La nuova homepage usa una composizione fotografica a maschere e titoli monumentali. The Ignition dura circa 2,4 secondi su desktop e 1,85 su mobile, con skip immediato, Escape e timeout di sicurezza. Nuova chiave di sessione `fuoco-ignition-living-seen`: l’upgrade compare una volta anche ai visitatori che avevano già visto l’intro precedente. Non usa audio o video.
+
+Dough Journey presenta quattro scene: impasto, lavorazione, forno e pizza pronta. Su desktop con movimento attivo, una scena fotografica sticky si trasforma seguendo lo scroll nativo; mobile, movimento ridotto e assenza di JavaScript conservano il percorso lineare. I contatti aprono con Table Reveal e fotografia autentica di repertorio chiaramente identificata, oppure una foto reale del locale se configurata.
+
+Componenti creativi: `hero.tsx`, `intro.tsx`, `dough-journey.tsx`, `pizza-orbit.tsx`, `menu-experience.tsx`. Stili in `creative-home.css`, `pizza-orbit.css`, `menu.css`, `creative-contact.css`; ricerca pura in `menu-search.ts`. Nessuna nuova dipendenza o fotografia aggiunta nell’upgrade.
 
 ## Personalizzare il locale
 
@@ -34,7 +49,7 @@ WhatsApp apre una richiesta che il visitatore può controllare prima di inviare:
 
 `src/features/fuoco/menu-data.ts` contiene le quattro categorie e le undici proposte. Ogni voce ha `id`, `name`, `category`, `description`, `ingredients`, `allergens`, `price`, e opzionalmente `image` e `alt`. Le sei pizze richieste sono già presenti. I prezzi numerici sono esempi in euro, indicati come demo; `price: null` mostra “Da definire”. Non cambiare la sola modalità demo per trasformare esempi in prezzi commerciali: confermare prima gli importi.
 
-Usare `image` soltanto quando la fotografia rappresenta la proposta corretta. Omettendo `image`, la scheda e il dettaglio mantengono una composizione tipografica: nessuna pizza diversa viene mostrata al suo posto. Un `id` stabile consente collegamenti come `/fuoco/menu#margherita`.
+Usare `image` soltanto quando la fotografia rappresenta la proposta corretta. Omettendo `image`, la scheda e il dettaglio mantengono una composizione tipografica: nessuna pizza diversa viene mostrata al suo posto. Un `id` stabile consente collegamenti come `/fuoco/menu?view=quick#margherita`.
 
 I testi editoriali e l’anteprima delle tre pizze in homepage sono in `src/features/fuoco/content.ts`; aggiornarli insieme alla selezione del menu quando si cambia quella vetrina. Il racconto in cinque sezioni è in `src/app/(fuoco)/fuoco/storia/page.tsx`; i paragrafi sono provvisori, senza storia aziendale, premi, certificazioni o tempi di lavorazione inventati.
 
@@ -88,4 +103,4 @@ Conservare il rewrite della home ONE MAN e il prefisso `/fuoco`. Preparare un br
 - Fotografie originali autorizzate di piatti, persone e locale, con diritti d’uso documentati.
 - Dati aziendali e contenuti legali pertinenti al sito effettivo.
 
-La Fase 2 termina con questa esperienza. Prenotazioni, ordini, pagamenti e dashboard non sono implementati.
+Le due fasi e il Creative Experience Upgrade mantengono il medesimo perimetro: prenotazioni, ordini, pagamenti e dashboard non sono implementati.

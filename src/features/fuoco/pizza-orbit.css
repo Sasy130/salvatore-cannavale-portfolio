@@ -1,0 +1,164 @@
+.fuoco-orbit {
+  --orbit-bg: #211a16;
+  --orbit-ink: #f5ebdd;
+  --orbit-muted: #c6baaa;
+  --orbit-line: rgb(245 235 221 / 23%);
+  --orbit-accent: #ed9367;
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  padding: 28px clamp(22px, 4.5vw, 76px) 22px;
+  overflow: hidden;
+  color: var(--orbit-ink);
+  background: var(--orbit-bg);
+  touch-action: pan-y;
+  transition: background-color 600ms ease, color 600ms ease;
+}
+
+.fuoco-orbit-tone-1 {
+  --orbit-bg: #e9dfcc;
+  --orbit-ink: #2b241c;
+  --orbit-muted: #615543;
+  --orbit-line: rgb(43 36 28 / 25%);
+  --orbit-accent: #a34225;
+}
+
+.fuoco-orbit-tone-2 {
+  --orbit-bg: #313c30;
+  --orbit-ink: #f5ebdd;
+  --orbit-muted: #c6cbb9;
+  --orbit-line: rgb(245 235 221 / 25%);
+  --orbit-accent: #e4b47e;
+}
+
+.fuoco-orbit:focus-visible { outline: 2px solid var(--orbit-accent); outline-offset: -5px; }
+.fuoco-orbit button { font: inherit; color: inherit; cursor: pointer; }
+.fuoco-orbit button:focus-visible { outline: 2px solid var(--orbit-accent); outline-offset: 5px; }
+.fuoco-orbit button:disabled { opacity: 0.35; cursor: default; }
+.fuoco-orbit-sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.fuoco-orbit-topline { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-bottom: 20px; border-bottom: 1px solid var(--orbit-line); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; }
+.fuoco-orbit-topline-count { font-size: 13px; font-variant-numeric: tabular-nums; letter-spacing: 0.06em; }
+.fuoco-orbit-topline-count > span { color: var(--orbit-muted); }
+.fuoco-orbit-body { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr); align-items: center; gap: clamp(24px, 5vw, 90px); min-height: 650px; padding: 46px 0; }
+.fuoco-orbit-stage { position: relative; display: grid; place-items: center; min-width: 0; padding: 26px 0; }
+.fuoco-orbit-stage-number { position: absolute; top: -10%; left: -4%; font-family: "Cormorant Garamond", Georgia, serif; font-size: clamp(180px, 23vw, 360px); font-weight: 400; line-height: 1; letter-spacing: -0.1em; color: var(--orbit-ink); opacity: 0.045; user-select: none; }
+.fuoco-orbit-ring { position: absolute; width: 105%; aspect-ratio: 1; border: 1px solid var(--orbit-line); border-radius: 50%; transform: rotate(-22deg) scaleY(0.92); }
+.fuoco-orbit-ring::before, .fuoco-orbit-ring::after { content: ""; position: absolute; top: 12%; left: 15%; width: 7px; height: 7px; border-radius: 50%; background: var(--orbit-accent); }
+.fuoco-orbit-ring::after { top: auto; left: auto; right: 14%; bottom: 12%; width: 4px; height: 4px; background: var(--orbit-ink); }
+.fuoco-orbit-stage-note { position: absolute; right: -34px; top: 50%; z-index: 2; font-size: 9px; letter-spacing: 0.17em; writing-mode: vertical-rl; text-transform: uppercase; color: var(--orbit-muted); }
+.fuoco-orbit-stage-signature { position: absolute; bottom: -8px; left: 50%; width: 100%; text-align: center; transform: translateX(-50%); font-family: "Cormorant Garamond", Georgia, serif; font-size: 20px; font-style: italic; color: var(--orbit-muted); }
+.fuoco-orbit-visuals { position: relative; width: 94%; max-width: 640px; aspect-ratio: 1; }
+.fuoco-orbit-visual { position: relative; width: 100%; height: 100%; overflow: hidden; border-radius: 50%; will-change: transform, clip-path; }
+.fuoco-orbit-outgoing { position: absolute; inset: 0; opacity: 0; pointer-events: none; }
+.fuoco-orbit-current { z-index: 1; }
+.fuoco-orbit .fuoco-orbit-photo { position: relative; width: 100%; height: 100%; border-radius: 50%; }
+.fuoco-orbit-photo img { object-fit: cover; }
+.fuoco-orbit-composition { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 17px; width: 100%; height: 100%; padding: 13%; text-align: center; color: #2c2a21; background: #dfd8c2; box-shadow: inset 0 0 80px rgb(80 63 38 / 8%); }
+.fuoco-orbit-composition::before { position: absolute; inset: 5%; content: ""; border: 1px solid rgb(44 42 33 / 20%); border-radius: 50%; }
+.fuoco-orbit-composition-label { font-size: 9px; line-height: 1.4; letter-spacing: 0.17em; text-transform: uppercase; }
+.fuoco-orbit-composition-name { font-family: "Cormorant Garamond", Georgia, serif; font-size: clamp(42px, 5.5vw, 86px); font-weight: 500; line-height: 0.85; letter-spacing: -0.045em; }
+.fuoco-orbit-composition-rule { width: 34px; height: 1px; margin-top: 4px; background: #98734f; }
+.fuoco-orbit-composition-note { font-family: "Cormorant Garamond", Georgia, serif; font-size: clamp(15px, 1.5vw, 21px); font-style: italic; }
+.fuoco-orbit-copy { position: relative; min-width: 0; padding: 10px 0; }
+.fuoco-orbit-category { display: flex; align-items: center; gap: 9px; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; }
+.fuoco-orbit-category > span:first-child { width: 5px; height: 5px; background: var(--orbit-accent); border-radius: 50%; }
+.fuoco-orbit-category-no { margin-left: auto; color: var(--orbit-muted); font-size: 9px; }
+.fuoco-orbit .fuoco-orbit-title { max-width: 100%; margin: 24px 0 22px; font-family: "Cormorant Garamond", Georgia, serif; font-size: clamp(66px, 7.7vw, 126px); font-weight: 400; line-height: 0.83; letter-spacing: -0.055em; overflow-wrap: normal; }
+.fuoco-orbit-description { max-width: 420px; margin: 0; color: var(--orbit-muted); font-size: 13px; line-height: 1.8; }
+.fuoco-orbit-ingredients { margin-top: 30px; }
+.fuoco-orbit-small-label { color: var(--orbit-muted); font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; }
+.fuoco-orbit-ingredients ul { display: flex; flex-wrap: wrap; gap: 5px 0; max-width: 460px; margin: 10px 0 0; padding: 0; list-style: none; font-family: "Cormorant Garamond", Georgia, serif; font-size: 20px; line-height: 1.35; }
+.fuoco-orbit-ingredients li { display: inline; }
+.fuoco-orbit-ingredients li:not(:last-child)::after { display: inline-block; content: "·"; margin: 0 8px; color: var(--orbit-accent); }
+.fuoco-orbit-actions { display: flex; align-items: center; justify-content: space-between; gap: 18px; max-width: 480px; margin-top: 34px; padding-top: 23px; border-top: 1px solid var(--orbit-line); }
+.fuoco-orbit-price { display: flex; flex-direction: column; flex-shrink: 0; gap: 4px; margin: 0; }
+.fuoco-orbit-price > span { color: var(--orbit-muted); font-size: 8px; letter-spacing: 0.13em; text-transform: uppercase; }
+.fuoco-orbit-price strong { font-family: "Cormorant Garamond", Georgia, serif; font-size: 35px; font-weight: 400; line-height: 1; }
+.fuoco-orbit-details { display: flex; align-items: center; justify-content: space-between; gap: 19px; min-height: 52px; padding: 12px 0 12px 16px; border: 0; background: transparent; font-size: 11px !important; letter-spacing: 0.02em; }
+.fuoco-orbit-details svg { transition: transform 200ms ease; }
+.fuoco-orbit-details:hover svg { transform: translate(3px, -3px); }
+.fuoco-orbit-bottomline { display: flex; align-items: center; justify-content: space-between; gap: 28px; padding-top: 13px; border-top: 1px solid var(--orbit-line); }
+.fuoco-orbit-progress { display: flex; align-items: center; width: 45%; max-width: 480px; gap: 8px; }
+.fuoco-orbit-choice { display: flex; flex: 1; flex-direction: column; justify-content: center; gap: 10px; min-width: 32px; min-height: 48px; padding: 8px 0; border: 0; background: transparent; font-size: 9px !important; font-variant-numeric: tabular-nums; color: var(--orbit-muted) !important; text-align: left; }
+.fuoco-orbit-choice-line { display: block; width: 100%; height: 1px; background: var(--orbit-line); }
+.fuoco-orbit-choice-active { color: var(--orbit-ink) !important; }
+.fuoco-orbit-choice-active .fuoco-orbit-choice-line { height: 2px; background: var(--orbit-accent); }
+.fuoco-orbit .fuoco-orbit-gesture { display: flex; align-items: center; gap: 20px; margin: 0 0 0 auto; color: var(--orbit-muted); font-family: "Cormorant Garamond", Georgia, serif; font-size: 18px; font-style: italic; white-space: nowrap; }
+.fuoco-orbit-gesture > span { font-family: Arial, sans-serif; font-size: 23px; font-style: normal; }
+.fuoco-orbit-navigation { display: flex; flex-shrink: 0; gap: 9px; }
+.fuoco-orbit-navigation button { display: grid; place-items: center; width: 49px; height: 49px; border: 1px solid var(--orbit-line); border-radius: 50%; background: transparent; transition: border-color 200ms ease, background-color 200ms ease; }
+.fuoco-orbit-navigation button:hover { border-color: var(--orbit-accent); background: var(--orbit-line); }
+.fuoco-orbit-empty { padding: 40px 20px; }
+
+@media (min-width: 1500px) {
+  .fuoco-orbit-body { max-width: 1440px; margin: 0 auto; gap: 100px; min-height: 760px; }
+  .fuoco-orbit-topline, .fuoco-orbit-bottomline { max-width: 1440px; margin-right: auto; margin-left: auto; }
+}
+
+@media (max-width: 1100px) and (min-width: 761px) {
+  .fuoco-orbit-body { min-height: 570px; gap: 40px; }
+  .fuoco-orbit .fuoco-orbit-title { font-size: 8.5vw; }
+  .fuoco-orbit-stage-note { right: -20px; font-size: 8px; }
+  .fuoco-orbit-description { font-size: 12px; }
+  .fuoco-orbit-ingredients { margin-top: 24px; }
+  .fuoco-orbit-ingredients ul { font-size: 18px; }
+  .fuoco-orbit .fuoco-orbit-gesture { display: none; }
+  .fuoco-orbit-progress { width: 65%; }
+}
+
+@media (max-width: 760px) {
+  .fuoco-orbit { padding: 22px clamp(20px, 6vw, 38px) 20px; }
+  .fuoco-orbit-topline { padding-bottom: 15px; font-size: 8px; letter-spacing: 0.14em; }
+  .fuoco-orbit-topline-count { font-size: 11px; }
+  .fuoco-orbit-body { grid-template-columns: minmax(0, 1fr); gap: 30px; min-height: 0; padding: 30px 0 27px; }
+  .fuoco-orbit-stage { width: min(100%, 470px); margin: 0 auto; padding: 14px 0 17px; }
+  .fuoco-orbit-stage-number { top: -5%; left: -6%; font-size: 48vw; }
+  .fuoco-orbit-ring { width: 102%; }
+  .fuoco-orbit-visuals { width: 90%; }
+  .fuoco-orbit-stage-note { right: -8px; font-size: 8px; letter-spacing: 0.13em; }
+  .fuoco-orbit-stage-signature { bottom: -6px; font-size: 17px; }
+  .fuoco-orbit-composition-name { font-size: clamp(47px, 12vw, 76px); }
+  .fuoco-orbit-composition { gap: 14px; }
+  .fuoco-orbit-composition-label { font-size: 8px; }
+  .fuoco-orbit-composition-note { font-size: 17px; }
+  .fuoco-orbit-copy { padding: 0; }
+  .fuoco-orbit-category { font-size: 9px; }
+  .fuoco-orbit-category-no { font-size: 8px; }
+  .fuoco-orbit .fuoco-orbit-title { margin: 20px 0 19px; font-size: clamp(67px, 17vw, 110px); line-height: 0.87; }
+  .fuoco-orbit-description { max-width: 540px; font-size: 12px; line-height: 1.8; }
+  .fuoco-orbit-ingredients { margin-top: 23px; }
+  .fuoco-orbit-ingredients ul { font-size: 19px; }
+  .fuoco-orbit-small-label { font-size: 8px; }
+  .fuoco-orbit-actions { max-width: none; margin-top: 25px; padding-top: 18px; }
+  .fuoco-orbit-price strong { font-size: 34px; }
+  .fuoco-orbit-details { min-height: 50px; gap: 14px; }
+  .fuoco-orbit-bottomline { flex-wrap: wrap; gap: 17px; padding-top: 12px; }
+  .fuoco-orbit-progress { display: grid; grid-template-columns: repeat(6, minmax(44px, 1fr)); flex: 1 0 100%; width: 100%; max-width: none; gap: 2px; }
+  .fuoco-orbit-choice { min-width: 44px; min-height: 48px; gap: 10px; }
+  .fuoco-orbit .fuoco-orbit-gesture { display: flex; margin: 0; font-size: 16px; }
+  .fuoco-orbit-navigation { gap: 7px; margin-left: auto; }
+  .fuoco-orbit-navigation button { width: 44px; height: 44px; }
+}
+
+@media (max-width: 370px) {
+  .fuoco-orbit { padding-right: 20px; padding-left: 20px; }
+  .fuoco-orbit-body { padding-top: 23px; gap: 28px; }
+  .fuoco-orbit-topline { font-size: 7px; }
+  .fuoco-orbit .fuoco-orbit-title { font-size: 17vw; }
+  .fuoco-orbit-composition-name { font-size: 13vw; }
+  .fuoco-orbit-composition-note { font-size: 14px; }
+  .fuoco-orbit-composition-label { font-size: 7px; }
+  .fuoco-orbit-composition { gap: 10px; }
+  .fuoco-orbit-stage-note { font-size: 7px; right: -9px; }
+  .fuoco-orbit-description { font-size: 11px; }
+  .fuoco-orbit-ingredients ul { font-size: 18px; }
+  .fuoco-orbit-progress { grid-template-columns: repeat(3, minmax(44px, 1fr)); gap: 3px 12px; }
+  .fuoco-orbit-bottomline { gap: 6px; }
+  .fuoco-orbit-navigation { margin-left: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fuoco-orbit, .fuoco-orbit *, .fuoco-orbit *::before, .fuoco-orbit *::after { transition: none !important; animation: none !important; }
+  .fuoco-orbit-current, .fuoco-orbit-title, .fuoco-orbit-detail-motion { opacity: 1 !important; clip-path: none !important; transform: none !important; }
+  .fuoco-orbit-outgoing { opacity: 0 !important; }
+}

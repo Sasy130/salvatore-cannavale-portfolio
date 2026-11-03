@@ -82,10 +82,12 @@ Alternatively, push the source and lockfile to a Git repository, then choose Add
 
 Git guide: https://vercel.com/docs/git
 
-## FUOCO — esperienza completa (Fasi 1 e 2)
+## FUOCO — The Living Menu
 
-Il concept FUOCO è disponibile su `/fuoco`, con menu digitale `/fuoco/menu`, storia `/fuoco/storia` e contatti `/fuoco/contatti`, senza modificare la home del portfolio. Il menu comprende filtri e schede accessibili; WhatsApp, telefono e indicazioni si attivano soltanto con dati validi configurati. Prezzi, ricette e storia iniziali sono dimostrativi.
+Il concept FUOCO è disponibile su `/fuoco`, con Living Menu `/fuoco/menu`, storia `/fuoco/storia` e contatti `/fuoco/contatti`, preservando la home del portfolio. Experience Mode permette di esplorare le sei pizze con tastiera, swipe e transizioni fotografiche; Quick Menu offre categorie, ricerca, prezzi e ingredienti delle undici proposte. Entrambi aprono Ingredient Dive. Accesso diretto rapido: `/fuoco/menu?view=quick`.
 
-Configurazione del locale in `src/features/fuoco/restaurant.ts`; proposte e prezzi in `menu-data.ts`. [FUOCO.md](FUOCO.md) spiega come modificare nome, logo, fotografie, pizze, prezzi, contatti, indirizzo e orari, i dati da richiedere al cliente e il deploy Vercel. Licenze in [CREDITS.md](public/images/fuoco/CREDITS.md), stato e verifiche in [PROGRESS.md](PROGRESS.md).
+Homepage, intro, Dough Journey e contatti hanno una direzione fotografica dedicata. Scroll verticale nativo e movimento ridotto; nessuna foto diversa viene usata per le proposte senza asset. WhatsApp e Maps si attivano soltanto con dati validi reali configurati. Prezzi, ricette e storia iniziali sono demo.
 
-Per lo sviluppo usare `npm run dev` con l’origine `localhost`, poi `/fuoco`. Controlli dedicati: `npm run lint:fuoco`, `npm run test:fuoco`, `npm run typecheck` e `npm run build`. Nessun backend, pagamento o ordine automatico.
+Configurazione in `src/features/fuoco/restaurant.ts`, proposte e prezzi in `menu-data.ts`. [FUOCO.md](FUOCO.md) documenta modifiche, interazioni, dati cliente e deploy; licenze in [CREDITS.md](public/images/fuoco/CREDITS.md), esiti e limiti in [PROGRESS.md](PROGRESS.md).
+
+Sviluppo: `npm run dev`, origine `localhost`, percorso `/fuoco`. Verifiche: `npm run lint:fuoco`, `npm run test:fuoco`, `npm run typecheck`, `npm run build`. Nessun backend, pagamento o ordine automatico.

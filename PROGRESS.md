@@ -191,3 +191,51 @@ Fase 2 completata il 3 novembre 2026, proseguendo la homepage e il design della 
 Aggiornato e confermato salvato `start_skill` della bozza cloud per le quattro pagine, i comandi di verifica, la configurazione e i confini della Fase 2. `install_script` esistente preservato: nessuna nuova installazione richiesta. Per rendere riutilizzabile lo snapshot, rivedere e salvare la bozza nelle impostazioni, poi pubblicare l’ambiente; il nuovo ripristino non è stato verificato. Questo passaggio è distinto dal deploy Vercel del sito.
 
 Restano da ottenere i dati reali del cliente elencati in FUOCO.md: contatti e indirizzo, orari, menu/prezzi/allergeni confermati, storia approvata, logo e fotografie autorizzate. Queste assenze sono gestite dalla demo e non impediscono la presentazione del concept. Fino alla conferma restano disattivati i contatti non configurati e l’indicizzazione. Prenotazioni, ordini, pagamenti, backend e dashboard non sono stati introdotti. Il lavoro termina alla Fase 2.
+
+
+## FUOCO — link di anteprima
+
+Su richiesta di un link apribile, creata e pubblicata su GitHub la branch `codex/fuoco-restaurant-20261103`, commit `7a7f28d961bb2ae406876b05a2d76b5bd9eaff6a`. Il branch `main` non è stato modificato. Le modifiche generate da `next dev` in next-env.d.ts non sono state incluse nel commit.
+
+Il controllo pubblico Vercel Preview Comments del commit riporta il dominio di anteprima `salvatore-cannavale-portfolio-git-codex-fuoc-7ab547-oneman-0b39.vercel.app`; ingresso FUOCO: `https://salvatore-cannavale-portfolio-git-codex-fuoc-7ab547-oneman-0b39.vercel.app/fuoco`. Il controllo dei commenti è riuscito, ma non è una conferma del completamento della build o dell’accesso anonimo al sito. La verifica HTTP dell’anteprima e le API GitHub sono bloccate dalla policy di rete del cloud (CONNECT 403).
+
+Salvate nella bozza dell’ambiente le destinazioni `api.github.com`, `www.salvatorecannavale.it` e l’esatto dominio di anteprima, preservando i preset esistenti. Per applicarle occorre rivedere/salvare la configurazione nelle impostazioni e pubblicare l’ambiente. Non è stata dichiarata una verifica remota del sito e non è stato eseguito un deploy di produzione su main. L’anteprima può richiedere accesso Vercel.
+
+
+## FUOCO — Creative Experience Upgrade: The Living Menu
+
+Upgrade completato il 3 novembre 2026, continuando la versione della Fase 2. Restano invariati dati del locale, ricette demo, integrazioni configurabili, storia, SEO e route del portfolio. Nessun backend, ordine automatico, pagamento o dashboard aggiunti.
+
+### Direzione creativa e componenti
+
+- The Ignition riprogettata con blackout, scintilla, luce calda in attraversamento, maschera fotografica e composizione del marchio. Timeline 2,4 s desktop / 1,85 s mobile, skip ed Escape immediati, focus accessibile, timeout di sicurezza 2,75 s / 2,15 s e nuova sessione `fuoco-ignition-living-seen`. Nessun audio o video; movimento ridotto e assenza di JavaScript evitano l’overlay.
+- Hero The First Bite in `hero.tsx`: fotografia autentica come elemento a maschera nella composizione, titoli monumentali a livelli, choreography tipografica, parallax/puntatore delicati soltanto su desktop appropriati e CTA separate verso Experience e menu rapido. La fotografia non è un semplice sfondo con testo sovrapposto.
+- Pizza Orbit in `pizza-orbit.tsx` e `pizza-orbit.css`: sei pizze dagli stessi `menuItems`, fotografia dominante oppure composizione tipografica, nome, ingredienti, categoria, prezzo e progressivo. Navigazione precedente/successivo, selezione diretta, tastiera locale (frecce/Home/End), swipe mobile e trackpad orizzontale. La rotella verticale e lo scroll del documento restano nativi. Le immagini in uscita ruotano leggermente; le nuove entrano tramite maschera, con ricomposizione del titolo e tonalità calde/crema/basilico. Cambio rapido e reduced motion puliscono i contesti GSAP.
+- Due modalità liberamente selezionabili, sempre sugli stessi dati: Experience conserva l’indice Orbit e Quick conserva ricerca/categoria quando si alternano. `/fuoco/menu?view=quick` apre direttamente Quick anche lato server; la pagina menu legge soltanto tale preferenza dalla query, senza nuove operazioni backend. I precedenti frammenti delle singole pizze continuano ad aprire Quick.
+- Quick Menu riprogettato come lista compatta: prezzi e ingredienti subito leggibili, categorie orizzontali, ricerca AND su nome/descrizione/ingredienti senza distinzione di maiuscole e accenti, conteggio annunciato, stato vuoto e ripristino. Campo mobile 16 px per evitare lo zoom automatico al focus su iOS. Senza JavaScript, tutte le undici proposte e gli allergeni provvisori restano visibili, con i controlli inattivi nascosti.
+- Ingredient Dive con un solo dialog nativo condiviso: ingrandimento e maschera della fotografia selezionata, descrizione, ingredienti, prezzo opzionale, allergeni provvisori e WhatsApp contestuale se configurato. Nessuna macro inesistente, nessuna foto differente; le speciali senza immagini conservano la tipografia. Focus, Escape, chiusura esterna e ripristino dello scroll mantenuti.
+- Dough Journey in `dough-journey.tsx`: quattro scene autentiche (impasto, lavorazione, forno, pizza pronta) con cambi fotografici sincronizzati allo scroll e composizione sticky su desktop; fallback lineare mobile, reduced motion e no-JS. Nessuna invenzione su tempi o metodi di produzione.
+- Table Reveal nei contatti: apertura fotografica calda a livelli, maschera editoriale, dati reali centralizzati e indicazioni configurabili. Lo scatto di repertorio è esplicitamente identificato e non viene presentato come foto di un locale reale.
+- Stili dedicati `creative-home.css`, `pizza-orbit.css`, `menu.css`, `creative-contact.css`; logica pura della ricerca in `menu-search.ts`. Nessuna nuova dipendenza o immagine aggiunta. Font e asset rimangono locali; niente video, audio o loop visivi pesanti.
+
+### Verifiche eseguite
+
+- `npm run lint:fuoco`: superato; `npm run test:fuoco`: 14 eseguiti e passati, zero fallimenti o skip; `npm run typecheck`: superato. I tre nuovi test coprono accenti/maiuscole/ingredienti, combinazione categoria+termini e ricerca vuota/senza risultati senza mutare i dati.
+- `npm run build`: superato sulla versione finale. Home, storia e contatti restano statici; il menu serve la preferenza query per il collegamento rapido. Le altre route sono preservate.
+- Produzione locale: 12 route, 16 combinazioni pagina/viewport a 320,390,768,1440 px e 8 controlli metadata. Nessun overflow, immagine mancante, errore JavaScript/console o risposta HTTP fallita nelle verifiche.
+- Interazioni: filtri, ricerca per nome/ingredienti/accenti/termini combinati, reset, modalità, wrapping, frecce/Home/End, 30 input rapidi e 51 aperture dettagli (18 Orbit, 33 Quick) verificate. Chiusura tramite pulsante, Escape e backdrop, ritorno del focus e cleanup del body verificati aspettando il completamento effettivo del cleanup React.
+- 13 scansioni axe su Experience, Quick e dialog: zero violazioni rilevate dopo la correzione del contrasto dei numeri decorativi Quick. Focus visibile di 2 px verificato a 320,390,1440 px. Si tratta di controllo automatico e revisione visiva, non di certificazione.
+- Corretto e ricontrollato il fallback no-JS: Tailwind preflight applicava display:none !important agli elementi hidden; l’override noscript nello stesso layer base rende ora visibili tutte le undici proposte, sia nella route predefinita sia con view=quick. Eliminata anche la barra modalità vuota. Heading Margherita presente nell’albero accessibile e controlli inattivi nascosti.
+- Otto verifiche intro: automatico mobile/desktop, sessione, skip, Escape, reduced motion iniziale/dinamico, nessun overlay no-JS e timeout di sicurezza. Misurati circa 1,9 s mobile /2,6 s desktop; fallback con requestAnimationFrame bloccato circa 2702 ms.
+- Dough Journey: tutte le quattro scene desktop (0/1/2/3) e fallback mobile/reduced verificati. Quattro percorsi SPA verificati.
+- Touch Chromium emulato a 390 e 412 px: swipe Orbit, scroll verticale nativo, scorrimento orizzontale dei filtri, selezione, dettagli e ripristino dello scroll superati. Nessuna verifica su Safari o hardware iPhone/Android reale.
+- Revisione visiva di hero, Orbit, speciali tipografiche, Quick, contatti e Dough su desktop/mobile completata. Report e screenshot in `/tmp/fuoco-creative-qa/`; script UI in `/tmp/fuoco-creative-check.py`, `/tmp/fuoco-creative-motion.py` e script dei retake dedicati.
+- `git diff --check`: superato. Il lint globale non è stato ripetuto nell’upgrade: restano documentati i 272 errori preesistenti nelle altre demo. Il lint dedicato comprende tutti i file FUOCO e i test ed è passato.
+
+### Documentazione, ambiente e anteprima
+
+README, FUOCO.md e registro degli asset aggiornati: interazioni, URL rapidi, componenti, personalizzazione e fonti. Stesse fotografie e licenze delle fasi precedenti; nessuna immagine macro o di locale fittizia. Restano da richiedere al cliente dati commerciali, allergeni e prezzi confermati, racconto e fotografie originali; la mozzarella di repertorio conserva il limite di 400×267 px già documentato.
+
+Confermato salvato l’aggiornamento `start_skill` della bozza cloud con le nuove modalità e verifiche; installazione e policy esistenti preservate. Per applicare la bozza, rivedere e salvare nelle impostazioni, poi pubblicare l’ambiente. La rete attuale continua a non applicare le destinazioni personalizzate salvate: la verifica remota dell’anteprima resta bloccata, e il ripristino su una macchina nuova non è stato verificato.
+
+Destinazione del codice: branch di anteprima esistente `codex/fuoco-restaurant-20261103`, mantenendo `main` invariato. Il link di anteprima precedente è documentato nella sezione sopra; l’aggiornamento del branch non costituisce una verifica del completamento del deployment o dell’accesso anonimo.

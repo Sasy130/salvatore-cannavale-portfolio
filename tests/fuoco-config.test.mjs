@@ -119,3 +119,26 @@ test('all requested pizzas exist and absent photography stays absent', () => {
     if (item.category !== 'classiche') assert.equal(item.image, undefined);
   }
 });
+
+test('quick search is case and accent insensitive for names and ingredients', () => {
+  const { findMenuItems } = load('menu-search');
+  const { menuItems } = load('menu-data');
+  assert.deepEqual(Array.from(findMenuItems(menuItems, 'all', '  marGHERITÀ '), item => item.id), ['margherita']);
+  assert.deepEqual(Array.from(findMenuItems(menuItems, 'all', 'básilico POMODÒRO'), item => item.id), ['margherita']);
+  assert.deepEqual(Array.from(findMenuItems(menuItems, 'fritti', 'CROCCHE'), item => item.id), ['crocche']);
+});
+test('quick search combines categories with every search term', () => {
+  const { findMenuItems } = load('menu-search');
+  const { menuItems } = load('menu-data');
+  assert.deepEqual(Array.from(findMenuItems(menuItems, 'speciali', 'pomodoro mozzarella'), item => item.id), ['capricciosa']);
+  assert.equal(findMenuItems(menuItems, 'bevande', 'pomodoro').length, 0);
+});
+test('quick menu handles empty and unmatched queries without altering its source', () => {
+  const { findMenuItems } = load('menu-search');
+  const { menuItems } = load('menu-data');
+  const original = JSON.stringify(menuItems);
+  assert.equal(findMenuItems(menuItems, 'all', '   ').length, 11);
+  assert.equal(findMenuItems(menuItems, 'all', 'ingrediente-che-non-esiste').length, 0);
+  assert.equal(findMenuItems([], 'all', 'pizza').length, 0);
+  assert.equal(JSON.stringify(menuItems), original);
+});

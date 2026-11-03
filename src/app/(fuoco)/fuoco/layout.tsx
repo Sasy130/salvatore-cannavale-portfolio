@@ -11,6 +11,7 @@ import "@fontsource/dm-sans/400.css";
 import "@fontsource/dm-sans/500.css";
 import "./globals.css";
 import "@/features/fuoco/restaurant-pages.css";
+import "@/features/fuoco/creative-home.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(restaurant.siteUrl),
