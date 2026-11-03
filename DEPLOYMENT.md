@@ -53,3 +53,12 @@ Su richiesta del proprietario, NØ/STATIC, MORSO, AEVUM, FORGIA e OMBRA sono sta
 Rent Car Station e A&J Rent Car sono presentati separatamente dai concept originali. I sorgenti delle due demo e i passaggi di build sono in `demo-sources/README.md`; i rispettivi casi studio sono `/demos/rent-car-station/progetto/` e `/demos/aj-rent-car/progetto/`. Le proposte sono indipendenti, non ufficiali e non affiliate alle aziende.
 
 Le proposte indipendenti non compaiono nella homepage: la pagina `/proposte` viene riscritta a `public/one-man/proposte.html` ed è raggiungibile dal menu. Le due demo usano collegamenti HTML diretti per evitare richieste RSC fra applicazioni statiche ospitate sotto il portfolio.
+
+
+## FUOCO — Fasi 1 e 2
+
+FUOCO vive nello stesso progetto Next.js alle route `/fuoco`, `/fuoco/menu`, `/fuoco/storia` e `/fuoco/contatti`. Mantenere il rewrite della home ONE MAN e le altre demo. Configurazione del locale, limiti demo, dati da richiedere e personalizzazione sono documentati in [FUOCO.md](FUOCO.md).
+
+Prima di una pubblicazione eseguire `npm run lint:fuoco`, `npm run test:fuoco`, `npm run typecheck` e `npm run build`, poi verificare in anteprima le quattro pagine, filtri, schede, contatti configurati, SEO e route preservate. Installazione Vercel `npm ci`, framework Next.js, build `npm run build`, output automatico; nessun segreto o servizio backend aggiuntivo richiesto. Seguire il collegamento GitHub → Vercel già configurato e il flusso di anteprima/produzione descritto sopra.
+
+Il concept resta demo e noindex finché i dati reali non sono confermati. Nessun deploy di FUOCO è stato eseguito durante la consegna locale delle due fasi. La pubblicazione dello snapshot dell’ambiente cloud è un’operazione separata.

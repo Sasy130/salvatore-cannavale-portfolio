@@ -81,3 +81,11 @@ Official guide: https://vercel.com/docs/projects/deploy-from-cli
 Alternatively, push the source and lockfile to a Git repository, then choose Add New → Project in Vercel, import that repository, select the directory containing `package.json`, accept the Next.js preset and Deploy. `node_modules`, `.next`, `.vercel`, `work` and `outputs` are excluded by `.gitignore`.
 
 Git guide: https://vercel.com/docs/git
+
+## FUOCO — esperienza completa (Fasi 1 e 2)
+
+Il concept FUOCO è disponibile su `/fuoco`, con menu digitale `/fuoco/menu`, storia `/fuoco/storia` e contatti `/fuoco/contatti`, senza modificare la home del portfolio. Il menu comprende filtri e schede accessibili; WhatsApp, telefono e indicazioni si attivano soltanto con dati validi configurati. Prezzi, ricette e storia iniziali sono dimostrativi.
+
+Configurazione del locale in `src/features/fuoco/restaurant.ts`; proposte e prezzi in `menu-data.ts`. [FUOCO.md](FUOCO.md) spiega come modificare nome, logo, fotografie, pizze, prezzi, contatti, indirizzo e orari, i dati da richiedere al cliente e il deploy Vercel. Licenze in [CREDITS.md](public/images/fuoco/CREDITS.md), stato e verifiche in [PROGRESS.md](PROGRESS.md).
+
+Per lo sviluppo usare `npm run dev` con l’origine `localhost`, poi `/fuoco`. Controlli dedicati: `npm run lint:fuoco`, `npm run test:fuoco`, `npm run typecheck` e `npm run build`. Nessun backend, pagamento o ordine automatico.

@@ -1,0 +1,35 @@
+# FUOCO — crediti fotografici
+
+Fotografie stock e fotografie liberamente riutilizzabili, impiegate per un concept dimostrativo. Non ritraggono un locale FUOCO reale, i suoi collaboratori o i suoi prodotti. Nessuna immagine è generata con IA. Sostituire questi file con fotografie originali autorizzate del locale prima di presentare il sito come attività reale.
+
+Acquisizione: 3 novembre 2026. Le fotografie sono state recuperate da copie pubbliche su GitHub che ne documentano la provenienza; le pagine originali e le licenze sono riportate sotto. La rete di questo ambiente blocca le pagine e i CDN di Unsplash/Pexels: l'ispezione ha quindi riguardato i file effettivamente scaricati e i crediti conservati dai repository sorgente, non una nuova consultazione diretta delle pagine delle piattaforme.
+
+## Fotografie e provenienza
+
+| File locale | Soggetto / autore | Fonte originale | Licenza | Copia con provenienza documentata |
+| --- | --- | --- | --- | --- |
+| `hero.webp` | Pizza Margherita; autore sulla pagina Pexels | [Pexels 14590497](https://www.pexels.com/photo/photo-of-margherita-pizza-14590497/) | [Pexels License](https://www.pexels.com/license/) | [borx3a/pizzeria-website-template, crediti e file](https://github.com/borx3a/pizzeria-website-template/tree/5c3acb147d390901d466cd7284d5b961b4a6baf8), `public/images/pizza-margherita.jpg` |
+| `margherita.webp` | Pizza con pomodoro, mozzarella e basilico; shaian ramesht | [Profilo Unsplash dell'autore](https://unsplash.com/@shaianramesht) | [Unsplash License](https://unsplash.com/license) | [Spartalis1/Landing_Page, attribuzione specifica nel README](https://github.com/Spartalis1/Landing_Page/tree/2703b71ea1916cf5ac4beebffe83e5e3d8a8ef13), `pizzathumb.jpg` |
+| `marinara.webp` | Pizza Marinara; Peter Van den Bossche, caricamento su Commons di Diádoco | [Wikimedia Commons, curid 11363846](https://commons.wikimedia.org/w/index.php?curid=11363846) | [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/) | [RiccardoPanzeri/restaurant_page_project, attribuzione specifica nel README](https://github.com/RiccardoPanzeri/restaurant_page_project/tree/99d5e980c197d6d290fc76975ee9bc292c60d078), `src/images/Pizza_marinara.jpg` |
+| `diavola.webp` | Pizza con salame; Brett Jordan | [Pexels 825661](https://www.pexels.com/photo/pizza-on-brown-wooden-board-825661/) | [Pexels License](https://www.pexels.com/license/) | [Educative-Content/application-composer-cl-image-repo, attribuzione specifica nel README](https://github.com/Educative-Content/application-composer-cl-image-repo/tree/5ba4d6cc356bead9fb60826366b64586d9f6c06a), `pepproni-pizza.jpg` |
+| `pizzaiolo.webp`, `dough.webp` | Mani che lavorano un impasto; Nadya Spetditskaya | [Unsplash](https://unsplash.com/) — la copia non conserva il permalink della singola fotografia | [Unsplash License](https://unsplash.com/license) | [joanavrsilva/italian-food-restaurant, attribuzione specifica nella sezione Media del README](https://github.com/joanavrsilva/italian-food-restaurant/tree/9c326ee9ad03ff8a7bc750eb3af40a21d818a90f), `media/pizza-making.jpg` |
+| `preparation.webp`, `tomatoes.webp` | Pomodori, passata, aglio, farina e altri ingredienti; Frank Shrader | [Pixabay](https://pixabay.com/) — la copia non conserva il permalink della singola fotografia | [Pixabay Content License](https://pixabay.com/service/license-summary/) | [joanavrsilva/italian-food-restaurant, attribuzione specifica nella sezione Media del README](https://github.com/joanavrsilva/italian-food-restaurant/tree/9c326ee9ad03ff8a7bc750eb3af40a21d818a90f), `media/pizza-ingredients.jpg` |
+| `mozzarella.webp` | Caprese con fette di mozzarella e pomodoro; Shameel Mukkath | [Pexels 5639966](https://www.pexels.com/photo/sliced-tomatoes-and-mozzarella-cheese-on-a-wooden-board-5639966/) | [Pexels License](https://www.pexels.com/license/) | [Rylanjp/Dalla-Sicilia, attribuzione specifica nel README](https://github.com/Rylanjp/Dalla-Sicilia/tree/f8221988467943fb98542a358d73f6e64d42a8f7), `assets/img/menu/Caprese.webp` |
+| `basil.webp` | Foglie di basilico su superficie scura | [Pexels 95214](https://www.pexels.com/photo/italian-italy-green-basil-95214/) | [Pexels License](https://www.pexels.com/license/) | [jason-simmons/gallery-assets, origine del settimo asset Pesto nel README](https://github.com/jason-simmons/gallery-assets/tree/f9d3fd5b616d986d9fabc2526972a06edb3acfbb), `lib/pesto/image7.jpg` |
+| `oven.webp` | Pizza in forno a legna; Vinicius Benedit | [Pexels 1082342](https://www.pexels.com/photo/1082342/) | [Pexels License](https://www.pexels.com/license/) | [bredafabio/Tasty-Slice, attribuzione nel README e nome originale del file](https://github.com/bredafabio/Tasty-Slice/tree/13102951d4188fe31eeb292085736fac2a870e9a), `assets/images/pexels-viniciusbenedit-1082342.jpg` |
+
+## Condizioni e trasformazioni
+
+- Pexels e Unsplash consentono l'uso e la modifica delle fotografie, incluso l'uso commerciale, alle condizioni delle rispettive licenze. Non rivendere le immagini inalterate come stock, non creare una libreria concorrente e non suggerire approvazione o affiliazione degli autori o dei soggetti fotografati.
+- Pixabay consente l'uso e l'adattamento dei contenuti alle condizioni della propria licenza; non distribuire questi file come raccolta stock autonoma. Il sito li utilizza all'interno di una composizione editoriale.
+- `marinara.webp`: © Peter Van den Bossche, **CC BY-SA 2.0**. Modifiche: ridimensionamento e conversione da JPEG a WebP. Questo derivato conserva la medesima licenza; il requisito ShareAlike riguarda la fotografia derivata. Conservare autore, fonte, licenza e indicazione delle modifiche anche nelle pubblicazioni successive.
+- Tutti i file sono stati solo ridimensionati e convertiti in WebP; non sono stati alterati ingredienti, persone o luoghi. I ritagli visuali avvengono nei contenitori CSS della pagina.
+- `mozzarella.webp` proviene da un'immagine di **400 × 267 pixel**: è l'asset meno dettagliato e va sostituito con una fotografia originale di maggiore risoluzione quando disponibile. Non è stato ingrandito artificialmente.
+- `pizzaiolo.webp` mostra le mani al lavoro, senza attribuire un'identità o un ruolo reale alla persona. `diavola.webp` è una fotografia d'atmosfera di pizza con salame; non certifica una ricetta o un grado di piccantezza. Le ricette proposte restano illustrative.
+
+Per sostituire gli asset mantenere i nomi dei file oppure aggiornare i percorsi nel contenuto FUOCO. Conservare un registro della liberatoria/licenza delle nuove fotografie e aggiornare questo documento.
+
+
+## Utilizzo nella Fase 2
+
+Le pagine menu, storia e contatti riutilizzano gli stessi asset documentati sopra. Nessuna nuova fotografia è stata acquisita nella Fase 2. Le classiche Margherita, Marinara e Diavola usano le immagini pertinenti; Quattro Formaggi, Capricciosa, Salsiccia e Friarielli, fritti e bevande usano presentazioni tipografiche finché non sono disponibili fotografie corrette. La sezione del locale non mostra una fotografia stock come immagine di un’attività reale: `restaurant.locationImage` resta null fino alla fornitura di un asset autorizzato.
