@@ -215,6 +215,32 @@ function startPortfolio() {
     hero.style.setProperty('--pointer-y', '0');
     sculpture?.setPointer(0, 0);
   });
+  // Horizontal touch gestures give the sculpture a little momentum; vertical scrolling remains native.
+  const heroObject = document.querySelector('#hero-object');
+  let touchGesture = null;
+  heroObject?.addEventListener('pointerdown', event => {
+    if (event.pointerType !== 'touch' || reduced) return;
+    touchGesture = { id: event.pointerId, startX: event.clientX, startY: event.clientY, x: event.clientX, time: event.timeStamp, velocity: 0, active: false };
+  });
+  heroObject?.addEventListener('pointermove', event => {
+    if (!touchGesture || event.pointerId !== touchGesture.id || reduced) return;
+    const dx = event.clientX - touchGesture.startX, dy = event.clientY - touchGesture.startY;
+    if (!touchGesture.active && Math.abs(dx) > 9 && Math.abs(dx) > Math.abs(dy) * 1.25) touchGesture.active = true;
+    if (!touchGesture.active) return;
+    const elapsed = Math.max(16, event.timeStamp - touchGesture.time);
+    touchGesture.velocity = (event.clientX - touchGesture.x) / elapsed;
+    touchGesture.x = event.clientX; touchGesture.time = event.timeStamp;
+    const rect = heroObject.getBoundingClientRect();
+    sculpture?.setPointer(clamp(dx / Math.max(1, rect.width) * 2, -1, 1), clamp(dy / Math.max(1, rect.height) * 2, -1, 1));
+    heroObject.classList.add('is-dragging');
+  });
+  const endTouchGesture = event => {
+    if (!touchGesture || event.pointerId !== touchGesture.id) return;
+    if (touchGesture.active && event.type !== 'pointercancel') sculpture?.setImpulse(touchGesture.velocity * 2);
+    sculpture?.setPointer(0, 0); heroObject?.classList.remove('is-dragging'); touchGesture = null;
+  };
+  window.addEventListener('pointerup', endTouchGesture);
+  window.addEventListener('pointercancel', endTouchGesture);
   window.addEventListener('blur', hideCursor);
 
   const main = document.querySelector('main');

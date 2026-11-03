@@ -190,7 +190,7 @@ export function createSculpture(canvas, { reduced = false, onReady = () => {} } 
 
   let mode = 'flow', progress = 0, pointerX = 0, pointerY = 0;
   let currentX = 0, currentY = 0, currentProgress = 0, opening = 0, explosion = 0;
-  let orbit = 0, frame = 0, disposed = false, announced = false, lastTime = 0, inView = true;
+  let orbit = 0, gestureVelocity = 0, gestureAngle = 0, frame = 0, disposed = false, announced = false, lastTime = 0, inView = true;
   let cssWidth = 0, cssHeight = 0, mobile = false, dirty = true, fitDistance = 10.6;
   const restRotation = new THREE.Euler(.13, -.34, -.20);
   const resize = () => {
@@ -226,10 +226,15 @@ export function createSculpture(canvas, { reduced = false, onReady = () => {} } 
     opening = ease(opening, mode === 'orbit' ? 1 : 0, damping);
     explosion = ease(explosion, mode === 'explode' ? 1 : 0, damping);
     orbit = ease(orbit, mode === 'orbit' ? .55 : 0, damping);
+    if (!reduced) {
+      gestureAngle = ease(gestureAngle, 0, 1 - Math.exp(-delta * .55));
+      gestureAngle = clamp(gestureAngle + gestureVelocity * delta, -1.35, 1.35);
+      gestureVelocity *= Math.exp(-delta * 3.2);
+    }
     const t = reduced ? 0 : time * .00018;
     camera.position.z = fitDistance + explosion * (camera.aspect < 1 ? 2.5 : 1.7);
     assembly.rotation.x = restRotation.x + currentY * .12 + Math.sin(t * .83) * .045 - currentProgress * .25;
-    assembly.rotation.y = restRotation.y + currentX * .24 + Math.sin(t * .61) * .13 + orbit + currentProgress * .6;
+    assembly.rotation.y = restRotation.y + currentX * .24 + Math.sin(t * .61) * .13 + orbit + currentProgress * .6 + gestureAngle;
     assembly.rotation.z = restRotation.z + Math.sin(t * .73) * .06 + currentProgress * .35;
     assembly.position.y = (reduced ? 0 : Math.sin(t * 1.5) * .075) + currentProgress * .15;
     assembly.scale.setScalar(1 - currentProgress * .13);
@@ -283,6 +288,7 @@ export function createSculpture(canvas, { reduced = false, onReady = () => {} } 
     setProgress(value) { progress = clamp(Number(value) || 0, 0, 1); kick(); },
     setMode(value) { mode = ['flow', 'orbit', 'explode'].includes(value) ? value : 'flow'; kick(); },
     setPointer(x, y) { if (reduced) return; pointerX = clamp(Number(x) || 0, -1, 1); pointerY = clamp(Number(y) || 0, -1, 1); kick(); },
+    setImpulse(value) { if (reduced) return; gestureVelocity = clamp(Number(value) || 0, -2.2, 2.2); kick(); },
     resize,
     dispose() {
       if (disposed) return;

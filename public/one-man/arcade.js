@@ -3,9 +3,9 @@ import { projects } from './projects-data.js';
 // The roulette presents only the original portfolio projects. Redesign proposals
 // remain on their separate page and never enter this selection.
 const featured = [
-  { name: 'VELMORA', category: 'Immersive experience', description: 'Uno yacht da esplorare, un mondo da immaginare.', image: '/one-man/assets/velmora.jpg', url: '/velmora/index.html' },
-  { name: 'VANTA', category: 'Automotive experience', description: 'Un’altra idea di noleggio premium, da vivere in prima persona.', image: '/one-man/assets/vanta.jpg', url: '/vanta/index.html' },
-  { name: 'LUNÉA', category: 'Jewelry experience', description: 'Un atelier digitale dove ogni dettaglio prende forma.', image: '/projects/lunea.jpg', url: '/lunea/index.html' },
+  { name: 'VELMORA', mood: 'sea', category: 'Immersive experience', description: 'Uno yacht da esplorare, un mondo da immaginare.', image: '/one-man/assets/velmora.jpg', url: '/velmora/index.html' },
+  { name: 'VANTA', mood: 'asphalt', category: 'Automotive experience', description: 'Un’altra idea di noleggio premium, da vivere in prima persona.', image: '/one-man/assets/vanta.jpg', url: '/vanta/index.html' },
+  { name: 'LUNÉA', mood: 'rose', category: 'Jewelry experience', description: 'Un atelier digitale dove ogni dettaglio prende forma.', image: '/projects/lunea.jpg', url: '/lunea/index.html' },
 ];
 const worlds = [...featured, ...projects.filter(project => project.kind !== 'redesign')];
 const section = document.querySelector('#project-roulette');
@@ -25,7 +25,37 @@ if (section && worlds.length) {
   const spin = section.querySelector('#arcade-spin');
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
   const pointerFine = matchMedia('(hover: hover) and (pointer: fine)');
-  let current = 0, animation = 0, busy = false, touchStart = null, pointerFrame = 0, swiped = false;
+  let current = 0, animation = 0, busy = false, touchStart = null, pointerFrame = 0, swiped = false, imageToken = 0;
+  const imageCache = new Map();
+  const categoryMood = { Luxury: 'sea', Automotive: 'asphalt', Food: 'olive', Sport: 'asphalt', Lifestyle: 'rose', Esperienze: 'sea' };
+  function prepareImage(src) {
+    if (!imageCache.has(src)) {
+      const candidate = new Image(); candidate.src = src;
+      imageCache.set(src, candidate.decode().catch(() => {}));
+    }
+    return imageCache.get(src);
+  }
+  function showImage(world) {
+    const token = ++imageToken;
+    if (image.getAttribute('src') === world.image) { image.alt = `Anteprima del progetto ${world.name}`; return; }
+    prepareImage(world.image).then(() => {
+      if (token !== imageToken) return;
+      const previous = image.cloneNode(false);
+      previous.removeAttribute('id'); previous.alt = ''; previous.setAttribute('aria-hidden', 'true');
+      previous.className = 'arcade-transition-image';
+      if (!reduceMotion.matches && typeof previous.animate === 'function') {
+        open.querySelectorAll('.arcade-transition-image').forEach(item => item.remove());
+        open.append(previous);
+        const outgoing = previous.animate([{ opacity: 1, transform: 'scale(1)' }, { opacity: 0, transform: 'scale(1.045)' }], { duration: 760, easing: 'cubic-bezier(.22,1,.36,1)' });
+        outgoing.finished.then(() => previous.remove(), () => previous.remove());
+      }
+      image.src = world.image; image.alt = `Anteprima del progetto ${world.name}`;
+      if (!reduceMotion.matches && typeof image.animate === 'function') {
+        image.getAnimations().forEach(item => item.cancel());
+        image.animate([{ transform: 'scale(1.055)' }, { transform: 'scale(1)' }], { duration: 900, easing: 'cubic-bezier(.16,1,.3,1)' });
+      }
+    });
+  }
   const wrap = n => (n + worlds.length) % worlds.length;
   const indicatorButtons = worlds.map((world, index) => {
     const button = document.createElement('button');
@@ -39,9 +69,10 @@ if (section && worlds.length) {
   function display(index, announce = true) {
     current = wrap(index);
     const world = worlds[current], one = worlds[wrap(current + 1)], two = worlds[wrap(current + 2)];
-    image.src = world.image;
-    image.alt = `Anteprima del progetto ${world.name}`;
+    showImage(world);
     backOne.src = one.image; backTwo.src = two.image;
+    machine.dataset.world = world.mood || categoryMood[world.category] || 'asphalt';
+    if (section.classList.contains('is-active')) { prepareImage(one.image); prepareImage(two.image); }
     title.textContent = world.name;
     description.textContent = world.description;
     category.textContent = `${String(current + 1).padStart(2, '0')} / ${world.category.toLocaleUpperCase('it-IT')}`;
@@ -52,11 +83,12 @@ if (section && worlds.length) {
     if (announce) status.textContent = `${world.name}, progetto ${current + 1} di ${worlds.length}.`;
   }
   function animateChange() {
-    if (reduceMotion.matches) return;
-    stage.classList.remove('is-changing');
-    // Restart only this brief transition when a new project is selected.
-    void stage.offsetWidth;
-    stage.classList.add('is-changing');
+    if (reduceMotion.matches || typeof title.animate !== 'function') return;
+    for (const item of [title, category, description, number]) {
+      item.getAnimations().forEach(animation => animation.cancel());
+      item.animate([{ opacity: .35, transform: 'translateY(12px)' }, { opacity: 1, transform: 'translateY(0)' }],
+        { duration: 620, easing: 'cubic-bezier(.16,1,.3,1)' });
+    }
   }
   function choose(index) {
     if (busy) return;
@@ -128,12 +160,19 @@ if (section && worlds.length) {
   // Decorative orbital motion only runs while the roulette is on screen.
   if ('IntersectionObserver' in window) {
     const activeObserver = new IntersectionObserver(entries => {
-      section.classList.toggle('is-active', entries.some(entry => entry.isIntersecting));
+      const active = entries.some(entry => entry.isIntersecting);
+      section.classList.toggle('is-active', active);
+      if (active) { prepareImage(worlds[wrap(current + 1)].image); prepareImage(worlds[wrap(current + 2)].image); }
     }, { threshold: .05 });
     activeObserver.observe(section);
   }
   reduceMotion.addEventListener('change', event => {
-    if (event.matches) { section.classList.add('is-visible'); stopSpin(); status.textContent = `${worlds[current].name}, progetto ${current + 1} di ${worlds.length}.`; }
+    if (event.matches) {
+      section.classList.add('is-visible'); stopSpin();
+      for (const item of [title, category, description, number, image]) item.getAnimations?.().forEach(animation => animation.cancel());
+      open.querySelectorAll('.arcade-transition-image').forEach(item => item.remove());
+      status.textContent = `${worlds[current].name}, progetto ${current + 1} di ${worlds.length}.`;
+    }
   });
 }
 
