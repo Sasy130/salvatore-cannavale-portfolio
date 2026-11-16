@@ -129,6 +129,7 @@ function startPortfolio() {
   const setMenu = (open, restoreFocus = false) => {
     body.classList.toggle('menu-open', open);
     menuButton?.setAttribute('aria-expanded', String(open));
+    menuButton?.setAttribute('aria-label', open ? 'Chiudi navigazione' : 'Apri navigazione');
     if (menu) menu.inert = !open;
     if (main) main.inert = open;
     hideCursor();
@@ -172,8 +173,6 @@ function startPortfolio() {
     requestAnimationFrame(() => dialog.querySelector('[data-close-dialog]')?.focus({ preventScroll: true }));
   };
   document.querySelector('#open-case')?.addEventListener('click', event => openDialog('case-dialog', event.currentTarget));
-  document.querySelector('#open-vanta-case')?.addEventListener('click', event => openDialog('vanta-case-dialog', event.currentTarget));
-  document.querySelector('#open-lunea-case')?.addEventListener('click', event => openDialog('lunea-case-dialog', event.currentTarget));
   for (const button of document.querySelectorAll('[data-open-brief]')) {
     button.addEventListener('click', event => openDialog('brief-dialog', event.currentTarget));
   }

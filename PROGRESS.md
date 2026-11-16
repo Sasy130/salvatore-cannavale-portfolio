@@ -276,3 +276,9 @@ Sostituita la struttura tre progetti grandi + raccolta con un indice unico di tr
 ## 16 novembre 2026 — presentazione scroll
 
 Rimossi markup e modulo della roulette, la scultura della home, i relativi controlli e il caricamento iniziale. Nuova presentazione a tre capitoli in nero/arancio con titoli, frammenti dei lavori, transizioni reversibili e profilo di Salvatore. Verificati via esecuzione del controller i capitoli, lo scroll inverso e il cambio di preferenza movimento; verificati markup, asset e griglia di tredici schede. Lint FUOCO, test FUOCO, TypeScript e build eseguiti. Browser QA ancora indisponibile: errore del servizio “Browser Use could not read requirements”. Base `da218c9006093547b1453017a2ee69ea05075312`.
+
+## 16 novembre 2026 — selezione e fluidità
+
+Rimossi LUNÉA, NOIR e VANTA dalla raccolta, ora di dieci progetti. Archivi e demo precedenti restano disponibili per i link già condivisi. Rimossa la scritta MENU, mantenendo icona, etichette accessibili e gestione focus.
+
+Ottimizzate le copie locali delle nuove demo: KÍNETIC decodifica i frame a 960 px desktop / 480 px mobile, evita la scrittura continua dei dati diagnostici senza `?debug` e sospende il disegno fuori schermo o con scheda nascosta. VÉRA usa lo scroll nativo, rimuovendo Lenis e il relativo ticker continuo. VELAR elimina blur di sfondo e ombre filtrate sulle chiavi nei dispositivi touch. La presentazione ONE MAN evita aggiornamenti CSS identici quando lo scroll è già prima o dopo la sequenza. Questi interventi riducono il lavoro richiesto, senza certificare un framerate su hardware non misurato.

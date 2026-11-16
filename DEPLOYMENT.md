@@ -79,3 +79,9 @@ VELMORA conserva il proprio URL e riceve il dist aggiornato del Site, senza modi
 ## Nuova apertura — 16 novembre 2026
 
 La homepage sostituisce scultura, loader e roulette con una presentazione tipografica a tre capitoli. `entrance.js` applica l’avanzamento allo scroll nativo tramite CSS e un frame su richiesta, senza wheel interception né WebGL. Nero/arancio, passaggio a pieno schermo e presentazione di Salvatore; griglia e casi studio preservati. Senza JavaScript e con movimento ridotto i capitoli sono impaginati in sequenza normale; “Vai ai progetti” resta disponibile durante l’animazione. Le demo dei singoli progetti non cambiano.
+
+## Fluidità delle demo — 16 novembre 2026
+
+La raccolta contiene dieci progetti dopo la rimozione di LUNÉA, NOIR e VANTA; vecchi URL preservati. MENU non è più scritto nel pulsante di navigazione, che conserva etichetta accessibile e area touch.
+
+Le copie esportate VELAR/KÍNETIC/VÉRA sono ricompilate dai sorgenti locali ottimizzati, disponibili negli archivi `demo-sources/`. KÍNETIC usa un canvas con decodifica ridotta (960/480 px), scritture diagnostiche solo in modalità debug, pausa del rendering fuori schermo e a scheda nascosta. VÉRA usa lo scroll nativo e non carica Lenis. VELAR alleggerisce blur e filtri sulle chiavi per dispositivi touch. Rimossi i vecchi chunk generati prima di copiare i nuovi export. Nessun aggiornamento ai Sites originali.

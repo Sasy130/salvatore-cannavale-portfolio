@@ -589,3 +589,6 @@ html{scroll-padding-top:84px}
 @media(max-height:680px) and (max-width:650px){.story-invite{padding-top:130px}.story-topline{top:95px}.story-invite h1{font-size:19vw}.story-fragments{height:25%;bottom:14%}.story-person{padding-top:120px}.story-person h2{font-size:12vw}.story-person-copy{margin-top:18px}.story-person-copy p{font-size:11px}.story-label{margin-bottom:16px}}
 @media(prefers-reduced-motion:reduce){.story-fragments{display:none}.story-panel{min-height:0;padding-top:130px;padding-bottom:80px}.story-invite{min-height:80svh}.story-person-copy{position:static;width:100%;margin-top:35px}.story-chapters,.story-scroll-cue,.story-progress{display:none}.story-footer{justify-content:flex-end}.story-impact h2>span{color:#101010;-webkit-text-stroke:0}}
 @media(forced-colors:active){.story-invite h1>span,.story-person h2>span,.story-impact h2>span{color:CanvasText;-webkit-text-stroke:0}.story-fragments,.story-orange{display:none}.story-panel{border-bottom:1px solid CanvasText}}
+
+/* Icon-only navigation retains its accessible name and 44px touch target. */
+.menu-toggle{width:44px;height:44px;padding:0}.menu-toggle>i{right:10px;width:24px;top:17px}.menu-toggle>i:last-child{top:25px}.menu-open .menu-toggle>i{top:21px}

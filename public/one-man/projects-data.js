@@ -65,56 +65,6 @@ export const projects = [
     "alt": "Anteprima del concept VÉRA"
   },
   {
-    "slug": "lunea",
-    "name": "LUNÉA",
-    "subtitle": "Indossa la tua luce",
-    "description": "Un atelier di gioielli con collezioni e creazioni personalizzabili in un configuratore tridimensionale.",
-    "category": "Luxury",
-    "tags": [
-      "ART DIRECTION",
-      "CONFIGURATORE 3D"
-    ],
-    "url": "/lunea/index.html",
-    "image": "/projects/lunea.jpg",
-    "caseButton": "open-lunea-case",
-    "caseDialog": "lunea-case-dialog",
-    "access": "public",
-    "alt": "Anteprima del progetto LUNÉA"
-  },
-  {
-    "slug": "noir",
-    "name": "NOIR",
-    "subtitle": "Luxury Automotive",
-    "description": "Uno showroom digitale immaginario: collezione, performance e visita privata dimostrativa.",
-    "category": "Automotive",
-    "tags": [
-      "LUXURY AUTOMOTIVE",
-      "SHOWROOM",
-      "MOTION"
-    ],
-    "url": "/demos/noir/",
-    "access": "public",
-    "image": "/one-man/assets/projects/noir.webp",
-    "alt": "Anteprima del progetto dimostrativo NOIR"
-  },
-  {
-    "slug": "vanta",
-    "name": "VANTA",
-    "subtitle": "Drive beyond",
-    "description": "Un atelier digitale per il noleggio premium. Dal desiderio al viaggio, tra vetture e scelte personali.",
-    "category": "Automotive",
-    "tags": [
-      "MOTION",
-      "RENTAL EXPERIENCE"
-    ],
-    "url": "/vanta/index.html",
-    "image": "/one-man/assets/vanta.jpg",
-    "caseButton": "open-vanta-case",
-    "caseDialog": "vanta-case-dialog",
-    "access": "public",
-    "alt": "Anteprima del progetto VANTA"
-  },
-  {
     "slug": "apex-karting",
     "name": "APEX KARTING",
     "subtitle": "Born to race",

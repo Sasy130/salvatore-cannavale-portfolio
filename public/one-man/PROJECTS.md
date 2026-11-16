@@ -41,3 +41,9 @@ VELMORA aggiornato dal dist del Site `velmora-yachts-v34`, mantenendo il percors
 Rimossa la divisione tra tre progetti in evidenza e raccolta secondaria. VELMORA, VANTA e LUNÉA entrano nell’unica griglia di tredici progetti, con la stessa gerarchia delle altre schede e mantenendo i casi studio. Link diretto alla demo sulle immagini, dettagli separati, numerazione continua e filtri per categoria. Layout a tre colonne desktop, due tablet e una mobile; titoli editoriali, cornici sottili e interazioni arancio con rispetto del movimento ridotto.
 
 Su richiesta del proprietario, SULLA VIA, ÉTERNA e NERÈA sono rimossi dalla presentazione e dalla roulette. I loro vecchi file demo non sono cancellati, per preservare eventuali link già condivisi. I due redesign restano separati in `/proposte`. Roulette e griglia usano ora lo stesso archivio completo in `projects-data.js`.
+
+## Selezione — 16 novembre 2026
+
+Rimossi dalla raccolta LUNÉA, NOIR e VANTA su richiesta del proprietario: restano dieci progetti, con conteggi e numerazione aggiornati. Demo originali e relativi asset preservati per i vecchi link. L’etichetta visiva MENU è sostituita dall’icona con nome accessibile dinamico.
+
+Le copie locali di KÍNETIC, VÉRA e VELAR ricevono ottimizzazioni di decodifica, rendering e scorrimento; i Sites originali non sono modificati. Sorgenti aggiornati negli archivi di `demo-sources/`.

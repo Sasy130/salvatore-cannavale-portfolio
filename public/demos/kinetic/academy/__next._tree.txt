@@ -1,4 +1,4 @@
 :HL["/demos/kinetic/_next/static/css/6f48ad82a4144358.css","style"]
 2:[["children",{"s":"__PAGE__","h":160}]]
 1:[["children",{"s":{"n":"section","t":"d","k":"academy","s":["_not-found","_global-error","courses","icon.svg"]},"h":65632,"c":"$Q2"}]]
-0:{"b":"E8SfiqAp-5VamYYu7qe_t","t":{"t":{"s":"","h":131152,"c":"$Q1"}}}
+0:{"b":"_uJA2BAUZh82GRTCPD5cB","t":{"t":{"s":"","h":131152,"c":"$Q1"}}}

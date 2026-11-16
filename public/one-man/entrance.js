@@ -11,11 +11,14 @@ if (story) {
   let frame = 0;
   let enabled = false;
   let active = -1;
+  let lastProgress = -1;
   function paint() {
     frame = 0;
     if (!enabled) return;
     const rect = story.getBoundingClientRect();
     const progress = clamp(-rect.top / Math.max(1, rect.height - innerHeight));
+    if (progress === lastProgress) return;
+    lastProgress = progress;
     const enter = ease(range(progress, .14, .36));
     const leave = ease(range(progress, .54, .76));
     const out = ease(range(progress, 0, .30));
@@ -46,6 +49,7 @@ if (story) {
     enabled = !motion.matches && CSS.supports('position', 'sticky');
     story.classList.toggle('is-enhanced', enabled);
     active = -1;
+    lastProgress = -1;
     if (enabled) paint();
     else {
       cancelAnimationFrame(frame); frame = 0;
