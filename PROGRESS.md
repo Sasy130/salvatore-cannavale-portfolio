@@ -272,3 +272,7 @@ Preparato aggiornamento VELAR, KÍNETIC e VÉRA con demo locali, schede, antepri
 ## 16 novembre 2026 — griglia unica
 
 Sostituita la struttura tre progetti grandi + raccolta con un indice unico di tredici progetti. Rimossi SULLA VIA, ÉTERNA e NERÈA dalla selezione; mantenute le vecchie demo. Casi studio VELMORA/VANTA/LUNÉA preservati. Controlli: lint FUOCO, 14 test FUOCO, TypeScript, build Next e verifiche delle schede/filtri/asset completati. Il controllo browser non è stato completato: limite di utilizzo del servizio di approvazione automatica. Commit di partenza `114f36e03993939d953e5a9b5da0fbfa6dda1157`.
+
+## 16 novembre 2026 — presentazione scroll
+
+Rimossi markup e modulo della roulette, la scultura della home, i relativi controlli e il caricamento iniziale. Nuova presentazione a tre capitoli in nero/arancio con titoli, frammenti dei lavori, transizioni reversibili e profilo di Salvatore. Verificati via esecuzione del controller i capitoli, lo scroll inverso e il cambio di preferenza movimento; verificati markup, asset e griglia di tredici schede. Lint FUOCO, test FUOCO, TypeScript e build eseguiti. Browser QA ancora indisponibile: errore del servizio “Browser Use could not read requirements”. Base `da218c9006093547b1453017a2ee69ea05075312`.

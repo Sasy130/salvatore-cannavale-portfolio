@@ -15,89 +15,15 @@ const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value));
 function startPortfolio() {
   const root = document.documentElement;
   const body = document.body;
-  const hero = document.querySelector('.hero');
   const header = document.querySelector('.site-header');
-  const canvas = document.querySelector('#sculpture');
   const reducedQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
   const fineQuery = window.matchMedia('(hover: hover) and (pointer: fine)');
   let reduced = reducedQuery.matches;
-  let sculpture = null;
-  let sculptureReady = false;
-  let currentMode = 'flow';
-  let currentProgress = 0;
   let scrollFrame = 0;
   let pointerFrame = 0;
-  let disposed = false;
   body.classList.add('js-enabled');
 
-  // The introduction is time bounded even when WebGL or a network request fails.
-  const intro = document.querySelector('#intro');
-  const counter = document.querySelector('#intro-count');
-  const introStart = performance.now();
-  let introClosing = false;
-  let introFrame = 0;
-  let introTimer = 0;
-  const finishIntro = () => {
-    if (introClosing) return;
-    introClosing = true;
-    cancelAnimationFrame(introFrame);
-    if (counter) counter.textContent = '100';
-    intro?.classList.add('is-exiting');
-    body.classList.add('is-ready');
-    window.setTimeout(() => {
-      body.classList.add('intro-done');
-      clearTimeout(introTimer);
-    }, reduced ? 0 : 420);
-  };
-  const animateIntro = now => {
-    const elapsed = now - introStart;
-    const progress = clamp(elapsed / 1450);
-    const eased = 1 - Math.pow(1 - progress, 2.3);
-    if (counter) counter.textContent = String(Math.round(eased * 100)).padStart(2, '0');
-    if (elapsed >= 1450 && (sculptureReady || elapsed >= 1950)) finishIntro();
-    else introFrame = requestAnimationFrame(animateIntro);
-  };
-  if (reduced) finishIntro();
-  else {
-    introFrame = requestAnimationFrame(animateIntro);
-    introTimer = window.setTimeout(finishIntro, 2150);
-  }
-
-  const modeButtons = [...document.querySelectorAll('[data-mode]')];
-  for (const button of modeButtons) {
-    button.addEventListener('click', () => {
-      currentMode = button.dataset.mode;
-      for (const item of modeButtons) item.setAttribute('aria-pressed', String(item === button));
-      sculpture?.setMode(currentMode);
-    });
-  }
-
-  const loadSculpture = async () => {
-    if (!canvas) return;
-    try {
-      const { createSculpture } = await import('./sculpture.js');
-      if (disposed) return;
-      sculpture = createSculpture(canvas, {
-        reduced,
-        onReady: () => {
-          sculptureReady = true;
-          body.classList.add('sculpture-ready');
-          body.classList.remove('no-webgl');
-          for (const button of modeButtons) button.disabled = false;
-        }
-      });
-      sculpture.setMode(currentMode);
-      sculpture.setProgress(currentProgress);
-    } catch (error) {
-      body.classList.add('no-webgl');
-      for (const button of modeButtons) {
-        button.disabled = true;
-        button.title = 'La modalità 3D non è disponibile su questo dispositivo.';
-      }
-      console.warn('La scultura 3D non è disponibile su questo dispositivo.', error);
-    }
-  };
-  loadSculpture();
+  body.classList.add('is-ready', 'intro-done');
 
   const track = document.querySelector('.motion-track');
   const motionBand = document.querySelector('.motion-band');
@@ -107,12 +33,6 @@ function startPortfolio() {
     const total = Math.max(1, root.scrollHeight - window.innerHeight);
     root.style.setProperty('--scroll-progress', clamp(y / total).toFixed(5));
     header?.classList.toggle('is-scrolled', y > 32);
-    if (hero) {
-      const rect = hero.getBoundingClientRect();
-      currentProgress = reduced ? 0 : clamp(-rect.top / Math.max(1, rect.height));
-      hero.style.setProperty('--hero-progress', currentProgress.toFixed(5));
-      sculpture?.setProgress(currentProgress);
-    }
     if (track && motionBand) {
       const rect = motionBand.getBoundingClientRect();
       const progress = clamp((window.innerHeight - rect.top) / (window.innerHeight + rect.height));
@@ -201,46 +121,6 @@ function startPortfolio() {
     card.addEventListener('pointerleave', hideCursor);
     card.addEventListener('blur', hideCursor);
   }
-  hero?.addEventListener('pointermove', event => {
-    if (!fineQuery.matches || event.pointerType === 'touch' || reduced) return;
-    const rect = hero.getBoundingClientRect();
-    const x = clamp((event.clientX - rect.left) / rect.width) * 2 - 1;
-    const y = clamp((event.clientY - rect.top) / rect.height) * 2 - 1;
-    hero.style.setProperty('--pointer-x', x.toFixed(4));
-    hero.style.setProperty('--pointer-y', y.toFixed(4));
-    sculpture?.setPointer(x, y);
-  });
-  hero?.addEventListener('pointerleave', () => {
-    hero.style.setProperty('--pointer-x', '0');
-    hero.style.setProperty('--pointer-y', '0');
-    sculpture?.setPointer(0, 0);
-  });
-  // Horizontal touch gestures give the sculpture a little momentum; vertical scrolling remains native.
-  const heroObject = document.querySelector('#hero-object');
-  let touchGesture = null;
-  heroObject?.addEventListener('pointerdown', event => {
-    if (event.pointerType !== 'touch' || reduced) return;
-    touchGesture = { id: event.pointerId, startX: event.clientX, startY: event.clientY, x: event.clientX, time: event.timeStamp, velocity: 0, active: false };
-  });
-  heroObject?.addEventListener('pointermove', event => {
-    if (!touchGesture || event.pointerId !== touchGesture.id || reduced) return;
-    const dx = event.clientX - touchGesture.startX, dy = event.clientY - touchGesture.startY;
-    if (!touchGesture.active && Math.abs(dx) > 9 && Math.abs(dx) > Math.abs(dy) * 1.25) touchGesture.active = true;
-    if (!touchGesture.active) return;
-    const elapsed = Math.max(16, event.timeStamp - touchGesture.time);
-    touchGesture.velocity = (event.clientX - touchGesture.x) / elapsed;
-    touchGesture.x = event.clientX; touchGesture.time = event.timeStamp;
-    const rect = heroObject.getBoundingClientRect();
-    sculpture?.setPointer(clamp(dx / Math.max(1, rect.width) * 2, -1, 1), clamp(dy / Math.max(1, rect.height) * 2, -1, 1));
-    heroObject.classList.add('is-dragging');
-  });
-  const endTouchGesture = event => {
-    if (!touchGesture || event.pointerId !== touchGesture.id) return;
-    if (touchGesture.active && event.type !== 'pointercancel') sculpture?.setImpulse(touchGesture.velocity * 2);
-    sculpture?.setPointer(0, 0); heroObject?.classList.remove('is-dragging'); touchGesture = null;
-  };
-  window.addEventListener('pointerup', endTouchGesture);
-  window.addEventListener('pointercancel', endTouchGesture);
   window.addEventListener('blur', hideCursor);
 
   const main = document.querySelector('main');
@@ -385,27 +265,17 @@ function startPortfolio() {
   reducedQuery.addEventListener('change', event => {
     reduced = event.matches;
     if (reduced) {
-      finishIntro();
       for (const item of reveals) item.classList.add('is-visible');
       hideCursor();
     }
-    sculpture?.dispose();
-    sculpture = null;
-    sculptureReady = false;
-    body.classList.remove('sculpture-ready');
-    loadSculpture();
     queueScroll();
   });
 
   window.addEventListener('pagehide', event => {
     hideCursor();
     if (!event.persisted) {
-      disposed = true;
-      sculpture?.dispose();
       cancelAnimationFrame(scrollFrame);
       cancelAnimationFrame(pointerFrame);
-      cancelAnimationFrame(introFrame);
-      clearTimeout(introTimer);
       clearTimeout(toastTimer);
     }
   });

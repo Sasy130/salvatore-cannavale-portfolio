@@ -75,3 +75,7 @@ La pubblicazione autorizzata usa il branch `main` del progetto Vercel esistente.
 VELAR, KÍNETIC e VÉRA sono copie statiche indipendenti alle route `/demos/velar/`, `/demos/kinetic/`, `/demos/vera/`. Le build usano un basePath dedicato; gli asset sono locali e i rewrite afterFiles risolvono le pagine interne. Sorgenti e ricostruzione in `demo-sources/`. L’accesso dei Sites originali è preservato. La raccolta conta tredici concept, sedici progetti originali totali nella roulette; redesign ancora separati.
 
 VELMORA conserva il proprio URL e riceve il dist aggiornato del Site, senza modificare VANTA, LUNÉA o le route OPERAI/FUOCO.
+
+## Nuova apertura — 16 novembre 2026
+
+La homepage sostituisce scultura, loader e roulette con una presentazione tipografica a tre capitoli. `entrance.js` applica l’avanzamento allo scroll nativo tramite CSS e un frame su richiesta, senza wheel interception né WebGL. Nero/arancio, passaggio a pieno schermo e presentazione di Salvatore; griglia e casi studio preservati. Senza JavaScript e con movimento ridotto i capitoli sono impaginati in sequenza normale; “Vai ai progetti” resta disponibile durante l’animazione. Le demo dei singoli progetti non cambiano.
