@@ -2,12 +2,7 @@ import { projects } from './projects-data.js';
 
 // The roulette presents only the original portfolio projects. Redesign proposals
 // remain on their separate page and never enter this selection.
-const featured = [
-  { name: 'VELMORA', mood: 'sea', category: 'Immersive experience', description: 'Uno yacht da esplorare, un mondo da immaginare.', image: '/one-man/assets/velmora.jpg', url: '/velmora/index.html' },
-  { name: 'VANTA', mood: 'asphalt', category: 'Automotive experience', description: 'Un’altra idea di noleggio premium, da vivere in prima persona.', image: '/one-man/assets/vanta.jpg', url: '/vanta/index.html' },
-  { name: 'LUNÉA', mood: 'rose', category: 'Jewelry experience', description: 'Un atelier digitale dove ogni dettaglio prende forma.', image: '/projects/lunea.jpg', url: '/lunea/index.html' },
-];
-const worlds = [...featured, ...projects.filter(project => project.kind !== 'redesign')];
+const worlds = projects.filter(project => project.kind !== 'redesign');
 const section = document.querySelector('#project-roulette');
 if (section && worlds.length) {
   const stage = section.querySelector('#arcade-stage');

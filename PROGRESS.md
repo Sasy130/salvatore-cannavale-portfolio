@@ -268,3 +268,7 @@ La policy cloud corrente consente GitHub Git, ma continua a bloccare API GitHub,
 ## 16 novembre 2026 — portfolio aggiornato
 
 Preparato aggiornamento VELAR, KÍNETIC e VÉRA con demo locali, schede, anteprime, filtri e roulette; sincronizzato il dist recente di VELMORA. Commit di partenza: `199c564a1d2290d3a38a0618b0f2dd3a92c81138`. I Sites sorgenti mantengono l’accesso originale. Build individuali delle tre nuove demo completate; verifiche del portfolio e pubblicazione riportate alla consegna.
+
+## 16 novembre 2026 — griglia unica
+
+Sostituita la struttura tre progetti grandi + raccolta con un indice unico di tredici progetti. Rimossi SULLA VIA, ÉTERNA e NERÈA dalla selezione; mantenute le vecchie demo. Casi studio VELMORA/VANTA/LUNÉA preservati. Controlli: lint FUOCO, 14 test FUOCO, TypeScript, build Next e verifiche delle schede/filtri/asset completati. Il controllo browser non è stato completato: limite di utilizzo del servizio di approvazione automatica. Commit di partenza `114f36e03993939d953e5a9b5da0fbfa6dda1157`.
