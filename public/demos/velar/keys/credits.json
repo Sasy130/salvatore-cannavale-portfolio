@@ -1,0 +1,59 @@
+{
+  "type": "AI-assisted photo-derived transparent cutouts",
+  "assets": [
+    {
+      "slug": "revuelto",
+      "file": "revuelto-cutout.webp",
+      "source": "https://www.ebay.com/itm/178095628584",
+      "credit": "Fotografia del venditore su eBay",
+      "note": "Fotografia di prodotto, abbinamento secondo la descrizione della fonte. Finiture e specifiche possono variare per anno e mercato.",
+      "reference_file": "revuelto-photo.jpg",
+      "processing": "Rielaborazione AI da fotografia di riferimento: isolamento della sagoma e uniformazione della luce. Non riproduzione OEM certificata."
+    },
+    {
+      "slug": "296-gtb",
+      "file": "296-gtb-cutout.webp",
+      "source": "https://www.ebay.com/itm/137770433260",
+      "credit": "Fotografia del venditore su eBay",
+      "note": "Fotografia di prodotto, abbinamento secondo la descrizione della fonte. Finiture e specifiche possono variare per anno e mercato.",
+      "reference_file": "296-gtb-photo.jpg",
+      "processing": "Rielaborazione AI da fotografia di riferimento: isolamento della sagoma e uniformazione della luce. Non riproduzione OEM certificata."
+    },
+    {
+      "slug": "cullinan",
+      "file": "cullinan-cutout.webp",
+      "source": "https://www.ebay.com/itm/307005657288",
+      "credit": "Fotografia del venditore su eBay",
+      "note": "Fotografia di prodotto, abbinamento secondo la descrizione della fonte. Finiture e specifiche possono variare per anno e mercato.",
+      "reference_file": "cullinan-photo.jpg",
+      "processing": "Rielaborazione AI da fotografia di riferimento: isolamento della sagoma e uniformazione della luce. Non riproduzione OEM certificata."
+    },
+    {
+      "slug": "750s",
+      "file": "750s-cutout.webp",
+      "source": "https://www.ebay.co.uk/itm/407159309773",
+      "credit": "Fotografia del venditore su eBay",
+      "note": "Fotografia di prodotto, abbinamento secondo la descrizione della fonte. Finiture e specifiche possono variare per anno e mercato.",
+      "reference_file": "750s-photo.jpg",
+      "processing": "Rielaborazione AI da fotografia di riferimento: isolamento della sagoma e uniformazione della luce. Non riproduzione OEM certificata."
+    },
+    {
+      "slug": "911-gt3-rs",
+      "file": "911-gt3-rs-cutout.webp",
+      "source": "https://www.ebay.com/itm/393800085879",
+      "credit": "Fotografia del venditore su eBay",
+      "note": "Fotografia di prodotto, abbinamento secondo la descrizione della fonte. Finiture e specifiche possono variare per anno e mercato.",
+      "reference_file": "911-gt3-rs-photo.webp",
+      "processing": "Rielaborazione AI da fotografia di riferimento: isolamento della sagoma e uniformazione della luce. Non riproduzione OEM certificata."
+    },
+    {
+      "slug": "g63",
+      "file": "g63-cutout.webp",
+      "source": "https://www.go-parts.com/hl-product.php?make=Mercedes-Benz&model=G63+AMG&sku=654-MB1J19-523566",
+      "credit": "Go-Parts",
+      "note": "Fotografia di prodotto, abbinamento secondo la descrizione della fonte. Finiture e specifiche possono variare per anno e mercato.",
+      "reference_file": "g63-photo.jpg",
+      "processing": "Rielaborazione AI da fotografia di riferimento: isolamento della sagoma e uniformazione della luce. Non riproduzione OEM certificata."
+    }
+  ]
+}

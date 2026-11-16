@@ -1,0 +1,33 @@
+1:"$Sreact.fragment"
+2:"static/chunks/500-fc3b64d9ff4a32a7.js"
+3:"static/chunks/437-54411284b88c6fb7.js"
+4:"static/chunks/app/%5Bsection%5D/page-c9300a1b69530764.js"
+5:I[8500,["500","$2","437","$3","910","$4"],""]
+6:"static/chunks/app/layout-93fa3bddd5d612b1.js"
+7:I[6536,["500","$2","177","$6"],"default"]
+8:I[7121,[],""]
+9:I[4581,[],""]
+10:I[567,["500","$2","437","$3","910","$4"],"default"]
+11:I[484,[],"OutletBoundary"]
+12:"$Sreact.suspense"
+15:"ViewportBoundary"
+16:I[484,[],"$15"]
+17:"MetadataBoundary"
+18:I[484,[],"$17"]
+19:I[6869,[],"IconMark"]
+:HL["/demos/kinetic/_next/static/css/6f48ad82a4144358.css","style"]
+b:X
+e:X
+e:C
+f:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$1","c",{"children":[["$","main",null,{"id":"main","className":"inner-page join-page","children":[["$","p",null,{"className":"eyebrow","children":["KÍNETIC / ","JOIN"]}],["$","h1",null,{"children":"Your move starts here."}],false,false,false,false,["$","div",null,{"className":"content-grid","children":[["$","div",null,{"children":[["$","p",null,{"className":"inner-intro","children":"You don’t have to know all the steps. You only have to take the first one."}],["$","p",null,{"style":{"lineHeight":1.9,"maxWidth":400},"children":"Explore a discipline, tell us what brings you here and preview your first class request. New to dance? Our foundation and open classes are a welcoming place to start."}],["$","p",null,{"className":"demo-note","children":"KÍNETIC is a fictional academy created as a design demonstration. There is no physical studio, live timetable or booking service."}]]}],["$","$L10",null,{}]]}],["$","p",null,{"className":"demo-note","children":"KÍNETIC is a concept academy. Faculty, facilities, dates and programs are illustrative. Stock photography does not imply endorsement."}]]}],null,["$","$L11",null,{"children":["$","$12",null,{"name":"Next.MetadataOutlet","children":"$@13"}]}]]}],"p":"$@14","v":null,"s":"$b"}}]]
+c:[["children",{"s":{"n":"section","t":"d","k":"join","s":["_not-found","_global-error","courses","icon.svg"]},"h":65632,"d":{"r":["$","$1","c",{"children":[null,["$","$L8",null,{"parallelRouterKey":"children","template":["$","$L9",null,{}]}]]}],"p":"$@d","v":"$e","s":"$b"},"c":"$Qf"}]]
+0:{"t":{"t":{"s":"","h":131152,"d":{"r":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/demos/kinetic/_next/static/css/6f48ad82a4144358.css","precedence":"next"}]],["$","html",null,{"lang":"en","children":["$","body",null,{"children":[["$","$L5",null,{"className":"skip-link","href":"#main","children":"Skip to content"}],["$","$L7",null,{}],["$","$L8",null,{"parallelRouterKey":"children","template":["$","$L9",null,{}],"notFound":[["$","main",null,{"id":"main","className":"inner-page","children":[["$","p",null,{"className":"eyebrow","children":"404 / A STEP OUT OF PLACE"}],["$","h1",null,{"children":["Find your way",["$","br",null,{}],["$","em",null,{"children":"back to movement."}]]}],["$","$L5",null,{"className":"pill","href":"/","children":"Return to the experience ↗"}]]}],[]]}],["$","footer",null,{"className":"site-footer","children":[["$","div",null,{"className":"footer-top","children":[["$","p",null,{"children":["Independent minds.",["$","br",null,{}],"Moving together."]}],["$","div",null,{"children":[["$","$L5",null,{"href":"/academy","children":"The academy ↗"}],["$","$L5",null,{"href":"/courses","children":"Find your class ↗"}],["$","$L5",null,{"href":"/contact","children":"Get in touch ↗"}]]}]]}],["$","div",null,{"className":"footer-bottom","children":[["$","span",null,{"children":"THE ART OF MOVEMENT / CLASSICAL · CONTEMPORARY · URBAN"}],["$","span",null,{"children":["© ",2026," KÍNETIC · A concept academy. All programs are illustrative."]}]]}],["$","$L5",null,{"className":"footer-wordmark","href":"/","aria-label":"Kinetic home","children":"KÍNETIC"}]]}]]}]}]]}],"p":"$@a","v":null,"s":"$b"},"c":"$Qc"},"h":{"r":["$","$1","h",{"children":[null,["$","$L16",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]}],["$","$L18",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$12",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Your move starts here. — KÍNETIC"}],["$","meta","1",{"name":"description","content":"A new language of movement. Classical, contemporary and urban dance. Discover the KÍNETIC academy."}],["$","link","2",{"rel":"icon","href":"/demos/kinetic/icon.svg?360199fbf82af3f8","type":"image/svg+xml","sizes":"any"}],["$","$L19","3",{}]]}]}],null]}],null]}],"p":"$@1a","v":null,"s":"$b"}},"a":"$@1b","u":"$@1c","b":"E8SfiqAp-5VamYYu7qe_t"}
+13:null
+b:300
+1c:true
+b:C
+1b:0
+d:"$undefined"
+a:"$undefined"
+1a:"$undefined"
+14:"$undefined"

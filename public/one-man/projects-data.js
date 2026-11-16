@@ -1,5 +1,53 @@
 export const projects = [
   {
+    "slug": "velar",
+    "name": "VELAR",
+    "subtitle": "Exotic Car Rental",
+    "description": "Sei vetture esclusive, un Key Vault cinematografico e un percorso di noleggio dimostrativo.",
+    "category": "Automotive",
+    "tags": [
+      "KEY VAULT",
+      "AUTOMOTIVE EXPERIENCE",
+      "MOTION"
+    ],
+    "url": "/demos/velar/",
+    "access": "public",
+    "image": "/one-man/assets/projects/velar.webp",
+    "alt": "Anteprima del concept VELAR"
+  },
+  {
+    "slug": "kinetic",
+    "name": "KÍNETIC",
+    "subtitle": "The Art of Movement",
+    "description": "Un’accademia di danza immaginaria, tra sequenze cinematografiche, corsi e percorsi da esplorare.",
+    "category": "Esperienze",
+    "tags": [
+      "DANCE EXPERIENCE",
+      "SCROLL CINEMA",
+      "INTERAZIONE"
+    ],
+    "url": "/demos/kinetic/",
+    "access": "public",
+    "image": "/one-man/assets/projects/kinetic.webp",
+    "alt": "Anteprima del concept KÍNETIC"
+  },
+  {
+    "slug": "vera",
+    "name": "VÉRA",
+    "subtitle": "Luxury Real Estate",
+    "description": "Residenze, architetture e luoghi da vivere in un’esperienza immobiliare editoriale e interattiva.",
+    "category": "Luxury",
+    "tags": [
+      "REAL ESTATE",
+      "ART DIRECTION",
+      "CATALOGO"
+    ],
+    "url": "/demos/vera/",
+    "access": "public",
+    "image": "/one-man/assets/projects/vera.webp",
+    "alt": "Anteprima del concept VÉRA"
+  },
+  {
     "slug": "eterna",
     "name": "ÉTERNA",
     "subtitle": "Wedding & Private Events",

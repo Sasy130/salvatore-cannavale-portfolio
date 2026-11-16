@@ -1,0 +1,6 @@
+User-Agent: *
+Allow: /
+Disallow: /privacy/
+Disallow: /cookies/
+
+Sitemap: https://velar-exotic-rental.one-man13.chatgpt.site/sitemap.xml

@@ -69,3 +69,9 @@ Il concept resta demo e noindex finché i dati reali non sono confermati. Nessun
 La home include FUOCO come concept Food con anteprima locale, card, dialog e selezione nella roulette. Entrambi gli ingressi aprono `/fuoco` sul dominio del portfolio; nessun link GPT/Sites. Totali aggiornati: tre progetti in evidenza e dieci nella raccolta (tredici nella roulette), con due Food; redesign separati in `/proposte`. Dati in `public/one-man/projects-data.js`, markup in `public/one-man/index.html`, anteprima in `public/one-man/assets/projects/fuoco.webp`.
 
 La pubblicazione autorizzata usa il branch `main` del progetto Vercel esistente. Il collegamento finale è `https://www.salvatorecannavale.it/fuoco`. Stato effettivo di promozione e verifica remota riportati in PROGRESS.md; il blocco di rete del cloud non deve essere confuso con un errore del sito.
+
+## Aggiornamento — 16 novembre 2026
+
+VELAR, KÍNETIC e VÉRA sono copie statiche indipendenti alle route `/demos/velar/`, `/demos/kinetic/`, `/demos/vera/`. Le build usano un basePath dedicato; gli asset sono locali e i rewrite afterFiles risolvono le pagine interne. Sorgenti e ricostruzione in `demo-sources/`. L’accesso dei Sites originali è preservato. La raccolta conta tredici concept, sedici progetti originali totali nella roulette; redesign ancora separati.
+
+VELMORA conserva il proprio URL e riceve il dist aggiornato del Site, senza modificare VANTA, LUNÉA o le route OPERAI/FUOCO.

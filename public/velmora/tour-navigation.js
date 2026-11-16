@@ -7,6 +7,6 @@ export function advanceTour(target,delta){
 export function finishTourGesture(target,forward){
   if(forward&&target>=LAST_STOP-.15)return{target:target>LAST_STOP?LOOP_END:LAST_STOP,returnToStart:true};
   const rounded=Math.round(target);
-  return{target:Math.abs(target-rounded)<.12?rounded:target,returnToStart:false};
+  return{target:Math.abs(target-rounded)<.22?rounded:target,returnToStart:false};
 }
 export function completedTourLoop(progress,target){return target>=LOOP_END&&progress>=LOOP_END-.0002;}

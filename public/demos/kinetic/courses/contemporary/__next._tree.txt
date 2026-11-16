@@ -1,0 +1,5 @@
+:HL["/demos/kinetic/_next/static/css/6f48ad82a4144358.css","style"]
+3:[["children",{"s":"__PAGE__","h":160}]]
+2:[["children",{"s":{"n":"slug","t":"d","k":"contemporary","s":[]},"h":65632,"c":"$Q3"}]]
+1:[["children",{"s":"courses","h":131168,"c":"$Q2"}]]
+0:{"b":"E8SfiqAp-5VamYYu7qe_t","t":{"t":{"s":"","h":131152,"c":"$Q1"}}}

@@ -264,3 +264,7 @@ Richiesta del 3 novembre 2026: completare FUOCO, inserirlo con gli altri progett
 La richiesta autorizza la promozione su `main` tramite il collegamento GitHub→Vercel già attivo. Base remota di produzione verificata prima della promozione: `341205ac2e5da9944c8a108e7cf354ac0b174b11`. Usare un aggiornamento fast-forward e controllare nuovamente il riferimento remoto per preservare modifiche concorrenti.
 
 La policy cloud corrente consente GitHub Git, ma continua a bloccare API GitHub, dominio pubblico e anteprima. Il check pubblico Vercel Preview Comments non conferma la build. La promozione del codice e l’eventuale completamento Vercel/risposta HTTP sul dominio devono quindi essere riportati separatamente, senza dichiarare una verifica remota non eseguita.
+
+## 16 novembre 2026 — portfolio aggiornato
+
+Preparato aggiornamento VELAR, KÍNETIC e VÉRA con demo locali, schede, anteprime, filtri e roulette; sincronizzato il dist recente di VELMORA. Commit di partenza: `199c564a1d2290d3a38a0618b0f2dd3a92c81138`. I Sites sorgenti mantengono l’accesso originale. Build individuali delle tre nuove demo completate; verifiche del portfolio e pubblicazione riportate alla consegna.

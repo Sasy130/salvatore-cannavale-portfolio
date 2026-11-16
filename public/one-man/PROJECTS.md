@@ -27,3 +27,11 @@ FUOCO si aggiunge come decimo concept originale della raccolta, nella categoria 
 Il concept presenta sei pizze in Pizza Orbit, un menu rapido con ricerca e filtri e dettagli degli ingredienti. Ricette, prezzi e allergeni sono dimostrativi; non rappresenta un locale reale e non invia prenotazioni, ordini o pagamenti.
 
 L’anteprima `assets/projects/fuoco.webp` è una cattura della hero reale di FUOCO dalla produzione locale, in viewport 1440 × 900 e con movimento ridotto, ridimensionata a 1200 × 750 e convertita in WebP. La fotografia di pizza fa parte della composizione originale: provenienza, licenza e limiti d’uso sono documentati in [FUOCO — crediti fotografici](../images/fuoco/CREDITS.md). Nessuna nuova fotografia o immagine generata è stata introdotta.
+
+## Aggiornamento — 16 novembre 2026
+
+Aggiunti VELAR (Automotive), KÍNETIC (Esperienze) e VÉRA (Luxury) in testa alla raccolta, con anteprime restituite da Sites, dialog, filtri e roulette. Tredici concept nella raccolta e tre progetti in evidenza: sedici in totale. Le demo esportate sono in `public/demos/velar`, `kinetic` e `vera`; i sorgenti ricostruibili e la provenienza sono in `demo-sources/`. Nessun accesso dei Sites originali è stato modificato. Le copie sono dimostrative, senza backend commerciale.
+
+Le anteprime WebP sono catture dei progetti originali fornite da Sites, ridimensionate a un massimo di 1200 × 750. VELAR include ricostruzioni delle chiavi dichiarate nel progetto; crediti fotografici e licenze sono conservati nella demo (`cars/credits.json`, `keys/credits.json`, pagina `/credits`). KÍNETIC conserva `ASSETS.md` e i documenti delle licenze in `project-docs/`; VÉRA conserva `images/credits.json` e i documenti originali.
+
+VELMORA aggiornato dal dist del Site `velmora-yachts-v34`, mantenendo il percorso `/velmora/index.html` e la licenza Three.js esistente. Sincronizzati app, performance, resa dei materiali, stile e navigazione del tour. Nessuna preferenza o dato runtime del proprietario è stato copiato.
