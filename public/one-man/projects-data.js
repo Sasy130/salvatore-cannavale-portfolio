@@ -1,4 +1,5 @@
 export const projects = [
+  {slug:"dimora-mia",name:"DIMORA MIA",subtitle:"Abita l’istante",description:"Un’esperienza hospitality cinematografica con booking dimostrativo locale.",category:"Luxury",tags:["HOSPITALITY","SCROLL CINEMA","BOOKING DEMO"],url:"/demos/dimora-mia/",access:"public",image:"/one-man/assets/projects/dimora-mia.svg",alt:"Direzione artistica del concept DIMORA MIA"},
   {
     "slug": "velar",
     "name": "VELAR",

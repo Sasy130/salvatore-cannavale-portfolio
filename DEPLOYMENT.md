@@ -85,3 +85,11 @@ La homepage sostituisce scultura, loader e roulette con una presentazione tipogr
 La raccolta contiene dieci progetti dopo la rimozione di LUNÉA, NOIR e VANTA; vecchi URL preservati. MENU non è più scritto nel pulsante di navigazione, che conserva etichetta accessibile e area touch.
 
 Le copie esportate VELAR/KÍNETIC/VÉRA sono ricompilate dai sorgenti locali ottimizzati, disponibili negli archivi `demo-sources/`. KÍNETIC usa un canvas con decodifica ridotta (960/480 px), scritture diagnostiche solo in modalità debug, pausa del rendering fuori schermo e a scheda nascosta. VÉRA usa lo scroll nativo e non carica Lenis. VELAR alleggerisce blur e filtri sulle chiavi per dispositivi touch. Rimossi i vecchi chunk generati prima di copiare i nuovi export. Nessun aggiornamento ai Sites originali.
+
+## DIMORA MIA — 17 novembre 2026
+
+La raccolta cinematografica include DIMORA MIA come tredicesimo progetto. Apri sito e anteprima interattiva usano `/demos/dimora-mia/`, una copia locale in `public/demos/dimora-mia/`: nessun iframe, redirect o endpoint Sites/ChatGPT. Font, fotografie e librerie sono locali. La route `/demos/dimora-mia/admin.html` è un pannello di simulazione di questo browser, non un pannello protetto.
+
+La copia portfolio usa localStorage per simulazioni esplicitamente etichettate, senza disponibilità condivisa, pagamento o email. Il backend originale con database e Stripe è conservato, non attivato né sostituito da un finto server. Il Site originale rimane invariato. Ricostruzione e limiti in `demo-sources/dimora-mia/PORTFOLIO.md`.
+
+Sorgente della home aggiornato in `portfolio-source/one-man-source.zip`; `lib/restored-projects.ts` contiene la nuova scheda. Le route esistenti e le altre dodici demo restano preservate.

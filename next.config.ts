@@ -10,6 +10,8 @@ const nextConfig: NextConfig = {
         { source: "/proposte", destination: "/one-man/proposte.html" },
       ],
       afterFiles: [
+        { source: "/demos/dimora-mia", destination: "/demos/dimora-mia/index.html" },
+        { source: "/demos/dimora-mia/admin", destination: "/demos/dimora-mia/admin.html" },
         { source: "/demos/velar", destination: "/demos/velar/index.html" },
         { source: "/demos/velar/:path*", destination: "/demos/velar/:path*/index.html" },
         { source: "/demos/kinetic", destination: "/demos/kinetic/index.html" },
