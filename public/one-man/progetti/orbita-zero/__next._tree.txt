@@ -1,0 +1,6 @@
+:HL["/one-man/_next/static/chunks/1sllot2_yc6xl.css","style"]
+:HL["/one-man/_next/static/chunks/25c4w8-ozl9-y.css","style"]
+3:[["children",{"s":"__PAGE__","h":160}]]
+2:[["children",{"s":{"n":"slug","t":"d","k":"orbita-zero","s":[]},"h":65632,"c":"$Q3"}]]
+1:[["children",{"s":"progetti","h":131168,"c":"$Q2"}]]
+0:{"b":"dPA1YSpjnaTJvkunMEIAL","t":{"t":{"s":"","h":131152,"c":"$Q1"}}}

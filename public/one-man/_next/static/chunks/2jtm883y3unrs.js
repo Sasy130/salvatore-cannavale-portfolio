@@ -1,0 +1,1 @@
+(globalThis.TURBOPACK||(globalThis.TURBOPACK=[])).push(["object"==typeof document?document.currentScript:void 0,92500,t=>{"use strict";var e=t.i(71645);class r extends e.Component{state={failed:!1};static getDerivedStateFromError(){return{failed:!0}}componentDidCatch(){this.props.onError()}render(){return this.state.failed?null:this.props.children}}t.s(["f",0,r])}]);

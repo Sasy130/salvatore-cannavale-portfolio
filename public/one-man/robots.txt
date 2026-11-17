@@ -1,0 +1,5 @@
+User-Agent: *
+Allow: /
+
+Host: https://www.salvatorecannavale.it
+Sitemap: https://www.salvatorecannavale.it/sitemap.xml
