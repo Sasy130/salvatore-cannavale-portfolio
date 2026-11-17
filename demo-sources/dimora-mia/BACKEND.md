@@ -1,4 +1,4 @@
-# DIMORA MIA
+# CASA MIA
 
 Concept hospitality interattivo, con booking dimostrativo persistente.
 

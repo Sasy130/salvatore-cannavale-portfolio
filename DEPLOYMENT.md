@@ -93,3 +93,7 @@ La raccolta cinematografica include DIMORA MIA come tredicesimo progetto. Apri s
 La copia portfolio usa localStorage per simulazioni esplicitamente etichettate, senza disponibilità condivisa, pagamento o email. Il backend originale con database e Stripe è conservato, non attivato né sostituito da un finto server. Il Site originale rimane invariato. Ricostruzione e limiti in `demo-sources/dimora-mia/PORTFOLIO.md`.
 
 Sorgente della home aggiornato in `portfolio-source/one-man-source.zip`; `lib/restored-projects.ts` contiene la nuova scheda. Le route esistenti e le altre dodici demo restano preservate.
+
+## CASA MIA — aggiornamento del nome
+
+Il concept hospitality è rinominato CASA MIA nella demo, nel menù, nei metadati, nella copertina e nella raccolta del portfolio. Il percorso `/demos/dimora-mia/` e la chiave di archivio locale sono conservati per mantenere validi i collegamenti e le simulazioni esistenti.

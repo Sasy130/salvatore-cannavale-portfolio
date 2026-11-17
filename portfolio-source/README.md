@@ -20,4 +20,4 @@ Scroll nativo con composizione CSS 3D animata da GSAP, 13 copertine originali, i
 
 TypeScript, lint e build superati. Quattro scenari Playwright superati anche sull’export con prefisso /one-man: progetti/menu/dettaglio, touch mobile, movimento ridotto/audit axe, intro/replay/cinque viewport. Il test touch è stato ripetuto due volte. Nessuna violazione axe negli scenari controllati. I test dell’iframe usano una risposta simulata per verificarne il collegamento; i 12 siti originali sono stati verificati separatamente via HTTP. Safari e telefoni fisici ancora da collaudare. Le schermate mobile sono state ispezionate.
 
-DIMORA MIA aggiunta alla raccolta: apertura e iframe puntano a `/demos/dimora-mia/`, sullo stesso dominio. La copia è una simulazione locale, con font e asset locali; sorgenti e limiti in `demo-sources/dimora-mia/PORTFOLIO.md`.
+CASA MIA aggiunta alla raccolta: apertura e iframe puntano a `/demos/dimora-mia/`, sullo stesso dominio. La copia è una simulazione locale, con font e asset locali; sorgenti e limiti in `demo-sources/dimora-mia/PORTFOLIO.md`.
