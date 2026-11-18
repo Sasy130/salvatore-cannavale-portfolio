@@ -10,7 +10,9 @@
     "lint:fuoco": "eslint \"src/features/fuoco/**\" \"src/app/(fuoco)/**\" src/app/robots.ts tests/fuoco-config.test.mjs",
     "test:fuoco": "node --test tests/fuoco-config.test.mjs",
     "typecheck": "tsc --noEmit",
-    "test:dimora": "node --test demo-sources/dimora-mia/tests/*.test.mjs && node scripts/check-dimora-local.mjs"
+    "test:dimora": "node --test demo-sources/dimora-mia/tests/*.test.mjs && node scripts/check-dimora-local.mjs",
+    "test:casa-mia": "node --test tests/casa-mia/*.test.mjs",
+    "db:casa-mia": "node scripts/casa-mia/migrate.mjs"
   },
   "dependencies": {
     "@fontsource-variable/manrope": "latest",
@@ -19,12 +21,15 @@
     "gsap": "3.15.0",
     "lucide-react": "1.67.0",
     "next": "latest",
+    "pg": "^8.23.1",
     "react": "latest",
     "react-dom": "latest"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "^0.5.16",
     "@tailwindcss/postcss": "latest",
     "@types/node": "latest",
+    "@types/pg": "^8.23.1",
     "@types/react": "latest",
     "@types/react-dom": "latest",
     "eslint": "^9.0.0",

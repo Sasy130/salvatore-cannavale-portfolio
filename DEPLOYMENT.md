@@ -97,3 +97,9 @@ Sorgente della home aggiornato in `portfolio-source/one-man-source.zip`; `lib/re
 ## CASA MIA — aggiornamento del nome
 
 Il concept hospitality è rinominato CASA MIA nella demo, nel menù, nei metadati, nella copertina e nella raccolta del portfolio. Il percorso `/demos/dimora-mia/` e la chiave di archivio locale sono conservati per mantenere validi i collegamenti e le simulazioni esistenti.
+
+## CASA MIA — app proprietario e inventario condiviso
+
+L'app installabile è alla route `/casa-mia/gestione`; API nello stesso dominio sotto `/api/casa-mia/`. Lo schema PostgreSQL è dedicato e richiede configurazione esterna esplicita. Nessuna variabile o risorsa è stata configurata automaticamente. Il flag di abilitazione è inizialmente assente: il sito rimane una demo locale, mentre l'app permette soltanto una dimostrazione esplicita con dati sintetici. Quando configurato, il sito usa lo stesso inventario transazionale dell'app e non ripiega su record locali in caso di errore del servizio. Hero e regia del sito restano invariati.
+
+Manifest, icone e service worker sono limitati a `/casa-mia/`; i dati degli ospiti e le API non vengono messi in cache. Non è un'app degli store. I canali esterni non sono sincronizzati. Configurazione, test, limiti e requisiti per il lancio commerciale in `CASA-MIA.md`.

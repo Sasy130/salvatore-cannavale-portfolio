@@ -9,3 +9,7 @@ Il booking della copia è una **simulazione locale**: usa solo localStorage del 
 Il motore originale, con prezzi server-side, inventario atomico, autenticazione e verifica Stripe, resta conservato in `server/` e `drizzle/` per un futuro hosting con database; non è presentato come attivo in questa copia statica. Il Site originale non viene modificato.
 
 Ricostruzione: `npm ci`, poi `npm run build:portfolio`. L’output viene scritto soltanto in `../../public/demos/dimora-mia/`. Le fotografie sono dimostrative Unsplash, non della proprietà reale; crediti nel README e nell’interfaccia.
+
+## Area proprietario e backend condiviso
+
+L’app proprietario è su `/casa-mia/gestione`. Il sito verifica lo stato di `/api/casa-mia/status`: se il backend non è abilitato resta la simulazione locale; quando abilitato usa soltanto il database condiviso. Un servizio abilitato ma non raggiungibile non ripiega su prenotazioni locali. Hero e percorso visivo sono preservati. Configurazione in `CASA-MIA.md` alla root del repository.
