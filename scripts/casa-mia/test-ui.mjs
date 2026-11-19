@@ -103,11 +103,12 @@ async function enter(current) {
     current.viewportSize().width < 600 ? "mobile-entrance" : "desktop-entrance",
     current,
   );
+  await current.getByText("Esplora la demo", { exact: true }).click();
   await current
     .getByRole("button", { name: "Apri la demo interattiva" })
     .click();
   await expect(
-    current.getByRole("heading", { name: "Ogni soggiorno, sotto controllo." }),
+    current.getByRole("heading", { name: "Oggi, nella tua dimora." }),
   ).toBeVisible();
   await expect.poll(() => current.evaluate(() => scrollY)).toBe(0);
 }
@@ -246,7 +247,7 @@ try {
   ).toContain("Registrato EUR");
   await page.reload();
   await expect(
-    page.getByRole("heading", { name: "Ogni soggiorno, sotto controllo." }),
+    page.getByRole("heading", { name: "Tutti i tuoi soggiorni." }),
   ).toBeVisible();
   await expect(
     page.getByRole("button", { name: "Apri la demo interattiva" }),

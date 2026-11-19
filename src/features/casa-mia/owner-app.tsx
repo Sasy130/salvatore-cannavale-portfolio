@@ -29,6 +29,7 @@ import {
   X,
   type LucideIcon,
 } from "lucide-react";
+import { NotificationCard } from "./notification-card";
 import { NotificationsPanel } from "./notifications";
 import { InstallPanel, useInstallCapture } from "./install";
 import { useOwner } from "./use-owner";
@@ -51,7 +52,7 @@ import { BookingDetail, eventTitle } from "./booking-detail";
 import { PaymentEditor } from "./payment-editor";
 import type { Booking, OwnerData, Settings, Tab } from "./types";
 const NAV: { id: Tab; label: string; icon: LucideIcon }[] = [
-  { id: "overview", label: "Panoramica", icon: LayoutDashboard },
+  { id: "overview", label: "Oggi", icon: LayoutDashboard },
   { id: "calendar", label: "Calendario", icon: CalendarDays },
   { id: "reservations", label: "Prenotazioni", icon: Users },
   { id: "finance", label: "Incassi e saldi", icon: Wallet },
@@ -59,8 +60,8 @@ const NAV: { id: Tab; label: string; icon: LucideIcon }[] = [
 ];
 const TITLES: Record<Tab, { title: string; description: string }> = {
   overview: {
-    title: "Ogni soggiorno, sotto controllo.",
-    description: "Ospiti, prossimi arrivi e priorità della tua casa.",
+    title: "Oggi, nella tua dimora.",
+    description: "Arrivi, partenze e attività da seguire.",
   },
   calendar: {
     title: "Il calendario della tua casa.",
@@ -528,6 +529,7 @@ export function OwnerApp() {
     } | null>(null),
     [install, setInstall] = useState(false),
     [notifications, setNotifications] = useState(false),
+    [notificationRevision, setNotificationRevision] = useState(0),
     [search, setSearch] = useState(""),
     [status, setStatus] = useState("active"),
     [channel, setChannel] = useState("all"),
@@ -578,6 +580,11 @@ export function OwnerApp() {
   );
   function navigate(next: Tab) {
     setTab(next);
+    const nextURL = new URL(location.href);
+    nextURL.searchParams.set("view", next);
+    nextURL.searchParams.delete("notifications");
+    nextURL.searchParams.delete("install");
+    history.replaceState(null, "", nextURL);
     setRange(null);
     owner.setNotice("");
   }
@@ -601,7 +608,7 @@ export function OwnerApp() {
       a = document.createElement("a");
     a.href = url;
     a.download =
-      (demo ? "CASA-MIA-DEMO-prenotazioni-" : "CASA-MIA-prenotazioni-") +
+      (demo ? "DIMORA-MIA-DEMO-prenotazioni-" : "DIMORA-MIA-prenotazioni-") +
       today +
       ".csv";
     a.click();
@@ -703,21 +710,24 @@ export function OwnerApp() {
                 </p>
               </div>
             )}
-            <div className="cm-login-divider">
-              <span>IL TUO PRIMO ACCESSO</span>
-            </div>
-            <button
-              className="cm-button cm-button-primary"
-              disabled={owner.busy}
-              onClick={owner.startDemo}
-            >
-              Apri la demo interattiva <ArrowUpRight size={18} />
-            </button>
-            <p className="cm-help">
-              Dati fittizi, salvati solo su questo dispositivo. La demo è
-              collegata alla simulazione del sito nello stesso browser. Nessuna
-              prenotazione o pagamento reale.
-            </p>
+            <details className="cm-demo-access">
+              <summary>Esplora la demo</summary>
+              <div className="cm-login-divider">
+                <span>IL TUO PRIMO ACCESSO</span>
+              </div>
+              <button
+                className="cm-button cm-button-primary"
+                disabled={owner.busy}
+                onClick={owner.startDemo}
+              >
+                Apri la demo interattiva <ArrowUpRight size={18} />
+              </button>
+              <p className="cm-help">
+                Dati fittizi, salvati solo su questo dispositivo. La demo è
+                collegata alla simulazione del sito nello stesso browser.
+                Nessuna prenotazione o pagamento reale.
+              </p>
+            </details>
           </section>
         </main>
         <footer className="cm-auth-footer">
@@ -868,6 +878,13 @@ export function OwnerApp() {
             )}
             <button
               className="cm-icon-button"
+              onClick={() => setNotifications(true)}
+              aria-label="Apri centro notifiche"
+            >
+              <Bell size={18} />
+            </button>
+            <button
+              className="cm-icon-button"
               disabled={owner.busy || !owner.online}
               onClick={() =>
                 owner.refresh().catch((e) => owner.setNotice(e.message))
@@ -968,7 +985,7 @@ export function OwnerApp() {
           <section className="cm-page-heading">
             <div>
               <span className="cm-kicker">
-                {demo ? "LA TUA REGIA / DEMO" : "LA TUA REGIA"}
+                {demo ? "DIMORA MIA / DEMO" : "DIMORA MIA / GESTIONE"}
               </span>
               <h1>{TITLES[tab].title}</h1>
               <p>{TITLES[tab].description}</p>
@@ -1179,62 +1196,13 @@ export function OwnerApp() {
                     </div>
                   )}
                 </section>
-                <section
-                  className="cm-panel cm-phone-card"
-                  aria-label="App e avvisi"
-                >
-                  <div className="cm-phone-card-heading">
-                    <span className="cm-phone-logo" aria-hidden="true">
-                      cm
-                    </span>
-                    <div>
-                      <span className="cm-kicker">DIMORA MIA / ANDROID</span>
-                      <h2>
-                        {installation.installed
-                          ? "La tua app è aperta."
-                          : "Portala sul tuo telefono."}
-                      </h2>
-                    </div>
-                  </div>
-                  <p>
-                    Apri la gestione dalla schermata Home, senza cercare ogni
-                    volta il sito.
-                  </p>
-                  {!installation.installed ? (
-                    <Primary onClick={() => setInstall(true)}>
-                      <ArrowDownToLine size={19} />
-                      Installa sul mio telefono
-                      <ArrowUpRight size={17} />
-                    </Primary>
-                  ) : (
-                    <span className="cm-installed-label">
-                      <CheckCircle2 size={17} />
-                      Stai usando l’app installata
-                    </span>
-                  )}
-                  <button
-                    className="cm-button cm-button-secondary"
-                    onClick={() => setNotifications(true)}
-                  >
-                    <Bell size={17} />
-                    Gestisci notifiche
-                  </button>
-                  <div className="cm-notification-status">
-                    <Bell size={19} />
-                    <div>
-                      <b>Quando arriva una prenotazione?</b>
-                      <p>
-                        {demo
-                          ? "Nella demo, un avviso compare quando prenoti dal sito nello stesso browser e l’app è aperta."
-                          : "Con l’app aperta compare un avviso al prossimo aggiornamento, entro circa 30 secondi se il servizio è raggiungibile."}
-                      </p>
-                      <small>
-                        Per gli avvisi con app chiusa apri Gestisci notifiche.
-                        Servono consenso e collegamento al server.
-                      </small>
-                    </div>
-                  </div>
-                </section>
+                <NotificationCard
+                  demo={demo}
+                  revision={notificationRevision}
+                  onOpen={() => setNotifications(true)}
+                  installed={installation.installed}
+                  onInstall={() => setInstall(true)}
+                />
                 <section className="cm-panel cm-upcoming">
                   <div className="cm-panel-heading">
                     <div>
@@ -1880,7 +1848,10 @@ export function OwnerApp() {
       {notifications && (
         <NotificationsPanel
           demo={demo}
-          onClose={() => setNotifications(false)}
+          onClose={() => {
+            setNotifications(false);
+            setNotificationRevision((n) => n + 1);
+          }}
         />
       )}
     </div>

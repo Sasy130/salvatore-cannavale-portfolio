@@ -1,6 +1,7 @@
 import {
   bookingPushStatements,
   deliverPush,
+  queueBookingPush,
   handlePushAdmin,
   disablePushEndpoint,
 } from "./push.mjs";
@@ -340,7 +341,7 @@ export async function handleAPI(req, env) {
       }
       if (bookingId) {
         await deliverEmails(env, { bookingId, limit: 1 });
-        await deliverPush(env, { bookingId, limit: 2 });
+        await queueBookingPush(env, bookingId);
       }
       return json({ received: true });
     }
@@ -563,7 +564,7 @@ export async function handleAPI(req, env) {
       }
       if (online) return json(await openCheckout(env, b, url.origin));
       const emailSent = await mail(env, b);
-      await deliverPush(env, { bookingId: b.id, limit: 2 });
+      await queueBookingPush(env, b.id);
       return json(
         {
           id: b.id,

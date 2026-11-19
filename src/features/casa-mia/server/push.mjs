@@ -364,3 +364,19 @@ export async function disablePushEndpoint(db, endpoint) {
       .bind(hash(endpoint))
       .run();
 }
+
+// Four bounded workers drain the ten supported phones without delaying checkout.
+// The durable outbox remains authoritative if a provider fails or execution stops.
+export async function queueBookingPush(env, bookingId) {
+  const work = async () => {
+    const results = await Promise.allSettled(
+      Array.from({ length: 4 }, () =>
+        deliverPush(env, { bookingId, limit: 3 }),
+      ),
+    );
+    if (results.some((r) => r.status === "rejected"))
+      console.error("DIMORA MIA push: invio da riprendere dalla coda");
+  };
+  if (typeof env.BACKGROUND === "function") env.BACKGROUND(work);
+  else await work();
+}

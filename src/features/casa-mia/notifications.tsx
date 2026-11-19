@@ -252,12 +252,15 @@ export function NotificationsPanel({
               run(async () => {
                 await consent();
                 const registration = await pushRegistration();
-                await registration.showNotification("DIMORA MIA · prova locale", {
-                  body: "Questa è una notifica di prova del telefono, non una prenotazione.",
-                  icon: "/casa-mia/icon-192.png",
-                  tag: "casa-mia-local-test",
-                  data: { url: "/casa-mia/gestione", kind: "test" },
-                });
+                await registration.showNotification(
+                  "DIMORA MIA · prova locale",
+                  {
+                    body: "Questa è una notifica di prova del telefono, non una prenotazione.",
+                    icon: "/casa-mia/icon-192.png",
+                    tag: "casa-mia-local-test",
+                    data: { url: "/casa-mia/gestione", kind: "test" },
+                  },
+                );
                 setMessage(
                   "Notifica locale richiesta al telefono. Controlla il pannello notifiche di Android. Le prenotazioni reali non sono ancora collegate.",
                 );
@@ -322,55 +325,58 @@ export function NotificationsPanel({
       )}
       {!demo && (
         <>
-          <h3 className="cm-delivery-title">Dispositivi collegati</h3>
-          {config?.devices
-            .filter((d) => d.active)
-            .map((d) => (
-              <div className="cm-document" key={d.id}>
-                <div>
-                  <b>
-                    <Smartphone size={14} />
-                    {d.label}
-                    {d.id === deviceId ? " · questo telefono" : ""}
-                  </b>
-                  <small>
-                    {d.key_current
-                      ? "Collegamento aggiornato"
-                      : "Da ricollegare dopo l’aggiornamento del servizio"}
-                  </small>
-                </div>
-                <button
-                  className="cm-button cm-button-secondary"
-                  disabled={busy}
-                  onClick={() => run(() => disable(d.id))}
-                >
-                  Disattiva
-                </button>
-              </div>
-            ))}
-          {config && !config.devices.some((d) => d.active) && (
-            <Empty title="Nessun telefono collegato" />
-          )}
-          {!!config?.deliveries.length && (
-            <>
-              <h3 className="cm-delivery-title">Ultimi invii</h3>
-              {config.deliveries.slice(0, 5).map((d) => (
+          <details className="cm-notification-details">
+            <summary>Dispositivi e storico invii</summary>
+            <h3 className="cm-delivery-title">Dispositivi collegati</h3>
+            {config?.devices
+              .filter((d) => d.active)
+              .map((d) => (
                 <div className="cm-document" key={d.id}>
                   <div>
                     <b>
-                      {d.kind === "test"
-                        ? "Prova dal server"
-                        : "Nuova prenotazione"}
+                      <Smartphone size={14} />
+                      {d.label}
+                      {d.id === deviceId ? " · questo telefono" : ""}
                     </b>
                     <small>
-                      {deliveryNames[d.status] || d.status} ·{" "}
-                      {new Date(d.created).toLocaleString("it-IT")}
+                      {d.key_current
+                        ? "Collegamento aggiornato"
+                        : "Da ricollegare dopo l’aggiornamento del servizio"}
                     </small>
                   </div>
+                  <button
+                    className="cm-button cm-button-secondary"
+                    disabled={busy}
+                    onClick={() => run(() => disable(d.id))}
+                  >
+                    Disattiva
+                  </button>
                 </div>
               ))}
-            </>
-          )}
+            {config && !config.devices.some((d) => d.active) && (
+              <Empty title="Nessun telefono collegato" />
+            )}
+            {!!config?.deliveries.length && (
+              <>
+                <h3 className="cm-delivery-title">Ultimi invii</h3>
+                {config.deliveries.slice(0, 5).map((d) => (
+                  <div className="cm-document" key={d.id}>
+                    <div>
+                      <b>
+                        {d.kind === "test"
+                          ? "Prova dal server"
+                          : "Nuova prenotazione"}
+                      </b>
+                      <small>
+                        {deliveryNames[d.status] || d.status} ·{" "}
+                        {new Date(d.created).toLocaleString("it-IT")}
+                      </small>
+                    </div>
+                  </div>
+                ))}
+              </>
+            )}
+          </details>
         </>
       )}
       {message && (

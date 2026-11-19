@@ -135,3 +135,11 @@ API condivise verificate sul dominio: schema 5, enabled true, disponibilità/pre
 ## DIMORA MIA — nome definitivo
 
 Ripristinato DIMORA MIA nel sito, nella scheda portfolio, nell'app proprietario, nel manifest Android, nelle icone DM, nei messaggi push e nei modelli email/ricevuta. Cache statica PWA aggiornata a v3 per sostituire icone e pagina offline. URL /casa-mia/, identificativo manifest, archivio, sessioni e configurazione CASA_MIA_* preservati per mantenere l'app installata e i dati esistenti. L'aggiornamento dell'etichetta sul launcher dipende dai tempi di Chrome/Android.
+
+## DIMORA MIA — gestione essenziale e centro notifiche
+
+Oggi sostituisce Panoramica, azioni principali sempre disponibili, centro notifiche persistente con stato verificato sul dispositivo (permesso, sottoscrizione locale, telefono attivo e chiave corrente sul server). Ricontrollo al ritorno in app, alla connessione e dopo la chiusura del pannello. Nessuna richiesta automatica di permesso. Installazione mostrata nella scheda soltanto quando non standalone; demo raccolta in un dettaglio nell'accesso, storico invii/dispositivi espandibile. La vista scelta sopravvive al ricaricamento tramite ?view=.
+
+Invii nuove prenotazioni eseguiti con Next after dopo la risposta; quattro worker limitati a tre messaggi coprono i dieci telefoni supportati. Coda transazionale e deduplicazione preservate; errori di consegna non fanno fallire una prenotazione salvata. Il worker protetto resta disponibile per retry, ma il servizio periodico esterno non è configurato. Il pulsante prova server rimane immediato. Stripe resta test, email non configurata; nessun piano commerciale acquistato. Non dichiarare ricezione fisica delle push finché il proprietario non la conferma.
+
+Verifiche aggiunte: prenotazione con quattro telefoni e invio dopo risposta; script browser test-push-status.mjs con API simulate verifica revoca server, permesso negato, servizio irraggiungibile, stato attivo e layout installato. Nessuna prenotazione reale creata dai test.

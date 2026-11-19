@@ -4397,3 +4397,19 @@
 .cm-form-success {
   color: #294c3d;
 }
+
+/* Owner app: actionable phone status, quiet installation, no duplicate welcome. */
+.cm-alert-center { display:flex; flex-direction:column; align-items:stretch; gap:16px; }
+.cm-alert-center .cm-panel-heading { margin-bottom:0; }
+.cm-alert-center .cm-body-copy { margin:0; }
+.cm-push-health { display:flex; align-items:center; gap:10px; padding:13px 15px; background:#f3f0e7; color:#69572c; border-radius:12px; font-size:13px; font-weight:650; }
+.cm-push-health i { width:7px; height:7px; border-radius:50%; background:currentColor; flex-shrink:0; }
+.cm-push-health.active { background:#edf3e9; color:#344e36; }
+.cm-push-footnote { color:var(--cm-muted); font-size:11px; line-height:1.7; }
+.cm-install-inline { display:flex; align-items:center; gap:10px; flex-wrap:wrap; border-top:1px solid var(--cm-line); padding-top:15px; font-size:12px; }
+.cm-install-inline span { flex:1; min-width:120px; }
+.cm-notification-details { margin-top:22px; border-top:1px solid var(--cm-line); padding-top:16px; }
+.cm-notification-details summary { cursor:pointer; font-weight:600; font-size:13px; padding:8px 0; }
+@media(max-width:600px) { .cm-topbar-tools { gap:5px; } }
+.cm-demo-access { margin-top:24px; border-top:1px solid var(--cm-line); padding-top:16px; }
+.cm-demo-access summary { cursor:pointer; color:var(--cm-muted); font-size:12px; padding:5px 0; }

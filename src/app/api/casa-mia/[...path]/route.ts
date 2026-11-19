@@ -1,10 +1,11 @@
+import { after } from "next/server";
 import { bookingEnvironment } from "@/features/casa-mia/server/database";
 import { handleAPI } from "@/features/casa-mia/server/api.mjs";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 export const maxDuration = 30;
 async function dispatch(request: Request) {
-  const env = bookingEnvironment(),
+  const env = { ...bookingEnvironment(), BACKGROUND: after },
     path = new URL(request.url).pathname;
   const requested = process.env.CASA_MIA_ENABLE_BOOKING === "true";
   const configured = !!env.DB && (env.ADMIN_PASSWORD?.length ?? 0) >= 12;
