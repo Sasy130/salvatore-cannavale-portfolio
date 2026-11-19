@@ -29,7 +29,7 @@ try {
         (c) => c.charCodeAt(0),
       );
       const registration = {
-        active: {},
+        active: { state: "activated" },
         pushManager: {
           getSubscription: async () => window.__subscription,
           subscribe: () => new Promise(() => {}),

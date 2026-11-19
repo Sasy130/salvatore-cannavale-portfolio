@@ -34,20 +34,58 @@ export async function pushDeadline<T>(
     if (timer) clearTimeout(timer);
   }
 }
-export async function pushRegistration() {
-  return pushDeadline(
-    (async () => {
-      const registration = await navigator.serviceWorker.register(
-        "/casa-mia/sw.js",
-        { scope: "/casa-mia/" },
+export async function waitForPushWorker(
+  registration: ServiceWorkerRegistration,
+) {
+  if (registration.active?.state === "activated") return registration;
+  return new Promise<ServiceWorkerRegistration>((resolve, reject) => {
+    const watched = new Set<ServiceWorker>();
+    const cleanup = () => {
+      clearTimeout(timer);
+      registration.removeEventListener("updatefound", check);
+      for (const worker of watched)
+        worker.removeEventListener("statechange", check);
+    };
+    const check = () => {
+      if (registration.active?.state === "activated") {
+        cleanup();
+        resolve(registration);
+        return;
+      }
+      for (const worker of [
+        registration.active,
+        registration.installing,
+        registration.waiting,
+      ]) {
+        if (worker && !watched.has(worker)) {
+          watched.add(worker);
+          worker.addEventListener("statechange", check);
+        }
+      }
+    };
+    const timer = setTimeout(() => {
+      cleanup();
+      reject(
+        Error(
+          "Il servizio dell’app non ha completato l’attivazione. Riapri l’app in Chrome e riprova.",
+        ),
       );
-      return registration.active
-        ? registration
-        : await navigator.serviceWorker.ready;
-    })(),
+    }, 12000);
+    registration.addEventListener("updatefound", check);
+    check();
+  });
+}
+export async function pushRegistration() {
+  const registration = await pushDeadline(
+    navigator.serviceWorker.register("/casa-mia/sw.js", {
+      scope: "/casa-mia/",
+    }),
     "Il servizio dell’app non risponde. Chiudi e riapri DIMORA MIA, poi riprova.",
   );
+  return waitForPushWorker(registration);
 }
+// Reuse the same pending native request after a UI timeout. Android may complete it later.
+const pendingSubscriptions = new Map<string, Promise<PushSubscription>>();
 export async function connectBrowserPush(
   publicKey: string,
   stage: (value: string) => void,
@@ -76,11 +114,21 @@ export async function connectBrowserPush(
   }
   if (!subscription) {
     stage("Collegamento al servizio notifiche di Android…");
-    subscription = await pushDeadline(
-      registration.pushManager.subscribe({
+    let pending = pendingSubscriptions.get(publicKey);
+    if (!pending) {
+      pending = registration.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: key,
-      }),
+      });
+      pendingSubscriptions.set(publicKey, pending);
+      const clear = () => {
+        if (pendingSubscriptions.get(publicKey) === pending)
+          pendingSubscriptions.delete(publicKey);
+      };
+      void pending.then(clear, clear);
+    }
+    subscription = await pushDeadline(
+      pending,
       "Android non ha completato il collegamento push. Il consenso è attivo, ma il telefono non è ancora collegato al server. Controlla la connessione, apri l’app in Chrome e riprova. Se il collegamento si completa in ritardo, il prossimo tentativo lo recupera.",
       20000,
     );
