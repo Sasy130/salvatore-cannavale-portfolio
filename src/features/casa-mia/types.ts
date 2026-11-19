@@ -47,7 +47,29 @@ export type Settings = {
   blockedDates: string[];
   assets: Record<string, string>;
 };
+export type Receipt = {
+  id: string;
+  booking_id: string;
+  amount: number;
+  currency: string;
+  mode: string;
+  issued: string;
+};
+export type EmailDelivery = {
+  id: string;
+  booking_id: string;
+  receipt_id: string | null;
+  kind: string;
+  status: string;
+  attempts: number;
+  next_attempt: number;
+  last_error: string | null;
+  sent_at: string | null;
+  created: string;
+};
 export type OwnerData = {
+  receipts?: Receipt[];
+  emails?: EmailDelivery[];
   bookings: Booking[];
   payments: Payment[];
   activity: Activity[];

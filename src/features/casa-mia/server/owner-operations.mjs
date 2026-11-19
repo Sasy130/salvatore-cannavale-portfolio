@@ -182,17 +182,31 @@ export async function handleOwnerOperation(path, req, env) {
   const db = env.DB;
   try {
     if (path === "admin/console" && req.method === "GET") {
-      const [bookings, payments, events, s] = await Promise.all([
-        all(db, "SELECT * FROM bookings ORDER BY checkin DESC LIMIT 2000"),
-        all(
-          db,
-          "SELECT * FROM owner_payments ORDER BY created DESC LIMIT 4000",
-        ),
-        all(db, "SELECT * FROM owner_activity ORDER BY created DESC LIMIT 150"),
-        config(db),
-      ]);
+      const [bookings, payments, events, s, receipts, emails] =
+        await Promise.all([
+          all(db, "SELECT * FROM bookings ORDER BY checkin DESC LIMIT 2000"),
+          all(
+            db,
+            "SELECT * FROM owner_payments ORDER BY created DESC LIMIT 4000",
+          ),
+          all(
+            db,
+            "SELECT * FROM owner_activity ORDER BY created DESC LIMIT 150",
+          ),
+          config(db),
+          all(
+            db,
+            "SELECT id,booking_id,amount,currency,mode,issued FROM payment_receipts ORDER BY issued DESC LIMIT 2000",
+          ),
+          all(
+            db,
+            "SELECT id,booking_id,receipt_id,kind,status,attempts,next_attempt,last_error,sent_at,created FROM email_outbox ORDER BY created DESC LIMIT 2000",
+          ),
+        ]);
       return json({
         bookings,
+        receipts,
+        emails,
         payments,
         activity: events,
         settings: { ...s, manualConfirmation: false },
@@ -200,7 +214,7 @@ export async function handleOwnerOperation(path, req, env) {
           !!env.STRIPE_SECRET_KEY?.startsWith("sk_test_") &&
           !!env.STRIPE_WEBHOOK_SECRET,
         emailReady: !!env.RESEND_API_KEY && !!env.MAIL_FROM,
-        schemaVersion: 3,
+        schemaVersion: 4,
       });
     }
     if (req.method !== "POST")

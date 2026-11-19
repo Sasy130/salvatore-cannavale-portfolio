@@ -1,3 +1,5 @@
+import { mailJob, queueConfirmation, deliverEmails } from "./outbox.mjs";
+import { receiptPDF } from "./receipt.mjs";
 import { handleOwnerOperation, activity } from "./owner-operations.mjs";
 import { defaults, quoteBooking, nightsBetween } from "./booking.mjs";
 const json = (data, status = 200, headers = {}) =>
@@ -62,39 +64,21 @@ async function expire(db) {
       .bind(Date.now()),
   ]);
 }
-async function mail(env, b) {
-  if (!env.RESEND_API_KEY || !env.MAIL_FROM || !b.email) return false;
-  try {
-    const r = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${env.RESEND_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from: env.MAIL_FROM,
-        to: b.email,
-        subject: `CASA MIA · ${b.status === "confirmed" ? "Conferma demo" : "Richiesta demo"} ${b.id}`,
-        text: `Questa è una prenotazione dimostrativa.\nRiferimento ${b.id}\n${b.checkin} → ${b.checkout}\nTotale EUR ${(b.total / 100).toFixed(2)}\nStato: ${b.status}.\nNessun pagamento reale è stato ricevuto.`,
-      }),
-    });
-    return r.ok;
-  } catch {
-    return false;
-  }
-}
-async function stripe(env, path, data) {
+const mail = queueConfirmation;
+async function stripe(env, path, data, idempotency) {
   if (!env.STRIPE_SECRET_KEY?.startsWith("sk_test_"))
     throw Error(
       "Stripe test non è configurato. Scegli pagamento in struttura.",
     );
-  const r = await fetch("https://api.stripe.com/v1/" + path, {
+  const r = await (env.FETCH || fetch)("https://api.stripe.com/v1/" + path, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${env.STRIPE_SECRET_KEY}`,
       "Content-Type": "application/x-www-form-urlencoded",
+      ...(idempotency ? { "Idempotency-Key": idempotency } : {}),
     },
     body: new URLSearchParams(data),
+    signal: AbortSignal.timeout(10000),
   });
   const b = await r.json();
   if (!r.ok)
@@ -110,8 +94,9 @@ async function verifyWebhook(req, env) {
     sigs = [...signature.matchAll(/(?:^|,)v1=([a-f0-9]+)/g)].map((x) => x[1]);
   if (!t || Math.abs(Date.now() / 1000 - +t) > 300)
     throw Error("Firma webhook scaduta.");
-  const raw = await req.text(),
-    key = await crypto.subtle.importKey(
+  const raw = await req.text();
+  if (raw.length > 256000) throw Error("Evento troppo grande.");
+  const key = await crypto.subtle.importKey(
       "raw",
       new TextEncoder().encode(env.STRIPE_WEBHOOK_SECRET),
       { name: "HMAC", hash: "SHA-256" },
@@ -134,7 +119,7 @@ async function verifyWebhook(req, env) {
 async function closeCheckout(env, id) {
   if (!env.STRIPE_SECRET_KEY?.startsWith("sk_test_"))
     throw Error("Stripe test non configurato.");
-  const response = await fetch(
+  const response = await (env.FETCH || fetch)(
     "https://api.stripe.com/v1/checkout/sessions/" + encodeURIComponent(id),
     { headers: { Authorization: `Bearer ${env.STRIPE_SECRET_KEY}` } },
   );
@@ -144,6 +129,74 @@ async function closeCheckout(env, id) {
   if (session.status !== "open")
     throw Error("Sessione già completata: verifica il pagamento.");
   return stripe(env, `checkout/sessions/${encodeURIComponent(id)}/expire`, {});
+}
+async function openCheckout(env, b, origin) {
+  let session;
+  if (b.stripe_session) {
+    const r = await (env.FETCH || fetch)(
+      "https://api.stripe.com/v1/checkout/sessions/" +
+        encodeURIComponent(b.stripe_session),
+      {
+        headers: { Authorization: `Bearer ${env.STRIPE_SECRET_KEY}` },
+        signal: AbortSignal.timeout(10000),
+      },
+    );
+    if (!r.ok)
+      throw Error("Impossibile verificare la sessione Stripe. Riprova.");
+    session = await r.json();
+  } else {
+    session = await stripe(
+      env,
+      "checkout/sessions",
+      {
+        mode: "payment",
+        success_url: origin + "/demos/dimora-mia/?payment=return#booking",
+        cancel_url: origin + "/demos/dimora-mia/?payment=cancelled#booking",
+        customer_email: b.email,
+        client_reference_id: b.id,
+        "metadata[booking_id]": b.id,
+        "payment_intent_data[metadata][booking_id]": b.id,
+        "payment_method_types[0]": "card",
+        "payment_method_options[card][request_three_d_secure]": "automatic",
+        expires_at: String(
+          Math.floor(new Date(b.created).getTime() / 1000) + 1800,
+        ),
+        "line_items[0][price_data][currency]": "eur",
+        "line_items[0][price_data][unit_amount]": String(b.due),
+        "line_items[0][price_data][product_data][name]": `CASA MIA - ${b.payment === "deposit" ? "Acconto" : "Soggiorno"} DEMO`,
+        "line_items[0][quantity]": "1",
+      },
+      "casa-mia-checkout-" + b.id,
+    );
+  }
+  let target;
+  try {
+    target = new URL(session.url);
+  } catch {}
+  if (
+    !session.id?.startsWith("cs_test_") ||
+    session.status !== "open" ||
+    target?.protocol !== "https:" ||
+    target.hostname !== "checkout.stripe.com"
+  )
+    throw Error(
+      "Sessione non disponibile: attendi la verifica o contatta il proprietario.",
+    );
+  const saved = await env.DB.prepare(
+    "UPDATE bookings SET stripe_session=? WHERE id=? AND status='awaiting_payment' RETURNING id",
+  )
+    .bind(session.id, b.id)
+    .all();
+  if (!saved.results.length) {
+    await closeCheckout(env, session.id);
+    throw Error("La prenotazione non è più attiva.");
+  }
+  return {
+    id: b.id,
+    url: session.url,
+    status: "awaiting_payment",
+    total: b.total,
+  };
 }
 export async function handleAPI(req, env) {
   const url = new URL(req.url),
@@ -155,6 +208,18 @@ export async function handleAPI(req, env) {
       503,
     );
   try {
+    if (p === "jobs/email") {
+      const token = req.headers.get("authorization") || "";
+      if (
+        !env.MAIL_JOB_SECRET ||
+        env.MAIL_JOB_SECRET.length < 32 ||
+        !(await same(token, "Bearer " + env.MAIL_JOB_SECRET))
+      )
+        return json({ error: "Accesso non consentito." }, 401);
+      if (!["POST", "GET"].includes(req.method))
+        return json({ error: "Metodo non consentito." }, 405);
+      return json(await deliverEmails(env, { limit: 3 }));
+    }
     if (req.method !== "GET" && p !== "stripe/webhook") {
       const origin = req.headers.get("origin");
       if (!origin || origin !== url.origin)
@@ -162,40 +227,98 @@ export async function handleAPI(req, env) {
     }
     if (p === "stripe/webhook" && req.method === "POST") {
       const event = await verifyWebhook(req, env),
-        s = event.data?.object;
-      if (event.type === "checkout.session.completed") {
-        const b = await one(
-          db,
-          "SELECT * FROM bookings WHERE id=?",
-          s.metadata?.booking_id || "",
-        );
-        if (
-          b &&
-          b.stripe_session === s.id &&
-          s.payment_status === "paid" &&
-          s.currency === "eur" &&
-          s.amount_total === b.due &&
-          s.livemode === false
-        ) {
-          if (b.status === "awaiting_payment") {
-            const changed = await db
-              .prepare(
-                "UPDATE bookings SET status='confirmed',expires=NULL WHERE id=? AND status='awaiting_payment' RETURNING id",
-              )
-              .bind(b.id)
-              .all();
-            if (changed.results.length)
-              await mail(env, { ...b, status: "confirmed" });
-          } else if (b.status !== "confirmed") {
-            await db
-              .prepare(
-                "UPDATE bookings SET status='payment_review_required' WHERE id=?",
-              )
-              .bind(b.id)
-              .run();
-          }
-        }
+        session = event.data?.object;
+      let bookingId = null;
+      if (
+        [
+          "checkout.session.completed",
+          "checkout.session.async_payment_succeeded",
+        ].includes(event.type) &&
+        session
+      ) {
+        bookingId = await db.transaction(async (tx) => {
+          const b = await one(
+            tx,
+            "SELECT * FROM bookings WHERE id=? FOR UPDATE",
+            session.metadata?.booking_id || "",
+          );
+          if (
+            !b ||
+            !["full", "deposit"].includes(b.payment) ||
+            b.stripe_session !== session.id ||
+            session.payment_status !== "paid" ||
+            session.currency !== "eur" ||
+            session.amount_total !== b.due ||
+            session.livemode !== false
+          )
+            return null;
+          const prior = await one(
+            tx,
+            "SELECT id FROM payment_receipts WHERE stripe_session=?",
+            session.id,
+          );
+          if (prior) return b.id;
+          const held = await query(
+              tx,
+              "SELECT date FROM nights WHERE booking_id=?",
+              b.id,
+            ),
+            dates = nightsBetween(b.checkin, b.checkout);
+          const confirmed =
+            b.status === "confirmed" ||
+            (b.status === "awaiting_payment" &&
+              Number(b.expires) > Date.now() &&
+              dates.every((d) => held.some((n) => n.date === d)));
+          const status = confirmed ? "confirmed" : "payment_review_required",
+            issued = new Date().toISOString();
+          await tx
+            .prepare(
+              "UPDATE bookings SET status=?,expires=NULL,revision=revision+1 WHERE id=?",
+            )
+            .bind(status, b.id)
+            .run();
+          const snapshot = { ...b, status };
+          const receipt = {
+            id: "CM-R-" + crypto.randomUUID().slice(0, 12).toUpperCase(),
+            booking_id: b.id,
+            stripe_session: session.id,
+            payment_intent:
+              typeof session.payment_intent === "string"
+                ? session.payment_intent
+                : null,
+            amount: b.due,
+            currency: "eur",
+            mode: "test",
+            issued,
+            snapshot: JSON.stringify(snapshot),
+          };
+          await tx
+            .prepare(
+              "INSERT INTO payment_receipts(id,booking_id,stripe_session,payment_intent,amount,currency,mode,issued,snapshot) VALUES(?,?,?,?,?,?,?,?,?)",
+            )
+            .bind(
+              receipt.id,
+              b.id,
+              receipt.stripe_session,
+              receipt.payment_intent,
+              receipt.amount,
+              "eur",
+              "test",
+              issued,
+              receipt.snapshot,
+            )
+            .run();
+          await mailJob(tx, snapshot, "receipt", receipt).run();
+          await activity(tx, b.id, "payment_verified", {
+            receiptId: receipt.id,
+            amount: b.due,
+            mode: "test",
+            review: !confirmed,
+          });
+          return b.id;
+        });
       }
+      if (bookingId) await deliverEmails(env, { bookingId, limit: 1 });
       return json({ received: true });
     }
     if (p === "availability" && req.method === "GET") {
@@ -266,11 +389,31 @@ export async function handleAPI(req, env) {
             },
             409,
           );
+        if (
+          !["awaiting_payment", "confirmed", "pending"].includes(
+            previous.status,
+          )
+        )
+          return json(
+            {
+              error:
+                "Questa prenotazione non è più attiva. Verifica nuovamente le date e avvia una nuova richiesta.",
+            },
+            409,
+          );
+        if (previous.status === "awaiting_payment")
+          return json(await openCheckout(env, previous, url.origin));
+        const delivery = await one(
+          db,
+          "SELECT status FROM email_outbox WHERE booking_id=? AND kind='confirmation'",
+          previous.id,
+        );
         return json({
+          emailQueued: !!delivery && delivery.status !== "sent",
           id: previous.id,
           status: previous.status,
           total: previous.total,
-          emailSent: false,
+          emailSent: delivery?.status === "sent",
         });
       }
       const s = await settings(db),
@@ -382,6 +525,7 @@ export async function handleAPI(req, env) {
               .prepare("INSERT INTO nights (date,booking_id) VALUES (?,?)")
               .bind(d, b.id),
           ),
+          ...(!online ? [mailJob(db, b)] : []),
         ]);
       } catch {
         return json(
@@ -392,49 +536,15 @@ export async function handleAPI(req, env) {
           409,
         );
       }
-      if (online) {
-        try {
-          const session = await stripe(env, "checkout/sessions", {
-            mode: "payment",
-            success_url:
-              url.origin + "/demos/dimora-mia/?payment=return#booking",
-            cancel_url:
-              url.origin + "/demos/dimora-mia/?payment=cancelled#booking",
-            customer_email: b.email,
-            client_reference_id: b.id,
-            "metadata[booking_id]": b.id,
-            expires_at: String(Math.floor(Date.now() / 1000) + 1800),
-            "line_items[0][price_data][currency]": "eur",
-            "line_items[0][price_data][unit_amount]": String(b.due),
-            "line_items[0][price_data][product_data][name]": `CASA MIA — ${input.payment === "deposit" ? "Acconto" : "Soggiorno"} DEMO`,
-            "line_items[0][quantity]": "1",
-          });
-          await db
-            .prepare("UPDATE bookings SET stripe_session=? WHERE id=?")
-            .bind(session.id, b.id)
-            .run();
-          return json({
-            id: b.id,
-            url: session.url,
-            status: b.status,
-            total: b.total,
-          });
-        } catch (e) {
-          await db.batch([
-            db.prepare("DELETE FROM nights WHERE booking_id=?").bind(b.id),
-            db
-              .prepare("UPDATE bookings SET status='payment_failed' WHERE id=?")
-              .bind(b.id),
-          ]);
-          throw e;
-        }
-      }
+      if (online) return json(await openCheckout(env, b, url.origin));
+      const emailSent = await mail(env, b);
       return json(
         {
           id: b.id,
           status: b.status,
           total: b.total,
-          emailSent: await mail(env, b),
+          emailSent,
+          emailQueued: !emailSent,
         },
         201,
       );
@@ -486,6 +596,56 @@ export async function handleAPI(req, env) {
           ));
       if (!session)
         return json({ error: "Accedi al pannello proprietario." }, 401);
+      if (p.startsWith("admin/receipts/") && req.method === "GET") {
+        const receipt = await one(
+          db,
+          "SELECT * FROM payment_receipts WHERE id=?",
+          p.slice("admin/receipts/".length),
+        );
+        if (!receipt) return json({ error: "Ricevuta non trovata." }, 404);
+        return new Response(receiptPDF(receipt), {
+          headers: {
+            "Content-Type": "application/pdf",
+            "Content-Disposition": `attachment; filename="CASA-MIA-${receipt.id}.pdf"`,
+            "Cache-Control": "private, no-store",
+            "X-Content-Type-Options": "nosniff",
+          },
+        });
+      }
+      if (p === "admin/emails/retry" && req.method === "POST") {
+        const input = await body(req),
+          job = await one(
+            db,
+            "SELECT * FROM email_outbox WHERE id=?",
+            input.id || "",
+          );
+        if (!job) return json({ error: "Invio non trovato." }, 404);
+        if (
+          job.status !== "queued" ||
+          job.attempts >= 8 ||
+          (job.first_attempt &&
+            Date.now() - Number(job.first_attempt) > 23 * 3600000)
+        )
+          return json(
+            {
+              error:
+                "Verifica prima l’esito con il servizio email: questo invio non può essere ripetuto automaticamente.",
+            },
+            409,
+          );
+        if (!env.RESEND_API_KEY || !env.MAIL_FROM)
+          return json(
+            { error: "Configura il servizio email prima di riprovare." },
+            409,
+          );
+        await db
+          .prepare(
+            "UPDATE email_outbox SET next_attempt=0 WHERE id=? AND status='queued'",
+          )
+          .bind(job.id)
+          .run();
+        return json(await deliverEmails(env, { jobId: job.id, limit: 1 }));
+      }
       if (
         [
           "admin/console",

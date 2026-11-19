@@ -1801,6 +1801,7 @@ export function OwnerApp() {
           }}
           onAction={owner.action}
           onOperation={owner.operation}
+          onRetryEmail={owner.retryEmail}
           busy={owner.busy}
           disabled={disabled}
         />

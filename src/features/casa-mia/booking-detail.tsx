@@ -35,6 +35,7 @@ export const EVENT_NAMES: Record<string, string> = {
   reservation_confirmed: "Prenotazione confermata",
   reservation_cancelled: "Date liberate",
   payment_recorded: "Incasso registrato",
+  payment_verified: "Pagamento verificato e ricevuta emessa",
   stay_operation_updated: "Operatività soggiorno aggiornata",
   refund_recorded: "Rimborso annotato",
 };
@@ -64,6 +65,7 @@ export function BookingDetail({
   onPayment,
   onAction,
   onOperation,
+  onRetryEmail,
   busy,
   disabled,
 }: {
@@ -79,6 +81,7 @@ export function BookingDetail({
     value: boolean,
     key: string,
   ) => Promise<void>;
+  onRetryEmail: (id: string) => Promise<void>;
   busy: boolean;
   disabled: boolean;
 }) {
@@ -131,6 +134,7 @@ export function BookingDetail({
       <div className="cm-tabs" role="tablist" aria-label="Dettagli soggiorno">
         {[
           ["overview", "Riepilogo"],
+          ["documents", "Email e ricevute"],
           ...(!blocking ? [["payments", "Movimenti"]] : []),
           ["activity", "Attività"],
         ].map(([id, label]) => (
@@ -360,6 +364,95 @@ export function BookingDetail({
           <p className="cm-help">
             Riepilogo gestionale. Le annotazioni manuali non sono addebiti,
             bonifici o documenti fiscali.
+          </p>
+        </div>
+      )}
+      {tab === "documents" && (
+        <div className="cm-detail-body">
+          <p className="cm-help">
+            Le ricevute sono emesse solo dopo un pagamento Stripe verificato. In
+            modalità test non attestano un incasso reale e non sono documenti
+            fiscali.
+          </p>
+          {(data.receipts || [])
+            .filter((r) => r.booking_id === b.id)
+            .map((r) => (
+              <div className="cm-document" key={r.id}>
+                <div>
+                  <b>Ricevuta {r.mode === "test" ? "TEST" : ""}</b>
+                  <small>
+                    {r.id} · {money(r.amount)} ·{" "}
+                    {new Date(r.issued).toLocaleDateString("it-IT")}
+                  </small>
+                </div>
+                <a
+                  className="cm-button cm-button-secondary"
+                  href={"/api/casa-mia/admin/receipts/" + r.id}
+                >
+                  Scarica PDF
+                </a>
+              </div>
+            ))}
+          {!(data.receipts || []).some((r) => r.booking_id === b.id) && (
+            <Empty title="Nessuna ricevuta emessa">
+              Una conferma o un incasso manuale non generano una ricevuta di
+              pagamento online.
+            </Empty>
+          )}
+          <h3 className="cm-delivery-title">Invii email</h3>
+          {(data.emails || [])
+            .filter((e) => e.booking_id === b.id)
+            .map((e) => (
+              <div className="cm-document" key={e.id}>
+                <div>
+                  <b>
+                    {e.kind === "receipt"
+                      ? "Email con ricevuta PDF"
+                      : "Conferma prenotazione"}
+                  </b>
+                  <small>
+                    {
+                      (
+                        {
+                          queued: "In coda",
+                          sending: "Invio in corso",
+                          sent: "Accettata dal servizio email",
+                          review: "Da verificare con il servizio email",
+                          superseded: "Superata da un aggiornamento",
+                        } as Record<string, string>
+                      )[e.status]
+                    }{" "}
+                    · {e.attempts} tentativi
+                  </small>
+                </div>
+                {e.status === "queued" && (
+                  <button
+                    className="cm-button cm-button-secondary"
+                    disabled={busy || disabled || !data.emailReady}
+                    onClick={async () => {
+                      setError("");
+                      try {
+                        await onRetryEmail(e.id);
+                      } catch (err) {
+                        setError((err as Error).message);
+                      }
+                    }}
+                  >
+                    Riprova invio
+                  </button>
+                )}
+              </div>
+            ))}
+          {!(data.emails || []).some((e) => e.booking_id === b.id) && (
+            <p className="cm-help">
+              Nessun invio in coda per questo soggiorno. Gli inserimenti manuali
+              non inviano automaticamente email.
+            </p>
+          )}
+          <p className="cm-help">
+            “Accettata” indica che il servizio ha preso in carico l’email, non
+            che l’ospite l’ha letta. Gli invii dubbi richiedono una verifica
+            prima di essere ripetuti.
           </p>
         </div>
       )}

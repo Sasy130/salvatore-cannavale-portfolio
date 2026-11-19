@@ -111,3 +111,7 @@ Interfaccia proprietario riorganizzata in cinque aree, blocchi e accordi manuali
 ## CASA MIA — edizione telefono v3
 
 Nuovo ingresso compatto, riapertura della demo, estremi calendario visibili anche tra mesi, eliminazione dell’approvazione manuale per le prenotazioni con pagamento in struttura, checklist operativa e file ICS per il calendario del telefono. Pannello installazione con prompt nativo quando disponibile e istruzioni Safari/Chrome; scorciatoie nel manifest. Migrazione aggiuntiva `003_stay_operations.sql`, richiesta dall’endpoint di stato; conferma soltanto i vecchi record pending/arrival, con storico, e preserva Stripe in attesa. Configurazione esterna ancora disabilitata: nessun dato reale o pagamento attivato durante il deploy. Dettagli in `CASA-MIA.md`.
+
+## CASA MIA — email e ricevute v4
+
+Migrazione `004_receipts_outbox.sql`, ricevute PDF non fiscali da webhook Stripe test verificato, coda email persistente e worker autenticato `/api/casa-mia/jobs/email`; chiave `CASA_MIA_MAIL_JOB_SECRET` e scheduler esterno da configurare. Download dei PDF solo con sessione proprietario. Checkout idempotente, recuperabile dopo timeout e limitato all’host Stripe. Tutte le API condivise richiedono schema v4. Nessun account Stripe, IBAN, pagamento live, mittente email o scheduler attivato automaticamente. Dettagli operativi e limiti in `CASA-MIA.md`.

@@ -467,7 +467,7 @@
   text-decoration: underline;
 }
 .cm-destructive {
-  color: #a96954 !important;
+  color: #8f4e3d !important;
 }
 .cm-metrics {
   display: grid;
@@ -4094,3 +4094,7 @@
  .cm-calendar-grid>button.range-start .cm-day-top,.cm-calendar-grid>button.range-end .cm-day-top{flex-direction:column;align-items:flex-start;gap:5px;margin-bottom:8px;}
  .cm-calendar-grid>button.range-start .cm-day-top i,.cm-calendar-grid>button.range-end .cm-day-top i{font-size:7px;line-height:1.2;height:auto;width:auto;min-width:0;border-radius:0;display:block;}
 }
+.cm-tabs{overflow-x:auto;white-space:nowrap;}
+.cm-document{display:flex;gap:18px;justify-content:space-between;align-items:center;padding:18px 0;border-bottom:1px solid var(--cm-line);}
+.cm-document>div{display:flex;flex-direction:column;gap:7px;min-width:0;}.cm-document b{font-size:12px;}.cm-document small{font-size:10px;color:#53664d;line-height:1.8;overflow-wrap:anywhere;}.cm-delivery-title{font-size:16px;margin-top:26px;}
+@media(max-width:600px){.cm-document{align-items:flex-start;flex-direction:column;gap:12px;}.cm-tabs>button{flex-shrink:0;}}

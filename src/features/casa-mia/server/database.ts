@@ -24,5 +24,6 @@ export function bookingEnvironment() {
     STRIPE_WEBHOOK_SECRET: process.env.CASA_MIA_STRIPE_WEBHOOK_SECRET,
     RESEND_API_KEY: process.env.CASA_MIA_RESEND_API_KEY,
     MAIL_FROM: process.env.CASA_MIA_MAIL_FROM,
+    MAIL_JOB_SECRET: process.env.CASA_MIA_MAIL_JOB_SECRET,
   };
 }

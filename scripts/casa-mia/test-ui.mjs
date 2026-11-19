@@ -204,6 +204,14 @@ try {
     page.getByRole("checkbox", { name: /Check-in registrato/ }),
   ).toBeChecked();
   await audit("desktop-stay-operations", page);
+  await page
+    .getByRole("tab", { name: "Email e ricevute", exact: true })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Nessuna ricevuta emessa" }),
+  ).toBeVisible();
+  await audit("desktop-email-and-receipts", page);
+  await page.getByRole("tab", { name: "Riepilogo", exact: true }).click();
   const agenda = page.waitForEvent("download");
   await page
     .getByRole("button", { name: "Salva in calendario", exact: true })
@@ -276,6 +284,12 @@ try {
     ),
   ).toBe(true);
   await audit("mobile-overview", page);
+  await page.locator('.cm-booking-row').filter({hasText:'Ospite di esempio'}).click();
+  await page.getByRole('tab',{name:'Email e ricevute',exact:true}).click();
+  await expect(page.getByRole('heading',{name:'Nessuna ricevuta emessa'})).toBeVisible();
+  await page.screenshot({path:resolve(output,'mobile-email-and-receipts.png'),fullPage:true});
+  await audit('mobile-email-and-receipts',page);
+  await page.keyboard.press('Escape');
   await page.getByRole("button", { name: "Calendario", exact: true }).click();
   await page.screenshot({
     path: resolve(output, "mobile-calendar.png"),

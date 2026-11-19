@@ -312,6 +312,12 @@ export function useOwner() {
       (d) => ({ ...d, settings: next }),
       "Tariffe e regole aggiornate.",
     );
+  const retryEmail = (id: string) =>
+    mutate(
+      () => ownerAPI("admin/emails/retry", { id }),
+      (d) => d,
+      "Stato invio aggiornato. Controlla l’esito nel dettaglio.",
+    );
   const reset = () => {
     if (modeRef.current === "demo") {
       apply(demoData());
@@ -339,6 +345,7 @@ export function useOwner() {
     action,
     settings,
     operation,
+    retryEmail,
     reset,
   };
 }

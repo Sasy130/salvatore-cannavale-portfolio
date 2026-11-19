@@ -44,9 +44,25 @@ try {
         "utf8",
       ),
     );
+  if (
+    !(
+      await client.query(
+        "SELECT version FROM schema_migrations WHERE version=4",
+      )
+    ).rows.length
+  )
+    await client.query(
+      await readFile(
+        new URL(
+          "../../src/features/casa-mia/server/migrations/004_receipts_outbox.sql",
+          import.meta.url,
+        ),
+        "utf8",
+      ),
+    );
   await client.query("COMMIT");
   console.log(
-    "CASA MIA: schema PostgreSQL v3 pronto. Nessun dato demo inserito.",
+    "CASA MIA: schema PostgreSQL v4 pronto. Nessun dato demo inserito.",
   );
 } catch (e) {
   await client.query("ROLLBACK");
