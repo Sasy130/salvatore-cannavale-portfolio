@@ -1,3 +1,13 @@
+## Aggiornamento neon tropicale — 19 novembre 2026
+
+Nuova scena originale in /one-man/assets/one-man-neon.webp (circa 208 KiB), condivisa da intro e hero. Tipografia inclinata, rosa/turchese, dettagli Art Déco e palme; cornici delle anteprime aggiornate. Tutti i 13 progetti correnti sono preservati, incluso il progetto ospitalità aggiunto successivamente, con iframe relativi allo stesso dominio. Gli altri siti e backend non vengono modificati.
+
+?intro=1 forza la riproduzione dell’apertura, salvo reduced motion. Nuova chiave sessione one-man-cinema-neon. Script per registrare una presentazione verticale senza audio: node scripts/capture-opening.mjs (richiede Playwright e ffmpeg).
+
+TypeScript, lint, build statica e quattro scenari Chromium superati sull’export con prefisso /one-man: progetti/menu/dettaglio, touch, accessibilità, intro/replay e cinque viewport. Telefoni fisici e Safari non collaudati. Nessuna garanzia di viralità. Il sorgente aggiornato è in one-man-source.zip.
+
+---
+
 # ONE MAN — Portfolio cinematografico
 
 Pubblicazione: https://www.salvatorecannavale.it/ — repository Sasy130/salvatore-cannavale-portfolio.
