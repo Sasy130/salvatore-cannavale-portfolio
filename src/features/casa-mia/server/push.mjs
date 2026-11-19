@@ -230,6 +230,74 @@ export async function handlePushAdmin(path, req, env) {
     if (raw.length > 6000)
       return json({ error: "Richiesta troppo grande." }, 413);
     const input = JSON.parse(raw);
+    if (path === "admin/push/diagnostic") {
+      const key = "push-diag:" + hash(req.headers.get("cookie") || "");
+      const now = Date.now();
+      const count = (
+        await all(
+          db,
+          "INSERT INTO attempts(key,count,expires) VALUES(?,1,?) ON CONFLICT(key) DO UPDATE SET count=CASE WHEN attempts.expires<=? THEN 1 ELSE attempts.count+1 END,expires=CASE WHEN attempts.expires<=? THEN EXCLUDED.expires ELSE attempts.expires END RETURNING count",
+          key,
+          now + 60000,
+          now,
+          now,
+        )
+      )[0];
+      if (Number(count.count) > 20)
+        return json({ error: "Attendi un minuto prima di riprovare." }, 429);
+      const pick = (value, allowed) =>
+        allowed.includes(value) ? value : "unknown";
+      const diagnostic = {
+        event: pick(input.event, [
+          "opened",
+          "consent",
+          "worker",
+          "subscription-read",
+          "subscribe",
+          "server",
+          "connected",
+          "failed",
+        ]),
+        phase: pick(input.phase, [
+          "opened",
+          "consent",
+          "worker",
+          "subscription-read",
+          "subscribe",
+          "server",
+          "connected",
+        ]),
+        permission: pick(input.permission, [
+          "granted",
+          "denied",
+          "default",
+          "unsupported",
+        ]),
+        browser: pick(input.browser, [
+          "chrome",
+          "samsung",
+          "webview",
+          "edge",
+          "other",
+        ]),
+        error: pick(input.error, [
+          "Error",
+          "AbortError",
+          "NotAllowedError",
+          "InvalidStateError",
+          "NotSupportedError",
+          "NetworkError",
+          "TimeoutError",
+          "TypeError",
+          "none",
+        ]),
+        standalone: input.standalone === true,
+        online: input.online === true,
+        userActivation: input.userActivation === true,
+      };
+      console.info("DIMORA_MIA_PUSH_DIAG " + JSON.stringify(diagnostic));
+      return json({ ok: true });
+    }
     if (path === "admin/push/disable") {
       await db.transaction(async (tx) => {
         await tx

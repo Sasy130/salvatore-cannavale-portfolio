@@ -49,6 +49,7 @@ try {
     posts = 0;
   await page.route("**/api/casa-mia/**", (r) => {
     const path = new URL(r.request().url()).pathname;
+    if (path.endsWith("/admin/push/diagnostic")) return r.fulfill({ json: { ok: true } });
     if (path.endsWith("/status"))
       return r.fulfill({ json: { enabled: true, configured: true } });
     if (path.endsWith("/admin/console")) return r.fulfill({ json: demoData() });

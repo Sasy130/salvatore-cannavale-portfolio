@@ -43,6 +43,8 @@ try {
   const data = demoData();
   await page.route("**/api/casa-mia/**", (route) => {
     const path = new URL(route.request().url()).pathname;
+    if (path.endsWith("/admin/push/diagnostic"))
+      return route.fulfill({ json: { ok: true } });
     if (route.request().method() !== "GET")
       throw Error("Status checks must not mutate any booking or permission");
     if (path.endsWith("/status"))

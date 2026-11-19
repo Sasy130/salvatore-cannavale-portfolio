@@ -151,3 +151,7 @@ Diagnostica produzione: due prenotazioni dirette, zero dispositivi push attivi e
 ## DIMORA MIA — worker realmente attivo prima della sottoscrizione
 
 Prova Chromium sul dominio reale senza mock: register/ready possono restituire un worker in stato activating. La sottoscrizione ora attende esplicitamente activated, con listener puliti e scadenza. Tentativi contemporanei riutilizzano un'unica richiesta nativa pendente per chiave VAPID. Test mirati browser-push.test.mjs verificano attesa e single-flight; il test UI di attivazione conserva la prova di recupero dopo timeout. Segnalazione proprietario: Samsung S26 Ultra, app installata, attesa nel servizio Android; ricezione fisica ancora non confermata. Nessuna configurazione o autorizzazione Android viene presunta attiva dal solo consenso del sito.
+
+## DIMORA MIA — diagnostica attivazione dal telefono
+
+Endpoint POST admin/push/diagnostic protetto dalla sessione proprietario e dall'Origin, massimo venti eventi/minuto per sessione. Log tecnico DIMORA_MIA_PUSH_DIAG con soli enum allowlist: fase, permesso, famiglia browser, classe di errore e booleani standalone/online/userActivation. Nessun endpoint push, chiave, cookie, UA completo o testo arbitrario incluso. L'app invia il controllo all'apertura del pannello e durante l'attivazione senza attendere la diagnosi prima del consenso; errori visibili in alto. Lettura log tramite CLI Vercel verificata. Test autenticazione, redazione e rate limit passati; non equivale a ricezione push sul dispositivo. Nessuna migrazione o nuova risorsa esterna.

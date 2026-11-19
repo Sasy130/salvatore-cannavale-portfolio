@@ -58,3 +58,18 @@ test('booking responds before background delivery and notifies every connected p
  await work();assert.equal(sends,4);assert.equal(Number((await pg.query("SELECT count(*) n FROM push_outbox WHERE status='accepted'")).rows[0].n),4);
  await call('book',input);assert.equal(sends,4);
 });
+
+test('activation diagnostics require owner access, redact arbitrary input and limit logging independently of login',async()=>{
+ assert.equal((await call('admin/push/diagnostic',{event:'opened'})).status,401);
+ const cookie=await login();assert.equal((await call('admin/push/diagnostic',{event:'opened'},{cookie,origin:'https://other.test'})).status,403);
+ const logs=[],original=console.info;console.info=(...args)=>logs.push(args.join(' '));
+ try{
+  const input={event:'failed',phase:'consent',permission:'default',browser:'chrome',error:'<secret endpoint>',endpoint:'https://private.test/secret',auth:'private',standalone:true,online:true};
+  for(let i=0;i<20;i++)assert.equal((await call('admin/push/diagnostic',input,{cookie})).status,200);
+  assert.equal((await call('admin/push/diagnostic',input,{cookie})).status,429);
+  assert.equal(logs.length,20);const record=JSON.parse(logs[0].slice('DIMORA_MIA_PUSH_DIAG '.length));
+  assert.equal(record.phase,'consent');assert.equal(record.error,'unknown');assert.equal(record.standalone,true);
+  for(const value of ['secret','private','endpoint','auth'])assert.ok(!logs[0].includes(value));
+ }finally{console.info=original;}
+ assert.equal((await call('admin/login',{password:env.ADMIN_PASSWORD})).status,200);
+});

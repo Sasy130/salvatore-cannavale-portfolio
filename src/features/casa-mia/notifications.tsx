@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Bell, CheckCircle2, Smartphone } from "lucide-react";
 import { Modal, Primary, Empty } from "./ui";
 import { ownerAPI } from "./use-owner";
@@ -70,6 +70,42 @@ export function NotificationsPanel({
     [stage, setStage] = useState(""),
     [error, setError] = useState(""),
     [loading, setLoading] = useState(!demo);
+  const phase = useRef("opened");
+  const [diagnosticSent, setDiagnosticSent] = useState(false);
+  function report(event: string, exception?: Error) {
+    if (demo) return;
+    const ua = navigator.userAgent;
+    void pushAPI("admin/push/diagnostic", {
+      event,
+      phase: phase.current,
+      permission:
+        "Notification" in window ? Notification.permission : "unsupported",
+      browser: /; wv\)|WebView/i.test(ua)
+        ? "webview"
+        : /SamsungBrowser/i.test(ua)
+          ? "samsung"
+          : /EdgA/i.test(ua)
+            ? "edge"
+            : /Chrome/i.test(ua)
+              ? "chrome"
+              : "other",
+      error: exception?.name || "none",
+      standalone: matchMedia("(display-mode: standalone)").matches,
+      online: navigator.onLine,
+      userActivation: navigator.userActivation?.isActive === true,
+    })
+      .then(() => setDiagnosticSent(true))
+      .catch(() => {});
+  }
+  function activationStage(value: string) {
+    setStage(value);
+    phase.current = value.startsWith("Preparazione")
+      ? "worker"
+      : value.startsWith("Verifica del collegamento")
+        ? "subscription-read"
+        : "subscribe";
+    report(phase.current);
+  }
   async function refresh() {
     if (demo) return;
     setConfig(await pushAPI<Config>("admin/push"));
@@ -85,6 +121,7 @@ export function NotificationsPanel({
     try {
       setDeviceId(localStorage.getItem(PUSH_DEVICE_KEY) || "");
     } catch {}
+    report("opened");
     let alive = true;
     if (!demo)
       Promise.all([pushAPI<Config>("admin/push"), browserPushSubscription()])
@@ -141,6 +178,7 @@ export function NotificationsPanel({
     try {
       await work();
     } catch (e) {
+      report("failed", e as Error);
       setError((e as Error).message);
     } finally {
       setBusy(false);
@@ -152,9 +190,16 @@ export function NotificationsPanel({
       throw Error(
         "Occorre prima attivare il collegamento condiviso e il servizio push.",
       );
+    phase.current = "consent";
+    report("consent");
     setStage("Verifica del consenso Android…");
     await consent();
-    const subscription = await connectBrowserPush(config.publicKey, setStage);
+    const subscription = await connectBrowserPush(
+      config.publicKey,
+      activationStage,
+    );
+    phase.current = "server";
+    report("server");
     setStage("Salvataggio del telefono sul server…");
     const result = await pushAPI<{ id: string }>("admin/push/subscribe", {
       subscription: subscription.toJSON(),
@@ -167,6 +212,8 @@ export function NotificationsPanel({
       localStorage.setItem(PUSH_DEVICE_KEY, result.id);
     } catch {}
     await refresh();
+    phase.current = "connected";
+    report("connected");
     setMessage(
       "Telefono collegato. Ora puoi inviare una notifica di prova dal server.",
     );
@@ -213,6 +260,16 @@ export function NotificationsPanel({
           </p>
         </div>
       </div>
+      {error && (
+        <div className="cm-form-error" role="alert">
+          <p>{error}</p>
+          {diagnosticSent && (
+            <small>
+              Controllo tecnico inviato. Nessun dato degli ospiti incluso.
+            </small>
+          )}
+        </div>
+      )}
       <dl className="cm-key-values">
         <div>
           <dt>Sito e app</dt>
@@ -397,11 +454,7 @@ export function NotificationsPanel({
           {message}
         </p>
       )}
-      {error && (
-        <p className="cm-form-error" role="alert">
-          {error}
-        </p>
-      )}
+
       <p className="cm-help">
         Sul display bloccato compare solo un avviso generico. Per leggere i dati
         degli ospiti serve accedere all’app. Disattivando il dispositivo o
