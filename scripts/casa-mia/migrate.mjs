@@ -1,89 +1,40 @@
 import { Pool } from "pg";
-import { readFile } from "node:fs/promises";
-if (!process.env.CASA_MIA_DATABASE_URL)
-  throw Error("Configura CASA_MIA_DATABASE_URL nel tuo ambiente sicuro.");
-const pool = new Pool({
-  connectionString: process.env.CASA_MIA_DATABASE_URL,
-  max: 1,
-});
-const client = await pool.connect();
+import { migrationPlan } from "../../src/features/casa-mia/server/migration-plan.mjs";
+const connectionString = process.env.CASA_MIA_DATABASE_URL;
+if (!connectionString) {
+  console.error("Configura CASA_MIA_DATABASE_URL nel tuo ambiente sicuro.");
+  process.exit(1);
+}
+let pool;
 try {
-  await client.query("BEGIN");
-  await client.query(
-    await readFile(
-      new URL("../../src/features/casa-mia/server/schema.sql", import.meta.url),
-      "utf8",
-    ),
-  );
-  const applied = await client.query(
-    "SELECT version FROM schema_migrations WHERE version=2",
-  );
-  if (!applied.rows.length)
-    await client.query(
-      await readFile(
-        new URL(
-          "../../src/features/casa-mia/server/migrations/002_owner_operations.sql",
-          import.meta.url,
-        ),
-        "utf8",
-      ),
-    );
-  if (
-    !(
-      await client.query(
-        "SELECT version FROM schema_migrations WHERE version=3",
-      )
-    ).rows.length
-  )
-    await client.query(
-      await readFile(
-        new URL(
-          "../../src/features/casa-mia/server/migrations/003_stay_operations.sql",
-          import.meta.url,
-        ),
-        "utf8",
-      ),
-    );
-  if (
-    !(
-      await client.query(
-        "SELECT version FROM schema_migrations WHERE version=4",
-      )
-    ).rows.length
-  )
-    await client.query(
-      await readFile(
-        new URL(
-          "../../src/features/casa-mia/server/migrations/004_receipts_outbox.sql",
-          import.meta.url,
-        ),
-        "utf8",
-      ),
-    );
-  if (
-    !(
-      await client.query(
-        "SELECT version FROM schema_migrations WHERE version=5",
-      )
-    ).rows.length
-  )
-    await client.query(
-      await readFile(
-        new URL(
-          "../../src/features/casa-mia/server/migrations/005_web_push.sql",
-          import.meta.url,
-        ),
-        "utf8",
-      ),
-    );
-  await client.query("COMMIT");
+  const plan = await migrationPlan();
+  if (process.argv.includes("--http")) {
+    const host = new URL(connectionString).hostname;
+    if (!host.endsWith(".neon.tech")) throw Error("Neon HTTPS only");
+    const { neon } = await import("@neondatabase/serverless");
+    const sql = neon(connectionString, {
+      fetchOptions: { signal: AbortSignal.timeout(30000) },
+    });
+    await sql.query(plan);
+  } else {
+    pool = new Pool({
+      connectionString,
+      max: 1,
+      connectionTimeoutMillis: 5000,
+      query_timeout: 30000,
+    });
+    await pool.query(plan);
+  }
   console.log(
     "CASA MIA: schema PostgreSQL v5 pronto. Nessun dato demo inserito.",
   );
-} catch (e) {
-  await client.query("ROLLBACK");
-  throw e;
+} catch (error) {
+  console.error(
+    "Migrazione non completata (" +
+      (error.code || error.name || "connection_or_schema_error") +
+      "). Nessun segreto mostrato.",
+  );
+  process.exitCode = 1;
 } finally {
-  client.release();
-  await pool.end();
+  if (pool) await pool.end();
 }

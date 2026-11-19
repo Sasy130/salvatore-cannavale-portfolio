@@ -123,3 +123,7 @@ Oggi senza mini calendario duplicato; pulsante Installa app nella barra mobile e
 ## CASA MIA — predisposizione Web Push v5
 
 Nuove tabelle `push_devices`/`push_outbox`, sottoscrizioni proprietario autenticate, VAPID server, worker protetto `/api/casa-mia/jobs/push` e service worker per notifiche generiche/click interno all’app. Migrazione aggiuntiva 005, schema minimo API v5. Variabili e istruzioni in `CASA-MIA-ATTIVAZIONE.md`. Database, VAPID e scheduler ancora da configurare; la demo offre soltanto una prova locale esplicita. Non attivare il flag condiviso prima della migrazione e del collaudo con i servizi reali. Nessun segreto o database esterno creato durante lo sviluppo.
+
+## CASA MIA — collegamento Neon per il collaudo condiviso
+
+Creata risorsa Neon Free `casa-mia`, regione fra1, prefisso CASA_MIA, collegata soltanto a Production. Migrazioni 1–5 applicate via SQL HTTPS. Password proprietario Secret salvata dal proprietario, chiavi push/worker e flag condiviso configurati in Vercel. Nessun valore sensibile nel repository. Il deploy successivo deve verificare API enabled/schema 5 e protezione admin; anteprima ancora in demo. Pool PostgreSQL con SET LOCAL search_path per ogni transazione; migrazioni atomiche con opzione --http per Neon. Nessun upgrade del team Hobby o cron incompatibile aggiunto; commercializzazione, email, Stripe e scheduler restano separati.

@@ -24,22 +24,31 @@ function scope(executor) {
   };
 }
 export function postgresAdapter(pool) {
-  async function transaction(work) {
+  async function withTransaction(work) {
     const client = await pool.connect();
+    let begun = false;
     try {
       await client.query("BEGIN");
-      const result = await work(scope(client));
+      begun = true;
+      // Transaction pooling does not preserve per-session search_path.
+      await client.query("SET LOCAL search_path TO casa_mia");
+      const result = await work(client);
       await client.query("COMMIT");
       return result;
-    } catch (e) {
-      await client.query("ROLLBACK");
-      throw e;
+    } catch (error) {
+      if (begun) await client.query("ROLLBACK").catch(() => {});
+      throw error;
     } finally {
       client.release();
     }
   }
+  const transaction = (work) =>
+    withTransaction((client) => work(scope(client)));
+  const executor = {
+    query: (sql, args) => withTransaction((client) => client.query(sql, args)),
+  };
   return {
-    ...scope(pool),
+    ...scope(executor),
     transaction,
     async batch(statements) {
       return transaction(async (tx) => {
