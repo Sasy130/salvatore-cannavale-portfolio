@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useId, useRef } from "react";
-import { X, ArrowUpRight, LoaderCircle } from "lucide-react";
+import { X, LoaderCircle } from "lucide-react";
 import { STATUS_LABELS, SOURCE_LABELS, moneyState } from "./model.mjs";
 import type { Booking, Payment } from "./types";
 export const money = (n: number) =>
@@ -139,46 +139,5 @@ export function Primary({
       {busy ? <LoaderCircle className="cm-spin" size={17} /> : null}
       {children}
     </button>
-  );
-}
-export function InstallHelp({ onClose }: { onClose: () => void }) {
-  return (
-    <Modal
-      title="La tua casa, a portata di mano."
-      eyebrow="INSTALLA L’APP"
-      onClose={onClose}
-    >
-      <p className="cm-modal-intro">
-        Aggiungi CASA MIA alla schermata Home. Si apre come un’app e non
-        richiede uno store.
-      </p>
-      <div className="cm-instruction">
-        <b>01 / iPhone</b>
-        <p>
-          Apri in Safari, tocca <strong>Condividi</strong>, poi{" "}
-          <strong>Aggiungi alla schermata Home</strong>.
-        </p>
-      </div>
-      <div className="cm-instruction">
-        <b>02 / Android</b>
-        <p>
-          Apri in Chrome, tocca il menù e scegli <strong>Installa app</strong>{" "}
-          oppure <strong>Aggiungi a schermata Home</strong>.
-        </p>
-      </div>
-      <p className="cm-help">
-        Per il calendario condiviso serve internet. La demo rimane separata dai
-        dati reali. Se stai usando l’anteprima nel portfolio, apri prima una
-        pagina separata.
-      </p>
-      <a
-        className="cm-button cm-button-primary"
-        href="/casa-mia/gestione"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Apri l’app separatamente <ArrowUpRight size={17} />
-      </a>
-    </Modal>
   );
 }

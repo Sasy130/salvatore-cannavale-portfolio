@@ -1,1 +1,50 @@
-{"id":"/casa-mia/gestione","name":"CASA MIA — Gestione prenotazioni","short_name":"CASA MIA","description":"Calendario e prenotazioni della tua casa.","lang":"it","start_url":"/casa-mia/gestione","scope":"/casa-mia/","display":"standalone","background_color":"#edf0e7","theme_color":"#edf0e7","icons":[{"src":"/casa-mia/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any"},{"src":"/casa-mia/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}]}
+{
+  "id": "/casa-mia/gestione",
+  "name": "CASA MIA — Gestione prenotazioni",
+  "short_name": "CASA MIA",
+  "description": "Calendario e prenotazioni della tua casa.",
+  "lang": "it",
+  "start_url": "/casa-mia/gestione",
+  "scope": "/casa-mia/",
+  "display": "standalone",
+  "background_color": "#f4f5f0",
+  "theme_color": "#f4f5f0",
+  "icons": [
+    {
+      "src": "/casa-mia/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/casa-mia/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Calendario",
+      "short_name": "Calendario",
+      "url": "/casa-mia/gestione?view=calendar",
+      "icons": [
+        {
+          "src": "/casa-mia/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Prenotazioni",
+      "short_name": "Soggiorni",
+      "url": "/casa-mia/gestione?view=reservations",
+      "icons": [
+        {
+          "src": "/casa-mia/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}

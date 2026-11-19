@@ -17,6 +17,7 @@ import {
   saveDemo,
   paymentDemo,
   actionDemo,
+  operationDemo,
   syncDemo,
   SITE_DEMO_KEY,
 } from "./demo";
@@ -73,6 +74,9 @@ export function useOwner() {
     generation.current++;
     modeRef.current = "welcome";
     setMode("welcome");
+    try {
+      localStorage.removeItem("casa-mia:resume-demo");
+    } catch {}
     dataRef.current = null;
     setData(null);
     setStale(false);
@@ -114,6 +118,15 @@ export function useOwner() {
       .then(async (s) => {
         setService(s);
         if (current !== generation.current) return;
+        if (!s.enabled && !s.unavailable) {
+          try {
+            if (localStorage.getItem("casa-mia:resume-demo") === "yes") {
+              modeRef.current = "demo";
+              setMode("demo");
+              apply(loadDemo());
+            }
+          } catch {}
+        }
         if (s.enabled) {
           try {
             const next = await ownerAPI<OwnerData>("admin/console");
@@ -184,6 +197,9 @@ export function useOwner() {
     generation.current++;
     modeRef.current = "demo";
     setMode("demo");
+    try {
+      localStorage.setItem("casa-mia:resume-demo", "yes");
+    } catch {}
     apply(loadDemo());
     setNotice("Demo locale aperta. Usa solo dati inventati.");
   }
@@ -229,8 +245,11 @@ export function useOwner() {
           ? "Simulazione salvata su questo dispositivo."
           : message,
       );
-    } catch(e) {
-      if ((e as Error & {status?:number}).status===401) {leave();setNotice('La sessione è scaduta. Accedi di nuovo.');}
+    } catch (e) {
+      if ((e as Error & { status?: number }).status === 401) {
+        leave();
+        setNotice("La sessione è scaduta. Accedi di nuovo.");
+      }
       throw e;
     } finally {
       mutating.current = false;
@@ -268,6 +287,25 @@ export function useOwner() {
         : "Date liberate. Verifica separatamente gli eventuali rimborsi.",
     );
   };
+  const operation = (
+    b: Booking,
+    field: string,
+    value: boolean,
+    key: string,
+  ) => {
+    const input = {
+      id: b.id,
+      revision: b.revision,
+      field,
+      value,
+      idempotency: key,
+    };
+    return mutate(
+      () => ownerAPI("admin/operations", input),
+      (d) => operationDemo(d, input),
+      "Operazione del soggiorno aggiornata.",
+    );
+  };
   const settings = (next: Settings) =>
     mutate(
       () => ownerAPI("admin/settings", next),
@@ -300,6 +338,7 @@ export function useOwner() {
     payment,
     action,
     settings,
+    operation,
     reset,
   };
 }

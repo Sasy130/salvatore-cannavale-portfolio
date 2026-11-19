@@ -14,6 +14,7 @@ export type Booking = {
   status: string;
   created: string;
   revision: number;
+  operations?: string;
 };
 export type Payment = {
   id: string;

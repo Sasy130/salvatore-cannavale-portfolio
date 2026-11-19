@@ -8,7 +8,7 @@ export const defaults = {
   payOnArrival: true,
   fullOnline: false,
   depositOnline: false,
-  manualConfirmation: true,
+  manualConfirmation: false,
   assets: {
     living: "/demos/dimora-mia/assets/living.webp",
     bedroom: "/demos/dimora-mia/assets/bedroom.webp",

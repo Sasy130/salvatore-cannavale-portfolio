@@ -6,7 +6,7 @@ export const SOURCE_LABELS = {
   booking: "Booking.com · manuale",
 };
 export const STATUS_LABELS = {
-  pending: "Da confermare",
+  pending: "Registrazione precedente",
   confirmed: "Confermata",
   blocked: "Date bloccate",
   awaiting_payment: "Pagamento in attesa",
@@ -225,4 +225,103 @@ export function ownerQuote(input, settings) {
     cleaning: settings.cleaning,
     total: subtotal + settings.cleaning,
   };
+}
+
+export function stayOperations(b) {
+  try {
+    const o = JSON.parse(b.operations || "{}");
+    return {
+      roomReady: !!o.roomReady,
+      guestArrived: !!o.guestArrived,
+      guestDeparted: !!o.guestDeparted,
+    };
+  } catch {
+    return { roomReady: false, guestArrived: false, guestDeparted: false };
+  }
+}
+export function updateStayOperations(b, field, value, today = propertyToday()) {
+  if (b.status !== "confirmed" || b.payment === "block")
+    throw Error(
+      "Le operazioni sono disponibili solo per soggiorni confermati.",
+    );
+  if (
+    !["roomReady", "guestArrived", "guestDeparted"].includes(field) ||
+    typeof value !== "boolean"
+  )
+    throw Error("Operazione non valida.");
+  const o = stayOperations(b);
+  if (field !== "roomReady" && value && today < b.checkin)
+    throw Error(
+      "Puoi registrare l’arrivo o la partenza dal giorno di check-in.",
+    );
+  if (field === "guestDeparted" && value && !o.guestArrived)
+    throw Error("Registra prima il check-in.");
+  if (field === "guestArrived" && !value && o.guestDeparted)
+    throw Error("Annulla prima la registrazione del check-out.");
+  return { ...o, [field]: value };
+}
+export function operationsAfterEdit(existing, input) {
+  if (!existing) return "{}";
+  if (
+    existing.checkin === input.checkin &&
+    existing.checkout === input.checkout
+  )
+    return existing.operations || "{}";
+  if (stayOperations(existing).guestArrived)
+    throw Error(
+      "Per cambiare le date, annulla prima le registrazioni di check-out e check-in.",
+    );
+  return "{}";
+}
+export function stayCalendarFile(b) {
+  const escape = (v) =>
+    String(v ?? "")
+      .replaceAll("\\", "\\\\")
+      .replaceAll("\r", "")
+      .replaceAll("\n", "\\n")
+      .replaceAll(";", "\\;")
+      .replaceAll(",", "\\,");
+  const lines = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//CASA MIA//Owner Calendar//IT",
+    "CALSCALE:GREGORIAN",
+    "METHOD:PUBLISH",
+    "BEGIN:VEVENT",
+    "UID:" + escape(b.id) + "@casa-mia",
+    "DTSTAMP:" +
+      new Date(b.created)
+        .toISOString()
+        .replace(/[-:]/g, "")
+        .replace(/\.\d{3}/, ""),
+    "DTSTART;VALUE=DATE:" + b.checkin.replaceAll("-", ""),
+    "DTEND;VALUE=DATE:" + b.checkout.replaceAll("-", ""),
+    "SUMMARY:" + escape("CASA MIA · " + b.name),
+    "DESCRIPTION:" +
+      escape(
+        "Copia statica del soggiorno. Modifiche e annullamenti non si sincronizzano. Riferimento: " +
+          b.id,
+      ),
+    "STATUS:" + (isCancelled(b) ? "CANCELLED" : "CONFIRMED"),
+    "END:VEVENT",
+    "END:VCALENDAR",
+  ];
+  return (
+    lines
+      .map((line) => {
+        let result = "",
+          bytes = 0;
+        for (const c of line) {
+          const size = new TextEncoder().encode(c).length;
+          if (bytes + size > 73) {
+            result += "\r\n ";
+            bytes = 1;
+          }
+          result += c;
+          bytes += size;
+        }
+        return result;
+      })
+      .join("\r\n") + "\r\n"
+  );
 }

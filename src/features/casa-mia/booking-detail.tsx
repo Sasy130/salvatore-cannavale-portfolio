@@ -2,6 +2,7 @@
 import { useRef, useState } from "react";
 import {
   Mail,
+  CalendarDays,
   Phone,
   Pencil,
   Wallet,
@@ -12,9 +13,15 @@ import {
   TriangleAlert,
   LockKeyhole,
 } from "lucide-react";
-import { moneyState, isActive, dateRange } from "./model.mjs";
+import {
+  moneyState,
+  isActive,
+  dateRange,
+  stayOperations,
+  stayCalendarFile,
+} from "./model.mjs";
 import { Modal, Primary, Status, Empty, day, money, source } from "./ui";
-import type { Booking, OwnerData } from "./types";
+import type { Booking, OwnerData, Activity } from "./types";
 const METHODS: Record<string, string> = {
   cash: "Contanti",
   bank: "Bonifico",
@@ -28,8 +35,27 @@ export const EVENT_NAMES: Record<string, string> = {
   reservation_confirmed: "Prenotazione confermata",
   reservation_cancelled: "Date liberate",
   payment_recorded: "Incasso registrato",
+  stay_operation_updated: "Operatività soggiorno aggiornata",
   refund_recorded: "Rimborso annotato",
 };
+export function eventTitle(event: Activity) {
+  if (event.event === "stay_operation_updated") {
+    try {
+      const d = JSON.parse(event.details);
+      const labels: Record<string, string> = {
+        roomReady: "Casa pronta",
+        guestArrived: "Check-in",
+        guestDeparted: "Check-out",
+      };
+      return (
+        (labels[d.field] || "Operazione") +
+        " · " +
+        (d.value ? "registrato" : "annullato")
+      );
+    } catch {}
+  }
+  return EVENT_NAMES[event.event] || event.event;
+}
 export function BookingDetail({
   booking: b,
   data,
@@ -37,6 +63,7 @@ export function BookingDetail({
   onEdit,
   onPayment,
   onAction,
+  onOperation,
   busy,
   disabled,
 }: {
@@ -46,6 +73,12 @@ export function BookingDetail({
   onEdit: () => void;
   onPayment: (k: "receipt" | "refund") => void;
   onAction: (b: Booking, k: "confirm" | "cancel", key: string) => Promise<void>;
+  onOperation: (
+    b: Booking,
+    field: string,
+    value: boolean,
+    key: string,
+  ) => Promise<void>;
   busy: boolean;
   disabled: boolean;
 }) {
@@ -147,6 +180,28 @@ export function BookingDetail({
                   Inserita il {new Date(b.created).toLocaleDateString("it-IT")}
                 </span>
               </div>
+              <button
+                className="cm-button cm-button-secondary"
+                onClick={() => {
+                  const url = URL.createObjectURL(
+                    new Blob([stayCalendarFile(b)], {
+                      type: "text/calendar;charset=utf-8",
+                    }),
+                  );
+                  const link = document.createElement("a");
+                  link.href = url;
+                  link.download = "CASA-MIA-" + b.id + ".ics";
+                  link.click();
+                  setTimeout(() => URL.revokeObjectURL(url), 1000);
+                }}
+              >
+                <CalendarDays size={16} />
+                Salva in calendario
+              </button>
+              <p className="cm-help">
+                Copia del soggiorno per il calendario del telefono. Le modifiche
+                successive non si sincronizzano.
+              </p>
               {(b.email || b.phone) && (
                 <div className="cm-contact-links">
                   {b.email && (
@@ -164,6 +219,58 @@ export function BookingDetail({
                 </div>
               )}
             </>
+          )}
+          {!blocking && b.status === "confirmed" && (
+            <section
+              className="cm-stay-checklist"
+              aria-label="Operazioni del soggiorno"
+            >
+              <div>
+                <span className="cm-kicker">OSPITALITÀ / OPERAZIONI</span>
+                <h3>Un soggiorno curato, dall’inizio alla fine.</h3>
+                <p>Registra ciò che hai già fatto. I saldi restano separati.</p>
+              </div>
+              {(
+                [
+                  [
+                    "roomReady",
+                    "Casa pronta",
+                    "Pulizia, biancheria e dotazioni controllate.",
+                  ],
+                  [
+                    "guestArrived",
+                    "Check-in registrato",
+                    "Gli ospiti sono arrivati.",
+                  ],
+                  [
+                    "guestDeparted",
+                    "Check-out registrato",
+                    "Gli ospiti hanno lasciato la casa.",
+                  ],
+                ] as const
+              ).map(([field, label, description]) => (
+                <label className="cm-operation-row" key={field}>
+                  <span>
+                    <b>{label}</b>
+                    <small>{description}</small>
+                  </span>
+                  <input
+                    type="checkbox"
+                    checked={stayOperations(b)[field]}
+                    disabled={busy || disabled}
+                    onChange={async (e) => {
+                      const value = e.target.checked;
+                      setError("");
+                      try {
+                        await onOperation(b, field, value, crypto.randomUUID());
+                      } catch (e) {
+                        setError((e as Error).message);
+                      }
+                    }}
+                  />
+                </label>
+              ))}
+            </section>
           )}
           {b.notes && (
             <div className="cm-notes">
@@ -263,7 +370,7 @@ export function BookingDetail({
               <div key={e.id}>
                 <History size={15} />
                 <span>
-                  <b>{EVENT_NAMES[e.event] || e.event}</b>
+                  <b>{eventTitle(e)}</b>
                   <small>{new Date(e.created).toLocaleString("it-IT")}</small>
                 </span>
               </div>
@@ -311,16 +418,6 @@ export function BookingDetail({
         </div>
       ) : (
         <div className="cm-detail-actions">
-          {b.status === "pending" && (
-            <Primary
-              onClick={() => act("confirm")}
-              busy={busy}
-              disabled={disabled}
-            >
-              <CheckCircle2 size={17} />
-              Conferma richiesta
-            </Primary>
-          )}
           {editable && (
             <button
               className="cm-button cm-button-secondary"

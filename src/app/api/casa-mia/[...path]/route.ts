@@ -8,16 +8,16 @@ async function dispatch(request: Request) {
     path = new URL(request.url).pathname;
   const requested = process.env.CASA_MIA_ENABLE_BOOKING === "true";
   const configured = !!env.DB && (env.ADMIN_PASSWORD?.length ?? 0) >= 12;
+  let ready = false;
+  if (requested && configured) {
+    try {
+      const result = await env
+        .DB!.prepare("SELECT version FROM schema_migrations WHERE version=3")
+        .all();
+      ready = result.results.length === 1;
+    } catch {}
+  }
   if (path === "/api/casa-mia/status") {
-    let ready = false;
-    if (requested && configured) {
-      try {
-        const result = await env
-          .DB!.prepare("SELECT version FROM schema_migrations WHERE version=2")
-          .all();
-        ready = result.results.length === 1;
-      } catch {}
-    }
     return Response.json(
       {
         configured,
@@ -25,12 +25,12 @@ async function dispatch(request: Request) {
         unavailable: requested && !ready,
         paymentMode: "test",
         app: "CASA MIA",
-        schemaVersion: 2,
+        schemaVersion: 3,
       },
       { headers: { "Cache-Control": "no-store" } },
     );
   }
-  if (!requested || !configured)
+  if (!requested || !configured || !ready)
     return Response.json(
       {
         error:

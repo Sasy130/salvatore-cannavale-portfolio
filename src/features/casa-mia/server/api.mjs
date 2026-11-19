@@ -23,6 +23,7 @@ export async function settings(db) {
     ...JSON.parse(
       (await one(db, "SELECT value FROM settings WHERE id=1"))?.value || "{}",
     ),
+    manualConfirmation: false,
   };
 }
 const digest = async (s) =>
@@ -351,11 +352,7 @@ export async function handleAPI(req, env) {
           input.payment === "deposit"
             ? Math.round((q.total * s.depositPercent) / 100)
             : q.total,
-        status: online
-          ? "awaiting_payment"
-          : s.manualConfirmation
-            ? "pending"
-            : "confirmed",
+        status: online ? "awaiting_payment" : "confirmed",
         created: new Date().toISOString(),
         expires: online ? Date.now() + 3600000 : null,
       };
@@ -496,6 +493,7 @@ export async function handleAPI(req, env) {
           "admin/reservations",
           "admin/payments",
           "admin/actions",
+          "admin/operations",
         ].includes(p)
       ) {
         await expire(db);
@@ -660,13 +658,9 @@ export async function handleAPI(req, env) {
             throw Error("Valore non valido: " + k);
           s[k] = input[k];
         }
-        for (const k of [
-          "payOnArrival",
-          "fullOnline",
-          "depositOnline",
-          "manualConfirmation",
-        ])
+        for (const k of ["payOnArrival", "fullOnline", "depositOnline"])
           s[k] = !!input[k];
+        s.manualConfirmation = false;
         if (!s.payOnArrival && !s.fullOnline && !s.depositOnline)
           throw Error("Abilita almeno una modalità di pagamento.");
         if (

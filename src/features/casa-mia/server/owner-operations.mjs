@@ -5,6 +5,8 @@ import {
   moneyState,
   isActive,
   ownerQuote,
+  updateStayOperations,
+  operationsAfterEdit,
 } from "../model.mjs";
 const json = (data, status = 200) =>
   new Response(JSON.stringify(data), {
@@ -96,6 +98,7 @@ async function plan(db, input) {
       "Questo soggiorno non può essere modificato da qui. Verifica prima lo stato o il pagamento online.",
       409,
     );
+  operationsAfterEdit(existing, input);
   const blocking = input.kind === "block";
   if (existing && (existing.payment === "block") !== blocking)
     throw fail("Il tipo di inserimento non può essere cambiato.");
@@ -192,17 +195,54 @@ export async function handleOwnerOperation(path, req, env) {
         bookings,
         payments,
         activity: events,
-        settings: s,
+        settings: { ...s, manualConfirmation: false },
         stripeReady:
           !!env.STRIPE_SECRET_KEY?.startsWith("sk_test_") &&
           !!env.STRIPE_WEBHOOK_SECRET,
         emailReady: !!env.RESEND_API_KEY && !!env.MAIL_FROM,
-        schemaVersion: 2,
+        schemaVersion: 3,
       });
     }
     if (req.method !== "POST")
       return json({ error: "Metodo non consentito." }, 405);
     const input = await read(req);
+    if (path === "admin/operations") {
+      const result = await db.transaction(async (tx) => {
+        const previous = await retry(tx, input);
+        if (previous.response) return previous.response;
+        const b = await one(
+          tx,
+          "SELECT * FROM bookings WHERE id=? FOR UPDATE",
+          input.id,
+        );
+        if (!b) throw fail("Soggiorno non trovato.", 404);
+        if (b.revision !== input.revision)
+          throw fail(
+            "Il soggiorno è cambiato. Aggiorna prima di riprovare.",
+            409,
+          );
+        const operations = updateStayOperations(b, input.field, input.value);
+        await tx
+          .prepare(
+            "UPDATE bookings SET operations=?,revision=revision+1 WHERE id=?",
+          )
+          .bind(JSON.stringify(operations), b.id)
+          .run();
+        await activity(tx, b.id, "stay_operation_updated", {
+          field: input.field,
+          value: input.value,
+        });
+        const response = {
+          ok: true,
+          id: b.id,
+          operations,
+          revision: b.revision + 1,
+        };
+        await remember(tx, input, previous.hash, b.id, response);
+        return response;
+      });
+      return json(result);
+    }
     if (path === "admin/preview") {
       const p = await plan(db, input);
       const { dates, existing, blocking, ...result } = p;
@@ -253,7 +293,7 @@ export async function handleOwnerOperation(path, req, env) {
             .run();
           await tx
             .prepare(
-              "UPDATE bookings SET checkin=?,checkout=?,guests=?,name=?,email=?,phone=?,notes=?,source=?,total=?,due=?,revision=revision+1 WHERE id=?",
+              "UPDATE bookings SET checkin=?,checkout=?,guests=?,name=?,email=?,phone=?,notes=?,source=?,total=?,due=?,operations=?,revision=revision+1 WHERE id=?",
             )
             .bind(
               input.checkin,
@@ -266,6 +306,7 @@ export async function handleOwnerOperation(path, req, env) {
               source,
               p.total,
               p.total,
+              operationsAfterEdit(p.existing, input),
               id,
             )
             .run();

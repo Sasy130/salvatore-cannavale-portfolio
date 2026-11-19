@@ -27,6 +27,7 @@ import {
   X,
   type LucideIcon,
 } from "lucide-react";
+import { InstallPanel, useInstallCapture } from "./install";
 import { useOwner } from "./use-owner";
 import {
   propertyToday,
@@ -39,20 +40,11 @@ import {
   bookingsCSV,
   parseMoney,
   dateRange,
+  stayOperations,
 } from "./model.mjs";
-import {
-  Brand,
-  Empty,
-  InstallHelp,
-  Modal,
-  Primary,
-  Status,
-  day,
-  money,
-  source,
-} from "./ui";
+import { Brand, Empty, Modal, Primary, Status, day, money, source } from "./ui";
 import { ReservationEditor, type EditorDraft } from "./reservation-editor";
-import { BookingDetail, EVENT_NAMES } from "./booking-detail";
+import { BookingDetail, eventTitle } from "./booking-detail";
 import { PaymentEditor } from "./payment-editor";
 import type { Booking, OwnerData, Settings, Tab } from "./types";
 const NAV: { id: Tab; label: string; icon: LucideIcon }[] = [
@@ -65,7 +57,7 @@ const NAV: { id: Tab; label: string; icon: LucideIcon }[] = [
 const TITLES: Record<Tab, { title: string; description: string }> = {
   overview: {
     title: "Ogni soggiorno, sotto controllo.",
-    description: "Richieste, prossimi ospiti e priorità della tua casa.",
+    description: "Ospiti, prossimi arrivi e priorità della tua casa.",
   },
   calendar: {
     title: "Il calendario della tua casa.",
@@ -219,15 +211,11 @@ function SettingsPanel({
       }
       for (const k of ["minStay", "summerMinStay", "depositPercent"] as const)
         s[k] = Number((f.elements.namedItem(k) as HTMLInputElement).value);
-      for (const k of [
-        "payOnArrival",
-        "manualConfirmation",
-        "fullOnline",
-        "depositOnline",
-      ] as const)
+      for (const k of ["payOnArrival", "fullOnline", "depositOnline"] as const)
         s[k] = (f.elements.namedItem(k) as HTMLInputElement).checked;
       if (!s.payOnArrival && !s.fullOnline && !s.depositOnline)
         throw Error("Mantieni almeno una modalità di pagamento.");
+      s.manualConfirmation = false;
       setError("");
       setSuccess(false);
       await onSave(s);
@@ -333,19 +321,10 @@ function SettingsPanel({
                 defaultChecked={data.settings.payOnArrival}
               />
             </label>
-            <label className="cm-switch-row">
-              <span>
-                <b>Conferma manuale</b>
-                <small>
-                  Decidi tu se accettare le richieste ricevute dal sito.
-                </small>
-              </span>
-              <input
-                name="manualConfirmation"
-                type="checkbox"
-                defaultChecked={data.settings.manualConfirmation}
-              />
-            </label>
+            <p className="cm-info-box">
+              Le prenotazioni con pagamento in struttura sono confermate
+              automaticamente. I pagamenti online richiedono la verifica Stripe.
+            </p>
             {(
               [
                 ["fullOnline", "Saldo completo online"],
@@ -527,6 +506,7 @@ function SettingsPanel({
 }
 export function OwnerApp() {
   const owner = useOwner();
+  useInstallCapture();
   const [tab, setTab] = useState<Tab>("overview"),
     [editor, setEditor] = useState<EditorDraft | null>(null),
     [detailId, setDetailId] = useState(""),
@@ -556,6 +536,12 @@ export function OwnerApp() {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
   }, [tab, owner.mode]);
+  useEffect(() => {
+    if (owner.mounted) {
+      const view = new URLSearchParams(location.search).get("view");
+      if (NAV.some((n) => n.id === view)) setTab(view as Tab);
+    }
+  }, [owner.mounted]);
   const data = owner.data,
     bookings = data?.bookings || [],
     payments = data?.payments || [],
@@ -598,7 +584,10 @@ export function OwnerApp() {
       url = URL.createObjectURL(blob),
       a = document.createElement("a");
     a.href = url;
-    a.download = (demo ? "CASA-MIA-DEMO-prenotazioni-" : "CASA-MIA-prenotazioni-") + today + ".csv";
+    a.download =
+      (demo ? "CASA-MIA-DEMO-prenotazioni-" : "CASA-MIA-prenotazioni-") +
+      today +
+      ".csv";
     a.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
     owner.setNotice(
@@ -615,7 +604,7 @@ export function OwnerApp() {
     );
   if (!data)
     return (
-      <div className="cm-auth-shell">
+      <div className="cm-auth-shell cm-entry-v3">
         <header className="cm-auth-header">
           <Brand />
           <button
@@ -628,49 +617,29 @@ export function OwnerApp() {
         </header>
         <main className="cm-auth-main">
           <div className="cm-auth-copy">
-            <span className="cm-kicker">
-              UNA CASA. UNA GESTIONE PIÙ SEMPLICE.
-            </span>
+            <span className="cm-kicker">CASA MIA / PRIVATE MANAGEMENT</span>
+            <div className="cm-entry-architecture" aria-hidden="true">
+              <span className="cm-entry-orbit" />
+              <span className="cm-entry-door">cm</span>
+              <span className="cm-entry-floor" />
+            </div>
             <h1>
-              Accogli meglio.
+              La tua casa.
               <br />
-              <em>Gestisci con chiarezza.</em>
+              <em>Tutto al suo posto.</em>
             </h1>
             <p>
-              Un calendario ordinato, prenotazioni da ogni contatto e importi
-              sempre leggibili. Il tuo spazio di lavoro, anche dal telefono.
+              Date, ospiti e soggiorni. Uno spazio riservato, pensato per
+              accogliere con cura.
             </p>
-            <div className="cm-auth-benefits">
-              <span>
-                <CheckCircle2 size={18} />
-                Disponibilità e blocchi in un solo calendario
-              </span>
-              <span>
-                <CheckCircle2 size={18} />
-                Soggiorni ricevuti anche fuori dal sito
-              </span>
-              <span>
-                <CheckCircle2 size={18} />
-                Incassi annotati e saldi da registrare
-              </span>
-            </div>
-            <div className="cm-auth-sequence">
-              <span>
-                <i>01</i>Controlla le date
-              </span>
-              <ArrowRight size={16} />
-              <span>
-                <i>02</i>Registra il soggiorno
-              </span>
-              <ArrowRight size={16} />
-              <span>
-                <i>03</i>Accogli gli ospiti
-              </span>
+            <div className="cm-entry-caption">
+              <span>01 — UNA SOLA CASA</span>
+              <span>OGNI DETTAGLIO, SOTTO CONTROLLO</span>
             </div>
           </div>
           <section className="cm-login-card">
             <span className="cm-kicker">AREA PROPRIETARIO</span>
-            <h2>Benvenuto nella tua casa.</h2>
+            <h2>Il tuo spazio di gestione.</h2>
             {owner.service?.enabled ? (
               <form
                 onSubmit={async (e) => {
@@ -713,16 +682,16 @@ export function OwnerApp() {
                   {owner.service?.unavailable
                     ? "Il servizio condiviso non è raggiungibile. Riprova tra poco."
                     : owner.service
-                      ? "Il collegamento al database reale è ancora da configurare. Intanto puoi provare l’app."
+                      ? "Esplora il nuovo spazio di gestione con dati di esempio. Il servizio reale è ancora da configurare."
                       : "Verifica del servizio in corso…"}
                 </p>
               </div>
             )}
             <div className="cm-login-divider">
-              <span>ESPLORA PRIMA DI ACCEDERE</span>
+              <span>IL TUO PRIMO ACCESSO</span>
             </div>
             <button
-              className="cm-button cm-button-secondary"
+              className="cm-button cm-button-primary"
               disabled={owner.busy}
               onClick={owner.startDemo}
             >
@@ -755,19 +724,24 @@ export function OwnerApp() {
             </button>
           </div>
         )}
-        {install && <InstallHelp onClose={() => setInstall(false)} />}
+        {install && <InstallPanel onClose={() => setInstall(false)} />}
       </div>
     );
-  const pending = bookings.filter((b) => b.status === "pending"),
-    stays = bookings.filter((b) => isActive(b) && b.payment !== "block"),
+  const stays = bookings.filter((b) => isActive(b) && b.payment !== "block"),
     arrivals = stays
       .filter((b) => b.status === "confirmed" && b.checkin >= today)
       .sort((a, b) => a.checkin.localeCompare(b.checkin)),
     arrivalsToday = stays.filter(
-      (b) => b.status === "confirmed" && b.checkin === today,
+      (b) =>
+        b.status === "confirmed" &&
+        b.checkin === today &&
+        !stayOperations(b).guestArrived,
     ),
     departuresToday = stays.filter(
-      (b) => b.status === "confirmed" && b.checkout === today,
+      (b) =>
+        b.status === "confirmed" &&
+        b.checkout === today &&
+        !stayOperations(b).guestDeparted,
     ),
     balance = stays.reduce(
       (sum, b) => sum + moneyState(b, payments).balance,
@@ -813,9 +787,6 @@ export function OwnerApp() {
             >
               <item.icon size={19} />
               {item.label}
-              {item.id === "reservations" && pending.length > 0 && (
-                <span className="cm-nav-count">{pending.length}</span>
-              )}
             </button>
           ))}
         </nav>
@@ -960,17 +931,26 @@ export function OwnerApp() {
               <div className="cm-metrics">
                 <button
                   onClick={() => {
-                    setStatus("pending");
+                    setStatus("confirmed");
                     navigate("reservations");
                   }}
                 >
                   <span>
-                    <CheckCircle2 size={17} />
-                    DA CONFERMARE
+                    <House size={17} />
+                    SOGGIORNI IN CORSO
                   </span>
-                  <strong>{pending.length}</strong>
+                  <strong>
+                    {
+                      stays.filter(
+                        (b) =>
+                          b.status === "confirmed" &&
+                          b.checkin <= today &&
+                          b.checkout > today,
+                      ).length
+                    }
+                  </strong>
                   <small>
-                    richieste da controllare <ArrowRight size={14} />
+                    soggiorni in corso <ArrowRight size={14} />
                   </small>
                 </button>
                 <button
@@ -1022,8 +1002,8 @@ export function OwnerApp() {
                   </span>
                   <strong>{occ.percentage}%</strong>
                   <small>
-                    {occ.occupied} riservate, incluse richieste · {occ.blocked}{" "}
-                    chiuse <ArrowRight size={14} />
+                    {occ.occupied} riservate · {occ.blocked} chiuse{" "}
+                    <ArrowRight size={14} />
                   </small>
                 </button>
               </div>
@@ -1035,39 +1015,29 @@ export function OwnerApp() {
                       <h2>Da fare oggi</h2>
                     </div>
                     <span className="cm-count-pill">
-                      {pending.length +
-                        arrivalsToday.length +
-                        departuresToday.length}
+                      {arrivalsToday.length + departuresToday.length}
                     </span>
                   </div>
                   <div className="cm-task-row">
-                    <span className="cm-task-icon amber">
-                      <CheckCircle2 size={19} />
+                    <span className="cm-task-icon">
+                      <House size={19} />
                     </span>
                     <div>
-                      <strong>
-                        {pending.length
-                          ? "Hai " +
-                            pending.length +
-                            " " +
-                            (pending.length === 1
-                              ? "richiesta da confermare"
-                              : "richieste da confermare")
-                          : "Nessuna richiesta in attesa"}
-                      </strong>
+                      <strong>Prepara il prossimo soggiorno</strong>
                       <small>
-                        Le richieste occupano le date fino alla gestione.
+                        {arrivals[0]
+                          ? arrivals[0].name + " · " + day(arrivals[0].checkin)
+                          : "Nessun arrivo programmato."}
                       </small>
                     </div>
-                    <button
-                      aria-label="Vedi richieste da confermare"
-                      onClick={() => {
-                        setStatus("pending");
-                        navigate("reservations");
-                      }}
-                    >
-                      <ChevronRight size={18} />
-                    </button>
+                    {arrivals[0] && (
+                      <button
+                        aria-label="Prepara il prossimo soggiorno"
+                        onClick={() => openDetail(arrivals[0])}
+                      >
+                        <ChevronRight size={18} />
+                      </button>
+                    )}
                   </div>
                   <div className="cm-task-row">
                     <span className="cm-task-icon">
@@ -1203,7 +1173,7 @@ export function OwnerApp() {
                   </div>
                   <div className="cm-calendar-legend">
                     <span className="confirmed">Prenotata</span>
-                    <span className="pending">Da confermare</span>
+
                     <span className="blocked">Bloccata</span>
                   </div>
                 </section>
@@ -1247,7 +1217,7 @@ export function OwnerApp() {
                       >
                         <span className="cm-activity-dot" />
                         <span>
-                          <b>{EVENT_NAMES[e.event] || e.event}</b>
+                          <b>{eventTitle(e)}</b>
                           <small>
                             {bookings.find((b) => b.id === e.booking_id)
                               ?.name || "Soggiorno"}{" "}
@@ -1308,7 +1278,7 @@ export function OwnerApp() {
                 </div>
                 <div className="cm-calendar-legend">
                   <span className="confirmed">Prenotata</span>
-                  <span className="pending">Da confermare</span>
+
                   <span className="blocked">Bloccata</span>
                 </div>
               </div>
@@ -1346,16 +1316,21 @@ export function OwnerApp() {
                     selected =
                       range &&
                       d >= range.start &&
-                      d < (range.end || addDays(range.start, 1)),
+                      d <= (range.end || range.start),
+                    rangeStart = range?.start === d,
+                    rangeEnd = !!range?.end && range.end === d,
                     starts = b?.checkin === d;
                   return (
                     <button
                       key={d}
+                      data-owner-date={d}
                       disabled={!b && d < today}
                       className={[
                         b?.status || "",
                         rule ? "blocked" : "",
                         selected ? "selected" : "",
+                        rangeStart ? "range-start" : "",
+                        rangeEnd ? "range-end" : "",
                         d === today ? "today" : "",
                       ].join(" ")}
                       onClick={() => {
@@ -1374,11 +1349,17 @@ export function OwnerApp() {
                         } else setRange({ start: d, end: "" });
                       }}
                       aria-pressed={!!selected}
-                      aria-label={`${day(d, true)}, ${b ? b.name : rule ? "bloccata" : "disponibile"}`}
+                      aria-label={`${day(d, true)}, ${b ? b.name : rule ? "bloccata" : "disponibile"}${rangeStart ? ", inizio selezione" : rangeEnd ? ", fine selezione, esclusa dal periodo" : ""}`}
                     >
                       <span className="cm-day-top">
                         <b>{Number(d.slice(-2))}</b>
-                        {d === today && <i>Oggi</i>}
+                        {rangeEnd ? (
+                          <i>Fine</i>
+                        ) : rangeStart ? (
+                          <i>Inizio</i>
+                        ) : (
+                          d === today && <i>Oggi</i>
+                        )}
                       </span>
                       {b ? (
                         <span className="cm-day-booking">
@@ -1518,7 +1499,7 @@ export function OwnerApp() {
                     onChange={(e) => setStatus(e.target.value)}
                   >
                     <option value="active">Non annullate</option>
-                    <option value="pending">Da confermare</option>
+
                     <option value="confirmed">Confermate</option>
                     <option value="blocked">Blocchi date</option>
                     <option value="cancelled">Annullate</option>
@@ -1780,9 +1761,6 @@ export function OwnerApp() {
                     ? "Regole"
                     : item.label}
             </span>
-            {item.id === "reservations" && pending.length > 0 && (
-              <i>{pending.length}</i>
-            )}
           </button>
         ))}
       </nav>
@@ -1822,6 +1800,7 @@ export function OwnerApp() {
             setPayment({ id: detail.id, kind });
           }}
           onAction={owner.action}
+          onOperation={owner.operation}
           busy={owner.busy}
           disabled={disabled}
         />
@@ -1837,7 +1816,7 @@ export function OwnerApp() {
           onSave={owner.payment}
         />
       )}
-      {install && <InstallHelp onClose={() => setInstall(false)} />}
+      {install && <InstallPanel onClose={() => setInstall(false)} />}
     </div>
   );
 }

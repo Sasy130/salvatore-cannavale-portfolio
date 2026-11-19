@@ -6,6 +6,8 @@ import {
   moneyState,
   isActive,
   ownerQuote,
+  updateStayOperations,
+  operationsAfterEdit,
 } from "./model.mjs";
 import type {
   OwnerData,
@@ -46,7 +48,7 @@ export function demoData(): OwnerData {
   }
   const bookings = [
     booking(0, 2, "Ospite di esempio", "confirmed", "phone"),
-    booking(4, 3, "Richiesta dimostrativa", "pending", "direct"),
+    booking(4, 3, "Soggiorno dal sito", "confirmed", "direct"),
     booking(10, 4, "Soggiorno di esempio", "confirmed", "airbnb", 78000),
     booking(18, 2, "Manutenzione programmata", "blocked", "phone", 0),
   ];
@@ -74,6 +76,7 @@ export function demoData(): OwnerData {
     })),
     settings: {
       ...defaults,
+      manualConfirmation: false,
       assets: {
         living: "/demos/dimora-mia/assets/living.webp",
         bedroom: "/demos/dimora-mia/assets/bedroom.webp",
@@ -82,7 +85,7 @@ export function demoData(): OwnerData {
     },
     stripeReady: false,
     emailReady: false,
-    schemaVersion: 2,
+    schemaVersion: 3,
     actions: {},
   };
 }
@@ -90,14 +93,14 @@ export function loadDemo(): OwnerData {
   try {
     const saved = JSON.parse(localStorage.getItem(DEMO_KEY) || "null");
     if (
-      saved?.schemaVersion === 2 &&
+      [2, 3].includes(saved?.schemaVersion) &&
       Array.isArray(saved.bookings) &&
       Array.isArray(saved.payments) &&
       Array.isArray(saved.activity)
     )
-      return demoWithWebsite(saved);
+      return normalizeDemo(demoWithWebsite(saved));
   } catch {}
-  return demoWithWebsite(demoData());
+  return normalizeDemo(demoWithWebsite(demoData()));
 }
 export function previewDemo(data: OwnerData, input: ReservationInput): Preview {
   const existing = data.bookings.find((b) => b.id === input.bookingId);
@@ -109,6 +112,7 @@ export function previewDemo(data: OwnerData, input: ReservationInput): Preview {
     throw Error("Questo soggiorno non può essere modificato.");
   if (existing && (existing.payment === "block") !== (input.kind === "block"))
     throw Error("Il tipo di inserimento non può cambiare.");
+  operationsAfterEdit(existing, input);
   const blocking = input.kind === "block",
     dates = dateRange(input.checkin, input.checkout, 365);
   if (
@@ -181,6 +185,7 @@ export function saveDemo(data: OwnerData, input: ReservationInput): OwnerData {
   const b: Booking = {
     id: existing?.id || "DEMO-" + id().slice(0, 8).toUpperCase(),
     ...existing,
+    operations: operationsAfterEdit(existing, input),
     checkin: input.checkin,
     checkout: input.checkout,
     guests: input.kind === "block" ? 1 : input.guests,
@@ -278,7 +283,10 @@ export function actionDemo(
     b.status = "confirmed";
   } else {
     if (!isActive(b)) throw Error("Il soggiorno non è attivo.");
-    b.status = moneyState(b, next.payments).paid > 0 ? "cancelled_refund_required" : "cancelled";
+    b.status =
+      moneyState(b, next.payments).paid > 0
+        ? "cancelled_refund_required"
+        : "cancelled";
   }
   b.revision++;
   log(
@@ -356,4 +364,52 @@ export function demoWithWebsite(base: OwnerData): OwnerData {
       depositOnline: false,
     },
   };
+}
+
+function normalizeDemo(data: OwnerData): OwnerData {
+  return {
+    ...data,
+    schemaVersion: 3,
+    settings: { ...data.settings, manualConfirmation: false },
+    bookings: data.bookings.map((b) =>
+      b.status === "pending" && b.payment === "arrival"
+        ? { ...b, status: "confirmed", revision: (b.revision || 1) + 1 }
+        : b,
+    ),
+  };
+}
+export function operationDemo(
+  data: OwnerData,
+  input: {
+    id: string;
+    revision: number;
+    field: string;
+    value: boolean;
+    idempotency: string;
+  },
+): OwnerData {
+  const next = structuredClone(data),
+    previous = next.actions?.[input.idempotency],
+    fingerprint = JSON.stringify(input);
+  if (previous) {
+    if (previous.fingerprint !== fingerprint)
+      throw Error("Richiesta già usata.");
+    return next;
+  }
+  const b = next.bookings.find((b) => b.id === input.id);
+  if (!b || b.revision !== input.revision)
+    throw Error("Il soggiorno è cambiato. Aggiorna prima di riprovare.");
+  b.operations = JSON.stringify(
+    updateStayOperations(b, input.field, input.value),
+  );
+  b.revision++;
+  log(next, b, "stay_operation_updated", {
+    field: input.field,
+    value: input.value,
+  });
+  next.actions = {
+    ...next.actions,
+    [input.idempotency]: { fingerprint, response: { ok: true } },
+  };
+  return next;
 }

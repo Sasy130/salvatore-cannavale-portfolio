@@ -107,3 +107,7 @@ Manifest, icone e service worker sono limitati a `/casa-mia/`; i dati degli ospi
 ## CASA MIA — gestione v2
 
 Interfaccia proprietario riorganizzata in cinque aree, blocchi e accordi manuali fino a 365 notti, controllo preventivo dei conflitti, modifiche con revisione, registro incassi/rimborsi, storico e CSV filtrato. Migrazione additiva `002_owner_operations.sql`, applicata da `npm run db:casa-mia`; il servizio richiede schema v2 prima di essere abilitato. Nessun database o pagamento esterno attivato automaticamente. La demo persistente dell’app ora condivide i blocchi con la demo del sito nello stesso browser, senza modificare la regia del sito. Dettagli e limiti in `CASA-MIA.md`.
+
+## CASA MIA — edizione telefono v3
+
+Nuovo ingresso compatto, riapertura della demo, estremi calendario visibili anche tra mesi, eliminazione dell’approvazione manuale per le prenotazioni con pagamento in struttura, checklist operativa e file ICS per il calendario del telefono. Pannello installazione con prompt nativo quando disponibile e istruzioni Safari/Chrome; scorciatoie nel manifest. Migrazione aggiuntiva `003_stay_operations.sql`, richiesta dall’endpoint di stato; conferma soltanto i vecchi record pending/arrival, con storico, e preserva Stripe in attesa. Configurazione esterna ancora disabilitata: nessun dato reale o pagamento attivato durante il deploy. Dettagli in `CASA-MIA.md`.
