@@ -22,8 +22,13 @@ import {
   syncDemo,
   SITE_DEMO_KEY,
 } from "./demo";
-export async function ownerAPI<T>(path: string, input?: unknown): Promise<T> {
+export async function ownerAPI<T>(
+  path: string,
+  input?: unknown,
+  options?: { signal?: AbortSignal },
+): Promise<T> {
   const r = await fetch("/api/casa-mia/" + path, {
+    signal: options?.signal,
     credentials: "same-origin",
     cache: "no-store",
     method: input === undefined ? "GET" : "POST",

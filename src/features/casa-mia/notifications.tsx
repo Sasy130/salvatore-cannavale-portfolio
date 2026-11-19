@@ -4,11 +4,28 @@ import { Bell, CheckCircle2, Smartphone } from "lucide-react";
 import { Modal, Primary, Empty } from "./ui";
 import { ownerAPI } from "./use-owner";
 import {
-  applicationKey,
+  connectBrowserPush,
+  pushDeadline,
   browserPushSubscription,
   pushRegistration,
   PUSH_DEVICE_KEY,
 } from "./browser-push";
+async function pushAPI<T>(path: string, input?: unknown): Promise<T> {
+  try {
+    return await ownerAPI<T>(path, input, {
+      signal: AbortSignal.timeout(12000),
+    });
+  } catch (e) {
+    if (
+      (e as Error).name === "TimeoutError" ||
+      (e as Error).name === "AbortError"
+    )
+      throw Error(
+        "Il server non ha risposto in tempo. Riprova: un collegamento già salvato verrà recuperato.",
+      );
+    throw e;
+  }
+}
 type Device = {
   id: string;
   label: string;
@@ -50,11 +67,12 @@ export function NotificationsPanel({
     [hasSubscription, setHasSubscription] = useState(false),
     [busy, setBusy] = useState(false),
     [message, setMessage] = useState(""),
+    [stage, setStage] = useState(""),
     [error, setError] = useState(""),
     [loading, setLoading] = useState(!demo);
   async function refresh() {
     if (demo) return;
-    setConfig(await ownerAPI<Config>("admin/push"));
+    setConfig(await pushAPI<Config>("admin/push"));
     setHasSubscription(!!(await browserPushSubscription()));
   }
   useEffect(() => {
@@ -69,7 +87,7 @@ export function NotificationsPanel({
     } catch {}
     let alive = true;
     if (!demo)
-      Promise.all([ownerAPI<Config>("admin/push"), browserPushSubscription()])
+      Promise.all([pushAPI<Config>("admin/push"), browserPushSubscription()])
         .then(([c, s]) => {
           if (alive) {
             setConfig(c);
@@ -105,7 +123,11 @@ export function NotificationsPanel({
     const value =
       Notification.permission === "granted"
         ? "granted"
-        : await Notification.requestPermission();
+        : await pushDeadline(
+            Notification.requestPermission(),
+            "La richiesta di consenso non è stata completata. Riprova e rispondi alla richiesta di Android.",
+            30000,
+          );
     setPermission(value);
     if (value !== "granted")
       throw Error(
@@ -122,6 +144,7 @@ export function NotificationsPanel({
       setError((e as Error).message);
     } finally {
       setBusy(false);
+      setStage("");
     }
   }
   async function enable() {
@@ -129,27 +152,11 @@ export function NotificationsPanel({
       throw Error(
         "Occorre prima attivare il collegamento condiviso e il servizio push.",
       );
+    setStage("Verifica del consenso Android…");
     await consent();
-    const registration = await pushRegistration();
-    let subscription = await registration.pushManager.getSubscription();
-    const key = applicationKey(config.publicKey);
-    if (subscription) {
-      const existing = subscription.options.applicationServerKey;
-      if (
-        !existing ||
-        Array.from(new Uint8Array(existing)).join(",") !==
-          Array.from(key).join(",")
-      ) {
-        await subscription.unsubscribe();
-        subscription = null;
-      }
-    }
-    if (!subscription)
-      subscription = await registration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: key,
-      });
-    const result = await ownerAPI<{ id: string }>("admin/push/subscribe", {
+    const subscription = await connectBrowserPush(config.publicKey, setStage);
+    setStage("Salvataggio del telefono sul server…");
+    const result = await pushAPI<{ id: string }>("admin/push/subscribe", {
       subscription: subscription.toJSON(),
       label: /Android/i.test(navigator.userAgent)
         ? "Il mio Android"
@@ -165,7 +172,7 @@ export function NotificationsPanel({
     );
   }
   async function disable(id: string) {
-    await ownerAPI("admin/push/disable", { id });
+    await pushAPI("admin/push/disable", { id });
     if (id === deviceId) {
       const sub = await browserPushSubscription();
       if (sub) await sub.unsubscribe();
@@ -299,7 +306,7 @@ export function NotificationsPanel({
               disabled={busy}
               onClick={() =>
                 run(async () => {
-                  const result = await ownerAPI<{ accepted: number }>(
+                  const result = await pushAPI<{ accepted: number }>(
                     "admin/push/test",
                     { id: deviceId },
                   );
@@ -378,6 +385,11 @@ export function NotificationsPanel({
             )}
           </details>
         </>
+      )}
+      {busy && stage && (
+        <p className="cm-help" role="status">
+          {stage}
+        </p>
       )}
       {message && (
         <p className="cm-form-success" role="status">

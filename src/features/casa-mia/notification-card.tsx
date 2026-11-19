@@ -69,7 +69,7 @@ export function NotificationCard({
           ownerAPI<{
             configured: boolean;
             devices: { id: string; active: boolean; key_current: boolean }[];
-          }>("admin/push"),
+          }>("admin/push", undefined, { signal: AbortSignal.timeout(12000) }),
           browserPushSubscription(),
         ]);
         const id = localStorage.getItem(PUSH_DEVICE_KEY);
