@@ -12,7 +12,8 @@
     "typecheck": "tsc --noEmit",
     "test:dimora": "node --test demo-sources/dimora-mia/tests/*.test.mjs && node scripts/check-dimora-local.mjs",
     "test:casa-mia": "node --test tests/casa-mia/*.test.mjs",
-    "db:casa-mia": "node scripts/casa-mia/migrate.mjs"
+    "db:casa-mia": "node scripts/casa-mia/migrate.mjs",
+    "test:casa-mia:ui": "node scripts/casa-mia/test-ui.mjs"
   },
   "dependencies": {
     "@fontsource-variable/manrope": "latest",
@@ -26,7 +27,9 @@
     "react-dom": "latest"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
     "@electric-sql/pglite": "^0.5.16",
+    "@playwright/test": "^1.65.1",
     "@tailwindcss/postcss": "latest",
     "@types/node": "latest",
     "@types/pg": "^8.23.1",

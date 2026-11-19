@@ -103,3 +103,7 @@ Il concept hospitality è rinominato CASA MIA nella demo, nel menù, nei metadat
 L'app installabile è alla route `/casa-mia/gestione`; API nello stesso dominio sotto `/api/casa-mia/`. Lo schema PostgreSQL è dedicato e richiede configurazione esterna esplicita. Nessuna variabile o risorsa è stata configurata automaticamente. Il flag di abilitazione è inizialmente assente: il sito rimane una demo locale, mentre l'app permette soltanto una dimostrazione esplicita con dati sintetici. Quando configurato, il sito usa lo stesso inventario transazionale dell'app e non ripiega su record locali in caso di errore del servizio. Hero e regia del sito restano invariati.
 
 Manifest, icone e service worker sono limitati a `/casa-mia/`; i dati degli ospiti e le API non vengono messi in cache. Non è un'app degli store. I canali esterni non sono sincronizzati. Configurazione, test, limiti e requisiti per il lancio commerciale in `CASA-MIA.md`.
+
+## CASA MIA — gestione v2
+
+Interfaccia proprietario riorganizzata in cinque aree, blocchi e accordi manuali fino a 365 notti, controllo preventivo dei conflitti, modifiche con revisione, registro incassi/rimborsi, storico e CSV filtrato. Migrazione additiva `002_owner_operations.sql`, applicata da `npm run db:casa-mia`; il servizio richiede schema v2 prima di essere abilitato. Nessun database o pagamento esterno attivato automaticamente. La demo persistente dell’app ora condivide i blocchi con la demo del sito nello stesso browser, senza modificare la regia del sito. Dettagli e limiti in `CASA-MIA.md`.
