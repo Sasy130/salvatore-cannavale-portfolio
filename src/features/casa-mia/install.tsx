@@ -6,6 +6,7 @@ import {
   Share2,
   Smartphone,
 } from "lucide-react";
+import { ChromeHandoff } from "./chrome-handoff";
 import { Modal, Primary } from "./ui";
 type InstallEvent = Event & {
   prompt: () => Promise<void>;
@@ -93,6 +94,7 @@ export function InstallPanel({ onClose }: { onClose: () => void }) {
       onClose={onClose}
       busy={busy}
     >
+      <ChromeHandoff />
       <div className="cm-install-icon">
         <Smartphone size={30} />
       </div>
@@ -185,7 +187,9 @@ export function InstallPanel({ onClose }: { onClose: () => void }) {
         </p>
       )}
       <p className="cm-help">
-        Dopo l’installazione puoi gestire gli avvisi nella schermata Notifiche. Il consenso del telefono e il collegamento al server sono separati dall’installazione.
+        Dopo l’installazione puoi gestire gli avvisi nella schermata Notifiche.
+        Il consenso del telefono e il collegamento al server sono separati
+        dall’installazione.
       </p>
       <p className="cm-help">
         Per lavorare con dati condivisi serve internet. La demo si riapre sullo

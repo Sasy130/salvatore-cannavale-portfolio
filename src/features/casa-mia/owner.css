@@ -4413,3 +4413,7 @@
 @media(max-width:600px) { .cm-topbar-tools { gap:5px; } }
 .cm-demo-access { margin-top:24px; border-top:1px solid var(--cm-line); padding-top:16px; }
 .cm-demo-access summary { cursor:pointer; color:var(--cm-muted); font-size:12px; padding:5px 0; }
+.cm-chrome-handoff { display:flex; flex-direction:column; gap:12px; padding:18px; border:1px solid #cad8bf; background:#f0f5eb; border-radius:14px; margin:18px 0; }
+.cm-chrome-handoff strong { font-size:14px; }
+.cm-chrome-handoff p { margin:0; font-size:13px; line-height:1.7; }
+.cm-chrome-handoff small { font-size:11px; line-height:1.7; color:var(--cm-muted); }

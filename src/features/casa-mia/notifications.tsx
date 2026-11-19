@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { Bell, CheckCircle2, Smartphone } from "lucide-react";
+import { ChromeHandoff } from "./chrome-handoff";
 import { Modal, Primary, Empty } from "./ui";
 import { ownerAPI } from "./use-owner";
 import {
@@ -260,6 +261,7 @@ export function NotificationsPanel({
           </p>
         </div>
       </div>
+      {!demo && permission !== "granted" && <ChromeHandoff />}
       {error && (
         <div className="cm-form-error" role="alert">
           <p>{error}</p>
