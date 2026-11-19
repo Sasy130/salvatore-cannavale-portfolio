@@ -88,7 +88,7 @@ export function InstallPanel({ onClose }: { onClose: () => void }) {
   }
   return (
     <Modal
-      title="CASA MIA, sul tuo telefono."
+      title="DIMORA MIA, sul tuo telefono."
       eyebrow="IL TUO SPAZIO QUOTIDIANO"
       onClose={onClose}
       busy={busy}
@@ -103,7 +103,7 @@ export function InstallPanel({ onClose }: { onClose: () => void }) {
       {installed ? (
         <div className="cm-info-box">
           <CheckCircle2 size={20} />
-          <p>Stai già usando CASA MIA come app installata.</p>
+          <p>Stai già usando DIMORA MIA come app installata.</p>
         </div>
       ) : (
         <>

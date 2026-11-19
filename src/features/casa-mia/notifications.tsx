@@ -181,7 +181,7 @@ export function NotificationsPanel({
   return (
     <Modal
       title="Gli avvisi, sul tuo telefono."
-      eyebrow="NOTIFICHE CASA MIA"
+      eyebrow="NOTIFICHE DIMORA MIA"
       onClose={onClose}
       busy={busy}
     >
@@ -202,7 +202,7 @@ export function NotificationsPanel({
           <p>
             {demo
               ? "Puoi provare una notifica locale. Gli avvisi delle prenotazioni reali richiedono il collegamento condiviso."
-              : "Consenti gli avvisi per ricevere una notifica anche quando CASA MIA è chiusa. La consegna dipende dalla connessione e dalle impostazioni Android."}
+              : "Consenti gli avvisi per ricevere una notifica anche quando DIMORA MIA è chiusa. La consegna dipende dalla connessione e dalle impostazioni Android."}
           </p>
         </div>
       </div>
@@ -252,7 +252,7 @@ export function NotificationsPanel({
               run(async () => {
                 await consent();
                 const registration = await pushRegistration();
-                await registration.showNotification("CASA MIA · prova locale", {
+                await registration.showNotification("DIMORA MIA · prova locale", {
                   body: "Questa è una notifica di prova del telefono, non una prenotazione.",
                   icon: "/casa-mia/icon-192.png",
                   tag: "casa-mia-local-test",
@@ -317,7 +317,7 @@ export function NotificationsPanel({
       {permission === "denied" && (
         <p className="cm-warning">
           Permesso bloccato: nelle impostazioni del sito in Chrome abilita
-          Notifiche, poi riapri CASA MIA.
+          Notifiche, poi riapri DIMORA MIA.
         </p>
       )}
       {!demo && (

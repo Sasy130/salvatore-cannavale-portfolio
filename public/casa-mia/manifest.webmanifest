@@ -1,7 +1,7 @@
 {
   "id": "/casa-mia/gestione",
-  "name": "CASA MIA — Gestione prenotazioni",
-  "short_name": "CASA MIA",
+  "name": "DIMORA MIA — Gestione prenotazioni",
+  "short_name": "DIMORA MIA",
   "description": "Calendario e prenotazioni della tua casa.",
   "lang": "it",
   "start_url": "/casa-mia/gestione",

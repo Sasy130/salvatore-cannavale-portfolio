@@ -169,7 +169,7 @@ async function openCheckout(env, b, origin) {
         ),
         "line_items[0][price_data][currency]": "eur",
         "line_items[0][price_data][unit_amount]": String(b.due),
-        "line_items[0][price_data][product_data][name]": `CASA MIA - ${b.payment === "deposit" ? "Acconto" : "Soggiorno"} DEMO`,
+        "line_items[0][price_data][product_data][name]": `DIMORA MIA - ${b.payment === "deposit" ? "Acconto" : "Soggiorno"} DEMO`,
         "line_items[0][quantity]": "1",
       },
       "casa-mia-checkout-" + b.id,
@@ -955,7 +955,7 @@ export async function handleAPI(req, env) {
     }
     return json({ error: "Operazione non trovata." }, 404);
   } catch (e) {
-    console.error("CASA MIA API error:", e.code || "validation");
+    console.error("DIMORA MIA API error:", e.code || "validation");
     return json(
       {
         error:

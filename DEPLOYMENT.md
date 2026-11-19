@@ -131,3 +131,7 @@ Creata risorsa Neon Free `casa-mia`, regione fra1, prefisso CASA_MIA, collegata 
 ## CASA MIA — verifica produzione e separazione demo
 
 API condivise verificate sul dominio: schema 5, enabled true, disponibilità/preventivo 200, admin anonimo 401. Accesso Android confermato dal proprietario. Demo locale selezionabile esplicitamente con ?demo=1 e collegamenti coerenti fra sito/app; suite browser confinata alla demo. Push configurato ma prova fisica da confermare; email, Stripe e scheduler non attivati. Nessun piano a pagamento acquistato.
+
+## DIMORA MIA — nome definitivo
+
+Ripristinato DIMORA MIA nel sito, nella scheda portfolio, nell'app proprietario, nel manifest Android, nelle icone DM, nei messaggi push e nei modelli email/ricevuta. Cache statica PWA aggiornata a v3 per sostituire icone e pagina offline. URL /casa-mia/, identificativo manifest, archivio, sessioni e configurazione CASA_MIA_* preservati per mantenere l'app installata e i dati esistenti. L'aggiornamento dell'etichetta sul launcher dipende dai tempi di Chrome/Android.

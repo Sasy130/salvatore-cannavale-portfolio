@@ -376,7 +376,7 @@ function SettingsPanel({
         <div className="cm-settings-side">
           <section className="cm-panel">
             <span className="cm-kicker">LA TUA STRUTTURA</span>
-            <h2>CASA MIA</h2>
+            <h2>DIMORA MIA</h2>
             <p className="cm-body-copy">
               Una casa, un inventario. Le notti bloccate non possono essere
               prenotate attraverso lo stesso calendario condiviso.
@@ -633,10 +633,10 @@ export function OwnerApp() {
         </header>
         <main className="cm-auth-main">
           <div className="cm-auth-copy">
-            <span className="cm-kicker">CASA MIA / PRIVATE MANAGEMENT</span>
+            <span className="cm-kicker">DIMORA MIA / PRIVATE MANAGEMENT</span>
             <div className="cm-entry-architecture" aria-hidden="true">
               <span className="cm-entry-orbit" />
-              <span className="cm-entry-door">cm</span>
+              <span className="cm-entry-door">dm</span>
               <span className="cm-entry-floor" />
             </div>
             <h1>
@@ -722,7 +722,7 @@ export function OwnerApp() {
         </main>
         <footer className="cm-auth-footer">
           <a href={demo ? "/demos/dimora-mia/?demo=1" : "/demos/dimora-mia/"}>
-            Visita il sito CASA MIA <ArrowUpRight size={14} />
+            Visita il sito DIMORA MIA <ArrowUpRight size={14} />
           </a>
           <a href="/">
             Portfolio ONE MAN <ArrowUpRight size={14} />
@@ -787,7 +787,7 @@ export function OwnerApp() {
             <House size={20} />
           </span>
           <div>
-            <strong>CASA MIA</strong>
+            <strong>DIMORA MIA</strong>
             <small>La tua struttura</small>
           </div>
           <span className="cm-property-dot" />
@@ -828,7 +828,7 @@ export function OwnerApp() {
             <LogOut size={17} />
             Esci dalla gestione
           </button>
-          <span>CASA MIA / PROPERTY MANAGER</span>
+          <span>DIMORA MIA / PROPERTY MANAGER</span>
         </div>
       </aside>
       <div className="cm-workspace">
@@ -839,7 +839,7 @@ export function OwnerApp() {
             <b>{NAV.find((n) => n.id === tab)?.label}</b>
           </div>
           <div className="cm-mobile-brand">
-            CASA MIA<span>GESTIONE</span>
+            DIMORA MIA<span>GESTIONE</span>
           </div>
           <div className="cm-topbar-tools">
             <span
@@ -887,7 +887,7 @@ export function OwnerApp() {
               <LogOut size={17} />
             </button>
             <span className="cm-owner-avatar" aria-label="Area proprietario">
-              CM
+              DM
             </span>
           </div>
         </header>
@@ -1188,7 +1188,7 @@ export function OwnerApp() {
                       cm
                     </span>
                     <div>
-                      <span className="cm-kicker">CASA MIA / ANDROID</span>
+                      <span className="cm-kicker">DIMORA MIA / ANDROID</span>
                       <h2>
                         {installation.installed
                           ? "La tua app è aperta."
@@ -1798,7 +1798,7 @@ export function OwnerApp() {
             >
               Apri il sito <ArrowUpRight size={13} />
             </a>
-            <span>CASA MIA · Gestione della casa</span>
+            <span>DIMORA MIA · Gestione della casa</span>
           </footer>
         </main>
       </div>

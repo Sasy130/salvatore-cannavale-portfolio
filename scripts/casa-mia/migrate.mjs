@@ -26,7 +26,7 @@ try {
     await pool.query(plan);
   }
   console.log(
-    "CASA MIA: schema PostgreSQL v5 pronto. Nessun dato demo inserito.",
+    "DIMORA MIA: schema PostgreSQL v5 pronto. Nessun dato demo inserito.",
   );
 } catch (error) {
   console.error(

@@ -284,7 +284,7 @@ export function stayCalendarFile(b) {
   const lines = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//CASA MIA//Owner Calendar//IT",
+    "PRODID:-//DIMORA MIA//Owner Calendar//IT",
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
     "BEGIN:VEVENT",
@@ -296,7 +296,7 @@ export function stayCalendarFile(b) {
         .replace(/\.\d{3}/, ""),
     "DTSTART;VALUE=DATE:" + b.checkin.replaceAll("-", ""),
     "DTEND;VALUE=DATE:" + b.checkout.replaceAll("-", ""),
-    "SUMMARY:" + escape("CASA MIA · " + b.name),
+    "SUMMARY:" + escape("DIMORA MIA · " + b.name),
     "DESCRIPTION:" +
       escape(
         "Copia statica del soggiorno. Modifiche e annullamenti non si sincronizzano. Riferimento: " +

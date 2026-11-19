@@ -37,9 +37,9 @@ export function emailMessage(payload) {
     "Ricevuta di pagamento non fiscale. Non sostituisce fattura o altri documenti fiscali.",
   ].filter(Boolean);
   return {
-    subject: `CASA MIA · ${title} · ${b.id}`,
+    subject: `DIMORA MIA · ${title} · ${b.id}`,
     text: lines.join("\n"),
-    html: `<div style="font-family:Arial,sans-serif;background:#f4f5f0;padding:32px;color:#233e32"><div style="max-width:560px;margin:auto;background:#fff;padding:32px;border-radius:12px"><p style="letter-spacing:3px;font-size:12px">CASA MIA</p><h1 style="font-size:25px">${html(title)}</h1>${lines.map((l) => `<p style="font-size:14px;line-height:1.7">${html(l)}</p>`).join("")}</div></div>`,
+    html: `<div style="font-family:Arial,sans-serif;background:#f4f5f0;padding:32px;color:#233e32"><div style="max-width:560px;margin:auto;background:#fff;padding:32px;border-radius:12px"><p style="letter-spacing:3px;font-size:12px">DIMORA MIA</p><h1 style="font-size:25px">${html(title)}</h1>${lines.map((l) => `<p style="font-size:14px;line-height:1.7">${html(l)}</p>`).join("")}</div></div>`,
   };
 }
 function latin(s) {
@@ -63,7 +63,7 @@ export function receiptPDF(receipt) {
     "1 1 1 rg 40 45 515 752 re f",
     "0.13 0.25 0.20 rg",
   );
-  text(68, 754, 23, "CASA MIA", "F2");
+  text(68, 754, 23, "DIMORA MIA", "F2");
   text(68, 728, 10, "RICEVUTA DI PAGAMENTO NON FISCALE");
   commands.push("0.92 0.94 0.88 rg 68 654 459 46 re f", "0.13 0.25 0.20 rg");
   text(82, 674, 11, "TEST - NESSUN PAGAMENTO O ACCREDITO REALE", "F2");

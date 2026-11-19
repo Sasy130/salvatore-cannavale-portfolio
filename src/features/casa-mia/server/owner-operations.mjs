@@ -551,7 +551,7 @@ export async function handleOwnerOperation(path, req, env) {
     if (e.status) return json({ error: e.message }, e.status);
     if (e instanceof SyntaxError)
       return json({ error: "Richiesta non valida." }, 400);
-    console.error("CASA MIA owner operation:", e.code || "validation");
+    console.error("DIMORA MIA owner operation:", e.code || "validation");
     return json(
       {
         error: e.code

@@ -52,7 +52,7 @@ if (process.argv.includes("--json"))
   );
 else {
   console.log(
-    "CASA MIA — verifica configurazione (nessun segreto viene mostrato)",
+    "DIMORA MIA — verifica configurazione (nessun segreto viene mostrato)",
   );
   for (const [name, ok] of Object.entries(checks))
     console.log((ok ? "OK  " : "--- ") + name);

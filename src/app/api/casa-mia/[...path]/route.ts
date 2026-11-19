@@ -24,7 +24,7 @@ async function dispatch(request: Request) {
         enabled: requested && configured && ready,
         unavailable: requested && !ready,
         paymentMode: "test",
-        app: "CASA MIA",
+        app: "DIMORA MIA",
         schemaVersion: 5,
       },
       { headers: { "Cache-Control": "no-store" } },

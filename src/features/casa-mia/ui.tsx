@@ -42,13 +42,13 @@ export function Brand() {
     <a
       href="/casa-mia/gestione"
       className="cm-brand"
-      aria-label="CASA MIA, gestione"
+      aria-label="DIMORA MIA, gestione"
     >
       <span className="cm-brand-symbol" aria-hidden="true">
-        cm
+        dm
       </span>
       <span>
-        CASA MIA<small>PROPERTY MANAGER</small>
+        DIMORA MIA<small>PROPERTY MANAGER</small>
       </span>
     </a>
   );

@@ -23,7 +23,7 @@ export async function pushRegistration() {
           () =>
             reject(
               Error(
-                "Il servizio dell’app non è pronto. Chiudi e riapri CASA MIA, poi riprova.",
+                "Il servizio dell’app non è pronto. Chiudi e riapri DIMORA MIA, poi riprova.",
               ),
             ),
           10000,

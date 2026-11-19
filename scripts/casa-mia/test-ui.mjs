@@ -325,7 +325,7 @@ try {
     page.getByRole("status").filter({ hasText: "Notifica locale richiesta" }),
   ).toBeVisible();
   expect(await page.evaluate(() => window.__notificationTest.title)).toBe(
-    "CASA MIA · prova locale",
+    "DIMORA MIA · prova locale",
   );
   await expect(
     page.getByText("Non collegati nella demo", { exact: true }),
@@ -411,7 +411,7 @@ try {
     .getByRole("button", { name: "Come installarla", exact: true })
     .click();
   await expect(
-    page.getByRole("heading", { name: "CASA MIA, sul tuo telefono." }),
+    page.getByRole("heading", { name: "DIMORA MIA, sul tuo telefono." }),
   ).toBeVisible();
   await page
     .getByRole("button", { name: "Installa su questo dispositivo" })
@@ -464,7 +464,7 @@ try {
   await page.keyboard.press("Escape");
   await page.goto(origin + "/casa-mia/gestione?install=1&demo=1");
   await expect(
-    page.getByRole("heading", { name: "CASA MIA, sul tuo telefono." }),
+    page.getByRole("heading", { name: "DIMORA MIA, sul tuo telefono." }),
   ).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(page.locator(".cm-booking-alert")).toHaveCount(0);
