@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#f4f5f0"><title>DIMORA MIA · Consenti notifiche</title>
+<style>*{box-sizing:border-box}body{margin:0;background:#f4f5f0;color:#243c30;font:16px system-ui,sans-serif;min-height:100svh;padding:28px 22px}main{max-width:460px;margin:8vh auto}header{font-size:13px;font-weight:700;letter-spacing:2px}h1{font-size:34px;line-height:1.15;letter-spacing:-1px;margin:38px 0 18px}p{line-height:1.7;color:#536454}section{padding:22px;background:white;border:1px solid #dce3d8;border-radius:18px;margin:24px 0}button,.primary{width:100%;display:block;background:#294d3b;color:white;border:0;border-radius:10px;padding:16px;font:600 15px system-ui;text-align:center;text-decoration:none;cursor:pointer}button:disabled{opacity:.6}a{color:#294d3b}small{display:block;line-height:1.7;color:#64735e;font-size:12px}#status{font-size:14px;font-weight:600;line-height:1.7;margin:18px 0}#details{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;color:#536454}button:focus-visible,a:focus-visible{outline:3px solid #aab98a;outline-offset:4px}[hidden]{display:none!important}</style></head>
+<body><main><header>DIMORA MIA / NOTIFICHE</header><h1>Un solo consenso.<br>Poi ti avvisiamo noi.</h1><p>Premi il pulsante e rispondi alla richiesta del browser. Questa pagina serve soltanto ad autorizzare gli avvisi su questo telefono.</p><section><small>1 · CONSENSO DEL BROWSER</small><p id="status" role="status" aria-live="polite">Verifica del permesso…</p><button id="allow" type="button">Consenti notifiche</button><a id="continue" class="primary" href="/casa-mia/gestione?notifications=1" hidden>Continua e collega il telefono →</a><p id="help" hidden>Ora completa il collegamento nell’app e invia la prova dal server. Il solo consenso non registra ancora il telefono.</p><p id="details"></p></section><small>Quando compare la richiesta, scegli Consenti. Nessuna notifica verrà attivata se non dai il consenso.</small><p><a href="/casa-mia/gestione?notifications=1">Torna all’app</a></p></main><script>
+'use strict';
+const allow=document.querySelector('#allow'), next=document.querySelector('#continue'), status=document.querySelector('#status'), details=document.querySelector('#details'), help=document.querySelector('#help');
+let busy=false, timer=null, poll=null, permissionStatus=null;
+const supported='Notification' in window;
+function diagnostic(event,error='none') { const ua=navigator.userAgent;fetch('/api/casa-mia/admin/push/diagnostic',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({event,phase:'permission-page',permission:supported?Notification.permission:'unsupported',browser:/SamsungBrowser/i.test(ua)?'samsung':/Chrome/i.test(ua)?'chrome':'other',standalone:matchMedia('(display-mode: standalone)').matches,online:navigator.onLine,userActivation:navigator.userActivation?.isActive===true,error}),signal:AbortSignal.timeout(5000)}).catch(()=>{}); }
+function stop(){clearTimeout(timer);clearInterval(poll);timer=null;poll=null;busy=false;allow.disabled=false;}
+function render(){
+ const permission=supported?Notification.permission:'unsupported';
+ details.textContent='Permesso del sito: '+permission+(permissionStatus?' · Controllo browser: '+permissionStatus.state:'');
+ if(permission==='granted'){stop();status.textContent='Consenso ricevuto. Ora collega il telefono nell’app.';allow.hidden=true;next.hidden=false;help.hidden=false;return true;}
+ if(permission==='denied'){stop();status.textContent='Il browser ha bloccato il permesso per questo sito. Abilita Notifiche nelle autorizzazioni del sito, poi ricarica questa pagina.';allow.disabled=true;return true;}
+ if(!supported){status.textContent='Questo browser non supporta le notifiche. Apri la pagina in Google Chrome.';allow.disabled=true;return true;}
+ if(!busy)status.textContent='Il sito non ha ancora ricevuto il consenso.';
+ return false;
+}
+function resolved(value){if(value==='granted'||value==='denied'){render();diagnostic(value==='granted'?'connected':'failed');return;}stop();render();status.textContent='La richiesta è stata chiusa senza consenso. Puoi riprovare.';diagnostic('failed');}
+allow.addEventListener('click',()=>{
+ if(busy||!supported)return;
+ // Invoke the native permission request directly in this top-level click.
+ busy=true;allow.disabled=true;status.textContent='Rispondi alla richiesta di consenso del browser…';
+ let request;
+ try{request=Notification.requestPermission(resolved);}catch(error){stop();status.textContent='Il browser non ha avviato la richiesta: '+error.name;diagnostic('failed',error.name);return;}
+ diagnostic('consent');
+ if(request&&typeof request.then==='function')request.then(resolved,error=>{stop();status.textContent='Richiesta non riuscita: '+error.name;diagnostic('failed',error.name);});
+ if(!busy)return;
+ poll=setInterval(()=>{if(render()&&Notification.permission==='granted')diagnostic('connected');},400);
+ timer=setTimeout(()=>{stop();if(!render()){status.textContent='Il browser non ha completato la richiesta, anche su questa pagina essenziale. Il consenso non è stato ricevuto.';diagnostic('failed');}},30000);
+});
+window.addEventListener('focus',render);
+if(navigator.permissions?.query)navigator.permissions.query({name:'notifications'}).then(result=>{permissionStatus=result;result.addEventListener('change',render);render();}).catch(()=>{});
+render();diagnostic('opened');
+</script></body></html>

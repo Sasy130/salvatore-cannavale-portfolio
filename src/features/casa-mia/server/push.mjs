@@ -266,6 +266,7 @@ export async function handlePushAdmin(path, req, env) {
           "subscribe",
           "server",
           "connected",
+          "permission-page",
         ]),
         permission: pick(input.permission, [
           "granted",

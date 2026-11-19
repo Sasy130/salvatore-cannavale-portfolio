@@ -344,21 +344,32 @@ export function NotificationsPanel({
         </>
       ) : (
         <>
-          <Primary
-            busy={busy}
-            disabled={
-              loading ||
-              !config?.configured ||
-              !!connected ||
-              permission === "denied"
-            }
-            onClick={() => run(enable)}
-          >
-            <Bell size={17} />
-            {connected
-              ? "Avvisi collegati"
-              : "Attiva avvisi su questo telefono"}
-          </Primary>
+          {permission === "default" ? (
+            <a
+              className="cm-button cm-button-primary"
+              href="/casa-mia/consenso.html"
+            >
+              Consenti notifiche sul telefono
+            </a>
+          ) : (
+            <>
+              <Primary
+                busy={busy}
+                disabled={
+                  loading ||
+                  !config?.configured ||
+                  !!connected ||
+                  permission === "denied"
+                }
+                onClick={() => run(enable)}
+              >
+                <Bell size={17} />
+                {connected
+                  ? "Avvisi collegati"
+                  : "Attiva avvisi su questo telefono"}
+              </Primary>
+            </>
+          )}
           {connected && (
             <button
               className="cm-button cm-button-secondary"
