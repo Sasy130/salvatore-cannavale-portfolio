@@ -92,6 +92,9 @@ export function useOwner() {
     generation.current++;
     modeRef.current = "welcome";
     setMode("welcome");
+    const leaveURL = new URL(location.href);
+    leaveURL.searchParams.delete("demo");
+    history.replaceState(null, "", leaveURL);
     try {
       localStorage.removeItem("casa-mia:resume-demo");
     } catch {}
@@ -137,16 +140,21 @@ export function useOwner() {
       .then(async (s) => {
         setService(s);
         if (current !== generation.current) return;
-        if (!s.enabled && !s.unavailable) {
+        const explicitDemo =
+          new URLSearchParams(location.search).get("demo") === "1";
+        if (explicitDemo || (!s.enabled && !s.unavailable)) {
           try {
-            if (localStorage.getItem("casa-mia:resume-demo") === "yes") {
+            if (
+              explicitDemo ||
+              localStorage.getItem("casa-mia:resume-demo") === "yes"
+            ) {
               modeRef.current = "demo";
               setMode("demo");
               apply(loadDemo());
             }
           } catch {}
         }
-        if (s.enabled) {
+        if (s.enabled && !explicitDemo) {
           try {
             const next = await ownerAPI<OwnerData>("admin/console");
             if (current === generation.current) {
@@ -213,6 +221,9 @@ export function useOwner() {
     }
   }
   function startDemo() {
+    const demoURL = new URL(location.href);
+    demoURL.searchParams.set("demo", "1");
+    history.replaceState(null, "", demoURL);
     generation.current++;
     modeRef.current = "demo";
     setMode("demo");

@@ -75,3 +75,9 @@ Autorizzazione OAuth Vercel riuscita per l’account del portfolio e condizioni 
 Connessione TCP rifiutata dall’ambiente cloud; applicazione delle migrazioni riuscita attraverso l’endpoint SQL HTTPS Neon. Nuova opzione `--http` nel comando di migrazione, con blocco PostgreSQL atomico e lock: le tabelle già applicate non vengono ricreate. I rerun sul database ospitato hanno confermato versioni 1–5 e zero prenotazioni. Il runtime Vercel continua a usare il pool PostgreSQL; `search_path` ora viene impostato con `SET LOCAL` dentro ogni transazione, senza affidarsi allo stato di sessione incompatibile con pooling a transazioni.
 
 Configurati flag condiviso, chiavi VAPID e segreto del worker push in Vercel; valori privati mai nel codice o nell’output. Contatto tecnico VAPID: il recapito pubblico già usato dal portfolio. Password proprietario inserita personalmente dal proprietario nell’interfaccia Vercel. Lo scheduler push non è ancora attivo: invio immediato dopo gli eventi e recupero programmato restano due aspetti distinti. Email e Stripe richiedono ancora i rispettivi account e collaudi.
+
+## Collaudo condiviso — 19 novembre 2026
+
+Produzione verificata: servizio abilitato, schema 5, disponibilità e preventivo server rispondono 200; area admin senza sessione risponde 401. Il proprietario ha confermato l'accesso con la password privata su Android. Push configurato lato server; visualizzazione sul telefono ancora da confermare. Nessun pagamento reale o servizio email attivato. Il team rimane Hobby: prima dell'utilizzo commerciale adeguare il piano Vercel. Scheduler dei tentativi push/email ancora da configurare.
+
+La demo locale è ora esplicita tramite `?demo=1` sia nell'app sia nel sito; i collegamenti dalla demo mantengono questa scelta. L'indirizzo normale usa l'archivio condiviso e non ripiega sulla demo in caso di errore. I test del browser usano esclusivamente la demo e non inseriscono prenotazioni nel database reale.

@@ -127,3 +127,7 @@ Nuove tabelle `push_devices`/`push_outbox`, sottoscrizioni proprietario autentic
 ## CASA MIA — collegamento Neon per il collaudo condiviso
 
 Creata risorsa Neon Free `casa-mia`, regione fra1, prefisso CASA_MIA, collegata soltanto a Production. Migrazioni 1–5 applicate via SQL HTTPS. Password proprietario Secret salvata dal proprietario, chiavi push/worker e flag condiviso configurati in Vercel. Nessun valore sensibile nel repository. Il deploy successivo deve verificare API enabled/schema 5 e protezione admin; anteprima ancora in demo. Pool PostgreSQL con SET LOCAL search_path per ogni transazione; migrazioni atomiche con opzione --http per Neon. Nessun upgrade del team Hobby o cron incompatibile aggiunto; commercializzazione, email, Stripe e scheduler restano separati.
+
+## CASA MIA — verifica produzione e separazione demo
+
+API condivise verificate sul dominio: schema 5, enabled true, disponibilità/preventivo 200, admin anonimo 401. Accesso Android confermato dal proprietario. Demo locale selezionabile esplicitamente con ?demo=1 e collegamenti coerenti fra sito/app; suite browser confinata alla demo. Push configurato ma prova fisica da confermare; email, Stripe e scheduler non attivati. Nessun piano a pagamento acquistato.

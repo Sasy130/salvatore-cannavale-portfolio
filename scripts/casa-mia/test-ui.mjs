@@ -189,7 +189,7 @@ try {
     .click();
   const site = await context.newPage();
   site.on("pageerror", (e) => errors.push(e.message));
-  await site.goto(origin + "/demos/dimora-mia/#booking");
+  await site.goto(origin + "/demos/dimora-mia/?demo=1#booking");
   await site.locator("input[name=checkin]").fill(start);
   await site.locator("input[name=checkout]").fill(addDays(start, 3));
   await site.locator("#availability-form button[type=submit]").click();
@@ -291,14 +291,21 @@ try {
     ),
   ).toBe(true);
   await audit("mobile-overview", page);
-  await page.evaluate(()=>{window.__permissionRequests=0;const original=Notification.requestPermission.bind(Notification);Notification.requestPermission=(...args)=>{window.__permissionRequests++;return original(...args);};});
+  await page.evaluate(() => {
+    window.__permissionRequests = 0;
+    const original = Notification.requestPermission.bind(Notification);
+    Notification.requestPermission = (...args) => {
+      window.__permissionRequests++;
+      return original(...args);
+    };
+  });
   await page
     .getByRole("button", { name: "Gestisci notifiche", exact: true })
     .click();
   await expect(
     page.getByRole("heading", { name: "Gli avvisi, sul tuo telefono." }),
   ).toBeVisible();
-  expect(await page.evaluate(()=>window.__permissionRequests)).toBe(0);
+  expect(await page.evaluate(() => window.__permissionRequests)).toBe(0);
   await expect(
     page.getByText("Non collegati nella demo", { exact: true }),
   ).toBeVisible();
@@ -415,7 +422,7 @@ try {
   await page.getByRole("button", { name: "Prenotazioni", exact: true }).click();
   await page.getByRole("combobox", { name: /^Canale/ }).selectOption("airbnb");
   const guest = await mobile.newPage();
-  await guest.goto(origin + "/demos/dimora-mia/#booking");
+  await guest.goto(origin + "/demos/dimora-mia/?demo=1#booking");
   await guest
     .locator("input[name=checkin]")
     .fill(addDays(propertyToday(), 140));
@@ -450,12 +457,12 @@ try {
   ).toBeVisible();
   await expect(page.locator(".cm-booking-alert")).toHaveCount(0);
   await guest.close();
-  await page.goto(origin + "/casa-mia/gestione?notifications=1");
+  await page.goto(origin + "/casa-mia/gestione?notifications=1&demo=1");
   await expect(
     page.getByRole("heading", { name: "Gli avvisi, sul tuo telefono." }),
   ).toBeVisible();
   await page.keyboard.press("Escape");
-  await page.goto(origin + "/casa-mia/gestione?install=1");
+  await page.goto(origin + "/casa-mia/gestione?install=1&demo=1");
   await expect(
     page.getByRole("heading", { name: "CASA MIA, sul tuo telefono." }),
   ).toBeVisible();

@@ -721,7 +721,7 @@ export function OwnerApp() {
           </section>
         </main>
         <footer className="cm-auth-footer">
-          <a href="/demos/dimora-mia/">
+          <a href={demo ? "/demos/dimora-mia/?demo=1" : "/demos/dimora-mia/"}>
             Visita il sito CASA MIA <ArrowUpRight size={14} />
           </a>
           <a href="/">
@@ -808,7 +808,7 @@ export function OwnerApp() {
         </nav>
         <div className="cm-sidebar-bottom">
           <a
-            href="/demos/dimora-mia/"
+            href={demo ? "/demos/dimora-mia/?demo=1" : "/demos/dimora-mia/"}
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -1792,7 +1792,7 @@ export function OwnerApp() {
                   : "Calendario condiviso."}
             </span>
             <a
-              href="/demos/dimora-mia/"
+              href={demo ? "/demos/dimora-mia/?demo=1" : "/demos/dimora-mia/"}
               target="_blank"
               rel="noopener noreferrer"
             >
