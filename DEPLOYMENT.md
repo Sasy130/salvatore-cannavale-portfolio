@@ -115,3 +115,7 @@ Nuovo ingresso compatto, riapertura della demo, estremi calendario visibili anch
 ## CASA MIA — email e ricevute v4
 
 Migrazione `004_receipts_outbox.sql`, ricevute PDF non fiscali da webhook Stripe test verificato, coda email persistente e worker autenticato `/api/casa-mia/jobs/email`; chiave `CASA_MIA_MAIL_JOB_SECRET` e scheduler esterno da configurare. Download dei PDF solo con sessione proprietario. Checkout idempotente, recuperabile dopo timeout e limitato all’host Stripe. Tutte le API condivise richiedono schema v4. Nessun account Stripe, IBAN, pagamento live, mittente email o scheduler attivato automaticamente. Dettagli operativi e limiti in `CASA-MIA.md`.
+
+## CASA MIA — installazione visibile e avvisi in primo piano
+
+Oggi senza mini calendario duplicato; pulsante Installa app nella barra mobile e scheda dedicata, link `/casa-mia/gestione?install=1` e istruzioni Android/Chrome con copia indirizzo. Avviso nell’interfaccia per nuovi soggiorni diretti confermati, con lettura e deduplicazione per sessione. Nessuna migrazione aggiuntiva, nessun servizio push o permesso OS attivato; API ancora schema v4 e configurazione reale disabilitata.

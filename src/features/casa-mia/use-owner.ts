@@ -50,12 +50,29 @@ export function useOwner() {
     [busy, setBusy] = useState(false),
     [stale, setStale] = useState(false),
     [syncedAt, setSyncedAt] = useState(""),
-    [notice, setNotice] = useState("");
+    [notice, setNotice] = useState(""),
+    [bookingAlerts, setBookingAlerts] = useState<string[]>([]);
   const dataRef = useRef<OwnerData | null>(null),
     modeRef = useRef(mode),
     generation = useRef(0),
     mutating = useRef(false);
-  const apply = useCallback((next: OwnerData) => {
+  const apply = useCallback((next: OwnerData, detectNew = true) => {
+    const previous = dataRef.current;
+    if (detectNew && previous && !mutating.current) {
+      const incoming = next.bookings
+        .filter(
+          (b) =>
+            b.source === "direct" &&
+            b.payment !== "block" &&
+            b.status === "confirmed" &&
+            !previous.bookings.some(
+              (old) => old.id === b.id && old.status === "confirmed",
+            ),
+        )
+        .map((b) => b.id);
+      if (incoming.length)
+        setBookingAlerts((ids) => Array.from(new Set([...ids, ...incoming])));
+    }
     dataRef.current = next;
     setData(next);
     setSyncedAt(new Date().toISOString());
@@ -79,6 +96,7 @@ export function useOwner() {
     } catch {}
     dataRef.current = null;
     setData(null);
+    setBookingAlerts([]);
     setStale(false);
   }, []);
   const refresh = useCallback(
@@ -320,7 +338,8 @@ export function useOwner() {
     );
   const reset = () => {
     if (modeRef.current === "demo") {
-      apply(demoData());
+      apply(demoData(), false);
+      setBookingAlerts([]);
       setNotice("Demo ripristinata con dati di esempio.");
     }
   };
@@ -334,6 +353,8 @@ export function useOwner() {
     stale,
     syncedAt,
     notice,
+    bookingAlerts,
+    clearBookingAlerts: () => setBookingAlerts([]),
     setNotice,
     login,
     startDemo,

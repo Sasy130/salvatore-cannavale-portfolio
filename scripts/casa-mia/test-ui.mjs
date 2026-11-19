@@ -124,6 +124,13 @@ try {
     fullPage: true,
   });
   await audit("desktop-overview", page);
+  await expect(page.locator(".cm-mini-grid")).toHaveCount(0);
+  await expect(
+    page.getByRole("button", {
+      name: "Installa sul mio telefono",
+      exact: true,
+    }),
+  ).toBeVisible();
   await page.getByRole("button", { name: "Calendario", exact: true }).click();
   await page.screenshot({
     path: resolve(output, "desktop-calendar.png"),
@@ -284,12 +291,36 @@ try {
     ),
   ).toBe(true);
   await audit("mobile-overview", page);
-  await page.locator('.cm-booking-row').filter({hasText:'Ospite di esempio'}).click();
-  await page.getByRole('tab',{name:'Email e ricevute',exact:true}).click();
-  await expect(page.getByRole('heading',{name:'Nessuna ricevuta emessa'})).toBeVisible();
-  await page.screenshot({path:resolve(output,'mobile-email-and-receipts.png'),fullPage:true});
-  await audit('mobile-email-and-receipts',page);
-  await page.keyboard.press('Escape');
+  await expect(page.locator(".cm-mini-grid")).toHaveCount(0);
+  await page.getByRole("button", { name: "Installa app", exact: true }).click();
+  await expect(
+    page.getByText("Sul tuo Android", { exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Copia link dell’app" }),
+  ).toBeVisible();
+  await page.screenshot({
+    path: resolve(output, "mobile-install-visible.png"),
+    fullPage: true,
+  });
+  await audit("mobile-install", page);
+  await page.keyboard.press("Escape");
+  await page
+    .locator(".cm-booking-row")
+    .filter({ hasText: "Ospite di esempio" })
+    .click();
+  await page
+    .getByRole("tab", { name: "Email e ricevute", exact: true })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Nessuna ricevuta emessa" }),
+  ).toBeVisible();
+  await page.screenshot({
+    path: resolve(output, "mobile-email-and-receipts.png"),
+    fullPage: true,
+  });
+  await audit("mobile-email-and-receipts", page);
+  await page.keyboard.press("Escape");
   await page.getByRole("button", { name: "Calendario", exact: true }).click();
   await page.screenshot({
     path: resolve(output, "mobile-calendar.png"),
@@ -342,6 +373,50 @@ try {
   expect(await page.evaluate(() => window.__installRequested)).toBe(true);
   await page.keyboard.press("Escape");
   await expect(page.locator("dialog[open]")).toHaveCount(0);
+  await page.getByRole("button", { name: "Prenotazioni", exact: true }).click();
+  await page.getByRole("combobox", { name: /^Canale/ }).selectOption("airbnb");
+  const guest = await mobile.newPage();
+  await guest.goto(origin + "/demos/dimora-mia/#booking");
+  await guest
+    .locator("input[name=checkin]")
+    .fill(addDays(propertyToday(), 140));
+  await guest
+    .locator("input[name=checkout]")
+    .fill(addDays(propertyToday(), 143));
+  await guest.locator("#availability-form button[type=submit]").click();
+  await expect(guest.locator("#booking-message")).toContainText(
+    "Date disponibili",
+  );
+  await guest.locator("#availability-form button[type=submit]").click();
+  await guest
+    .locator("#reservation-form input[name=name]")
+    .fill("Avviso di prova");
+  await guest
+    .locator("#reservation-form input[name=email]")
+    .fill("prova@example.test");
+  await guest.locator("#reservation-form input[type=checkbox]").check();
+  await guest.locator("#reservation-form button[type=submit]").click();
+  await expect(guest.locator("#checkout")).toContainText(
+    "Il tuo soggiorno demo è confermato.",
+  );
+  await expect(page.locator(".cm-booking-alert")).toContainText(
+    "Nuova prenotazione dal sito",
+  );
+  await expect(page.locator(".cm-booking-alert")).toBeInViewport();
+  await page
+    .getByRole("button", { name: "Vedi prenotazioni", exact: true })
+    .click();
+  await expect(
+    page.locator(".cm-booking-row").filter({ hasText: "Avviso di prova" }),
+  ).toBeVisible();
+  await expect(page.locator(".cm-booking-alert")).toHaveCount(0);
+  await guest.close();
+  await page.goto(origin + "/casa-mia/gestione?install=1");
+  await expect(
+    page.getByRole("heading", { name: "CASA MIA, sul tuo telefono." }),
+  ).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(page.locator(".cm-booking-alert")).toHaveCount(0);
   await writeFile(
     resolve(output, "accessibility.json"),
     JSON.stringify(audits, null, 2),
@@ -352,7 +427,7 @@ try {
   );
   expect(errors).toEqual([]);
   console.log(
-    "UI workflows passed: New entrance, cross-month endpoints, stay operations and persistence, 45-night block, conflict rejection, website inventory, receipt, CSV and ICS, touch layout, install prompt simulation and Escape.",
+    "UI workflows passed: Visible Android installation, install deep link, no duplicate overview calendar, new website booking alert and acknowledgment, calendar endpoints, stay operations, inventory, CSV/ICS, phone layout and prompt simulation.",
   );
   console.log(
     "Accessibility findings:",

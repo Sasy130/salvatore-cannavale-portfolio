@@ -4090,11 +4090,255 @@
   color: #fff;
 }
 
-@media(max-width:600px){
- .cm-calendar-grid>button.range-start .cm-day-top,.cm-calendar-grid>button.range-end .cm-day-top{flex-direction:column;align-items:flex-start;gap:5px;margin-bottom:8px;}
- .cm-calendar-grid>button.range-start .cm-day-top i,.cm-calendar-grid>button.range-end .cm-day-top i{font-size:7px;line-height:1.2;height:auto;width:auto;min-width:0;border-radius:0;display:block;}
+@media (max-width: 600px) {
+  .cm-calendar-grid > button.range-start .cm-day-top,
+  .cm-calendar-grid > button.range-end .cm-day-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    margin-bottom: 8px;
+  }
+  .cm-calendar-grid > button.range-start .cm-day-top i,
+  .cm-calendar-grid > button.range-end .cm-day-top i {
+    font-size: 7px;
+    line-height: 1.2;
+    height: auto;
+    width: auto;
+    min-width: 0;
+    border-radius: 0;
+    display: block;
+  }
 }
-.cm-tabs{overflow-x:auto;white-space:nowrap;}
-.cm-document{display:flex;gap:18px;justify-content:space-between;align-items:center;padding:18px 0;border-bottom:1px solid var(--cm-line);}
-.cm-document>div{display:flex;flex-direction:column;gap:7px;min-width:0;}.cm-document b{font-size:12px;}.cm-document small{font-size:10px;color:#53664d;line-height:1.8;overflow-wrap:anywhere;}.cm-delivery-title{font-size:16px;margin-top:26px;}
-@media(max-width:600px){.cm-document{align-items:flex-start;flex-direction:column;gap:12px;}.cm-tabs>button{flex-shrink:0;}}
+.cm-tabs {
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.cm-document {
+  display: flex;
+  gap: 18px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--cm-line);
+}
+.cm-document > div {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+}
+.cm-document b {
+  font-size: 12px;
+}
+.cm-document small {
+  font-size: 10px;
+  color: #53664d;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+.cm-delivery-title {
+  font-size: 16px;
+  margin-top: 26px;
+}
+@media (max-width: 600px) {
+  .cm-document {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .cm-tabs > button {
+    flex-shrink: 0;
+  }
+}
+.cm-install-topbar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 1px solid #294c3d;
+  background: #294c3d;
+  color: #fff;
+  border-radius: 8px;
+  padding: 9px 12px;
+  min-height: 38px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.cm-phone-card {
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+}
+.cm-phone-card-heading {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.cm-phone-card h2 {
+  font-size: 21px;
+  line-height: 1.3;
+  letter-spacing: -0.5px;
+  margin-top: 8px;
+}
+.cm-phone-logo {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 60px;
+  flex-shrink: 0;
+  border-radius: 28px 28px 9px 9px;
+  background: #294c3d;
+  color: #f1eddd;
+  font-family: Georgia, serif;
+  font-size: 27px;
+  font-style: italic;
+}
+.cm-phone-card > p {
+  font-size: 12px;
+  color: #53664d;
+  line-height: 1.9;
+}
+.cm-phone-card > .cm-button {
+  width: 100%;
+  min-height: 48px;
+  gap: 10px;
+  justify-content: center;
+  font-size: 12px;
+}
+.cm-notification-status {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  border-top: 1px solid var(--cm-line);
+  padding-top: 18px;
+  margin-top: 3px;
+}
+.cm-notification-status > svg {
+  flex-shrink: 0;
+  color: #294c3d;
+  margin-top: 3px;
+}
+.cm-notification-status b {
+  font-size: 12px;
+}
+.cm-notification-status p {
+  font-size: 11px;
+  line-height: 1.9;
+  color: #53664d;
+  margin: 8px 0;
+}
+.cm-notification-status small {
+  display: block;
+  font-size: 10px;
+  line-height: 1.8;
+  color: #715b28;
+}
+.cm-installed-label {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #294c3d;
+  font-size: 12px;
+}
+.cm-booking-alert {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 18px;
+  background: #eaf2e5;
+  border: 1px solid #a4ba95;
+  border-radius: 11px;
+  margin-bottom: 22px;
+  color: #294c3d;
+}
+.cm-booking-alert strong {
+  font-size: 13px;
+}
+.cm-booking-alert p {
+  font-size: 11px;
+  margin-top: 5px;
+  line-height: 1.7;
+}
+.cm-booking-alert > button:not(.cm-icon-button) {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 12px;
+  text-decoration: underline;
+}
+.cm-android-instructions ol {
+  padding-left: 20px;
+  margin: 15px 0;
+  font-size: 13px;
+  line-height: 1.9;
+}
+.cm-android-instructions li {
+  padding: 4px 0;
+}
+.cm-copy-install {
+  padding: 18px;
+  background: #f4f7ef;
+  border: 1px solid var(--cm-line);
+  border-radius: 10px;
+  margin: 20px 0;
+}
+.cm-copy-install input {
+  font-size: 12px !important;
+}
+.cm-instruction summary {
+  cursor: pointer;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+@media (max-width: 900px) {
+  .cm-topbar-tools > .cm-sync {
+    display: none;
+  }
+}
+@media (max-width: 600px) {
+  .cm-install-topbar {
+    font-size: 10px;
+    min-height: 36px;
+    padding: 8px 9px;
+    gap: 5px;
+  }
+  .cm-phone-card {
+    grid-column: 1;
+    order: -1;
+  }
+  .cm-phone-card h2 {
+    font-size: 20px;
+  }
+  .cm-phone-card .cm-kicker {
+    font-size: 7px;
+  }
+  .cm-phone-card-heading {
+    gap: 12px;
+  }
+  .cm-notification-status p {
+    font-size: 11px;
+  }
+  .cm-booking-alert {
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 15px;
+  }
+  .cm-booking-alert > div {
+    flex: 1;
+  }
+  .cm-booking-alert > button:not(.cm-icon-button) {
+    margin-left: 30px;
+  }
+  .cm-copy-install {
+    padding: 14px;
+  }
+}
+.cm-android-instructions strong{color:#294c3d;font-weight:600;}
+
+.cm-booking-alert{position:sticky;top:86px;z-index:15;box-shadow:0 8px 24px #203f3410;}
+@media(max-width:900px){.cm-booking-alert{top:76px;}}
+@media(max-width:600px){.cm-booking-alert{top:72px;}}

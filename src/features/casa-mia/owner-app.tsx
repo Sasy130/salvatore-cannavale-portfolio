@@ -2,6 +2,8 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   ArrowDownLeft,
+  ArrowDownToLine,
+  Bell,
   ArrowRight,
   ArrowUpRight,
   CalendarDays,
@@ -506,7 +508,7 @@ function SettingsPanel({
 }
 export function OwnerApp() {
   const owner = useOwner();
-  useInstallCapture();
+  const installation = useInstallCapture();
   const [tab, setTab] = useState<Tab>("overview"),
     [editor, setEditor] = useState<EditorDraft | null>(null),
     [detailId, setDetailId] = useState(""),
@@ -538,7 +540,9 @@ export function OwnerApp() {
   }, [tab, owner.mode]);
   useEffect(() => {
     if (owner.mounted) {
-      const view = new URLSearchParams(location.search).get("view");
+      const query = new URLSearchParams(location.search);
+      if (query.get("install") === "1") setInstall(true);
+      const view = query.get("view");
       if (NAV.some((n) => n.id === view)) setTab(view as Tab);
     }
   }, [owner.mounted]);
@@ -840,6 +844,16 @@ export function OwnerApp() {
                     ? "Collegato"
                     : "Offline"}
             </span>
+            {!installation.installed && (
+              <button
+                className="cm-install-topbar"
+                onClick={() => setInstall(true)}
+                aria-label="Installa app"
+              >
+                <ArrowDownToLine size={16} />
+                <span>Installa app</span>
+              </button>
+            )}
             <button
               className="cm-icon-button"
               disabled={owner.busy || !owner.online}
@@ -889,6 +903,45 @@ export function OwnerApp() {
               Dettagli <ArrowUpRight size={14} />
             </button>
           </div>
+          {owner.bookingAlerts.length > 0 && (
+            <div className="cm-booking-alert" role="status" aria-live="polite">
+              <Bell size={21} />
+              <div>
+                <strong>
+                  {owner.bookingAlerts.length === 1
+                    ? "Nuova prenotazione dal sito"
+                    : owner.bookingAlerts.length +
+                      " nuove prenotazioni dal sito"}
+                </strong>
+                <p>
+                  {demo
+                    ? "Avviso della demo di questo browser."
+                    : "Ricevuta mentre l’app è aperta."}
+                </p>
+              </div>
+              <button
+                onClick={() => {
+                  navigate("reservations");
+                  setStatus("confirmed");
+                  setChannel("all");
+                  setSearch("");
+                  setFrom("");
+                  setTo("");
+                  owner.clearBookingAlerts();
+                }}
+              >
+                Vedi prenotazioni
+                <ArrowRight size={16} />
+              </button>
+              <button
+                className="cm-icon-button"
+                aria-label="Segna avvisi come letti"
+                onClick={owner.clearBookingAlerts}
+              >
+                <X size={16} />
+              </button>
+            </div>
+          )}
           {(!owner.online || owner.stale) && (
             <div className="cm-stale-banner" role="alert">
               <TriangleAlert size={18} />
@@ -1114,67 +1167,53 @@ export function OwnerApp() {
                     </div>
                   )}
                 </section>
-                <section className="cm-panel cm-small-calendar">
-                  <div className="cm-panel-heading">
+                <section
+                  className="cm-panel cm-phone-card"
+                  aria-label="App e avvisi"
+                >
+                  <div className="cm-phone-card-heading">
+                    <span className="cm-phone-logo" aria-hidden="true">
+                      cm
+                    </span>
                     <div>
-                      <span className="cm-kicker">A COLPO D’OCCHIO</span>
-                      <h2>{monthLabel(currentMonth)}</h2>
+                      <span className="cm-kicker">CASA MIA / ANDROID</span>
+                      <h2>
+                        {installation.installed
+                          ? "La tua app è aperta."
+                          : "Portala sul tuo telefono."}
+                      </h2>
                     </div>
-                    <button
-                      className="cm-text-button"
-                      onClick={() => navigate("calendar")}
-                    >
-                      Apri calendario <ArrowUpRight size={15} />
-                    </button>
                   </div>
-                  <div className="cm-weekdays">
-                    {["L", "M", "M", "G", "V", "S", "D"].map((v, i) => (
-                      <span key={i}>{v}</span>
-                    ))}
-                  </div>
-                  <div className="cm-mini-grid">
-                    {Array.from(
-                      {
-                        length:
-                          (new Date(currentMonth + "T12:00Z").getUTCDay() + 6) %
-                          7,
-                      },
-                      (_, i) => (
-                        <span key={"x" + i} />
-                      ),
-                    )}
-                    {dateRange(currentMonth, monthEnd(currentMonth), 31).map(
-                      (d) => {
-                        const b = bookings.find(
-                          (b) =>
-                            isActive(b) && b.checkin <= d && b.checkout > d,
-                        );
-                        return (
-                          <button
-                            key={d}
-                            className={
-                              (b?.status || "") + (d === today ? " today" : "")
-                            }
-                            onClick={() => {
-                              setMonth(currentMonth);
-                              setRange({ start: d, end: addDays(d, 1) });
-                              navigate("calendar");
-                              setRange({ start: d, end: addDays(d, 1) });
-                            }}
-                            aria-label={
-                              day(d) + ": " + (b?.name || "disponibile")
-                            }
-                          >
-                            {Number(d.slice(-2))}
-                          </button>
-                        );
-                      },
-                    )}
-                  </div>
-                  <div className="cm-calendar-legend">
-                    <span className="confirmed">Prenotata</span>
-
-                    <span className="blocked">Bloccata</span>
+                  <p>
+                    Apri la gestione dalla schermata Home, senza cercare ogni
+                    volta il sito.
+                  </p>
+                  {!installation.installed ? (
+                    <Primary onClick={() => setInstall(true)}>
+                      <ArrowDownToLine size={19} />
+                      Installa sul mio telefono
+                      <ArrowUpRight size={17} />
+                    </Primary>
+                  ) : (
+                    <span className="cm-installed-label">
+                      <CheckCircle2 size={17} />
+                      Stai usando l’app installata
+                    </span>
+                  )}
+                  <div className="cm-notification-status">
+                    <Bell size={19} />
+                    <div>
+                      <b>Quando arriva una prenotazione?</b>
+                      <p>
+                        {demo
+                          ? "Nella demo, un avviso compare quando prenoti dal sito nello stesso browser e l’app è aperta."
+                          : "Con l’app aperta compare un avviso al prossimo aggiornamento, entro circa 30 secondi se il servizio è raggiungibile."}
+                      </p>
+                      <small>
+                        Notifiche push a telefono bloccato: non ancora attive.
+                        Installare l’app non le abilita.
+                      </small>
+                    </div>
                   </div>
                 </section>
                 <section className="cm-panel cm-upcoming">

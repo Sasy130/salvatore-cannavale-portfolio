@@ -13,15 +13,34 @@ type InstallEvent = Event & {
 };
 let pending: InstallEvent | null = null;
 export function useInstallCapture() {
+  const [installed, setInstalled] = useState(false);
   useEffect(() => {
+    const display = matchMedia("(display-mode: standalone)");
+    const check = () =>
+      setInstalled(
+        display.matches ||
+          !!(navigator as Navigator & { standalone?: boolean }).standalone,
+      );
+    const done = () => {
+      pending = null;
+      setInstalled(true);
+    };
+    check();
+    display.addEventListener("change", check);
+    addEventListener("appinstalled", done);
     const capture = (event: Event) => {
       event.preventDefault();
       pending = event as InstallEvent;
       dispatchEvent(new Event("casa-install-ready"));
     };
     addEventListener("beforeinstallprompt", capture);
-    return () => removeEventListener("beforeinstallprompt", capture);
+    return () => {
+      removeEventListener("beforeinstallprompt", capture);
+      display.removeEventListener("change", check);
+      removeEventListener("appinstalled", done);
+    };
   }, []);
+  return { installed };
 }
 export function InstallPanel({ onClose }: { onClose: () => void }) {
   const [ready, setReady] = useState(!!pending),
@@ -94,27 +113,70 @@ export function InstallPanel({ onClose }: { onClose: () => void }) {
               Installa su questo dispositivo
             </Primary>
           )}
-          <div className="cm-instruction">
+          <div className="cm-instruction cm-android-instructions">
             <b>
-              <Share2 size={15} /> iPhone / Safari
+              <Smartphone size={18} /> Sul tuo Android
             </b>
+            <ol>
+              <li>
+                Apri questa pagina in <strong>Google Chrome</strong>.
+              </li>
+              <li>
+                Tocca il menù <strong>⋮</strong> in alto a destra.
+              </li>
+              <li>
+                Scegli <strong>Installa app</strong> oppure{" "}
+                <strong>Aggiungi a schermata Home</strong>, poi conferma.
+              </li>
+            </ol>
             <p>
-              Tocca <strong>Condividi</strong>, poi{" "}
-              <strong>Aggiungi alla schermata Home</strong> e{" "}
-              <strong>Aggiungi</strong>. Se la voce non appare, apri prima
-              questa pagina in Safari.
+              Se stai leggendo da ChatGPT, WhatsApp o un altro browser interno,
+              usa “Apri in Chrome” dal suo menù. Non serve scaricare un APK.
             </p>
           </div>
-          <div className="cm-instruction">
-            <b>
-              <Smartphone size={15} /> Android / Chrome
-            </b>
-            <p>
-              Apri il menù <strong>⋮</strong> e scegli{" "}
-              <strong>Installa app</strong> oppure{" "}
-              <strong>Aggiungi a schermata Home</strong>.
-            </p>
+          <div className="cm-copy-install">
+            <label>
+              Link da aprire in Chrome
+              <input
+                readOnly
+                value={
+                  typeof location !== "undefined"
+                    ? location.origin + "/casa-mia/gestione?install=1"
+                    : ""
+                }
+                onFocus={(e) => e.currentTarget.select()}
+              />
+            </label>
+            <button
+              className="cm-button cm-button-secondary"
+              onClick={async () => {
+                try {
+                  await navigator.clipboard.writeText(
+                    location.origin + "/casa-mia/gestione?install=1",
+                  );
+                  setMessage("Link copiato. Aprilo in Chrome sul telefono.");
+                } catch {
+                  setMessage(
+                    "Tieni premuto sul link e copialo, poi aprilo in Chrome.",
+                  );
+                }
+              }}
+            >
+              Copia link dell’app
+            </button>
           </div>
+          <details className="cm-instruction">
+            <summary>
+              <Share2 size={15} /> Istruzioni per iPhone
+            </summary>
+            <p>
+              In Safari:{" "}
+              <strong>
+                Condividi → Aggiungi alla schermata Home → Aggiungi
+              </strong>
+              .
+            </p>
+          </details>
         </>
       )}
       {message && (
@@ -122,6 +184,11 @@ export function InstallPanel({ onClose }: { onClose: () => void }) {
           {message}
         </p>
       )}
+      <p className="cm-help">
+        Le notifiche push a telefono bloccato non sono ancora attive. Con l’app
+        aperta puoi ricevere gli avvisi delle nuove prenotazioni; nella demo
+        valgono solo per questo browser.
+      </p>
       <p className="cm-help">
         Per lavorare con dati condivisi serve internet. La demo si riapre sullo
         stesso dispositivo; su iPhone lo spazio dell’app installata può essere
