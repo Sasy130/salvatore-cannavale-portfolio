@@ -8,7 +8,7 @@ const output=resolve('outputs/casa-mia-v2');await mkdir(output,{recursive:true})
 const browser=await chromium.launch({headless:true,...(process.env.CASA_MIA_TEST_BROWSER?{executablePath:process.env.CASA_MIA_TEST_BROWSER}:{})});
 const errors=[],audits=[];let page;
 async function audit(name,current){const result=await new AxeBuilder({page:current}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();audits.push({name,violations:result.violations.map(v=>({id:v.id,impact:v.impact,nodes:v.nodes.map(n=>({target:n.target,summary:n.failureSummary}))}))})}
-async function enter(current){await current.goto(origin+'/casa-mia/gestione');await current.getByRole('button',{name:'Apri la demo interattiva'}).click();await expect(current.getByRole('heading',{name:'Ogni soggiorno, sotto controllo.'})).toBeVisible();}
+async function enter(current){await current.goto(origin+'/casa-mia/gestione');await current.getByRole('button',{name:'Apri la demo interattiva'}).click();await expect(current.getByRole('heading',{name:'Ogni soggiorno, sotto controllo.'})).toBeVisible();await expect.poll(()=>current.evaluate(()=>scrollY)).toBe(0);}
 try{
  const context=await browser.newContext({viewport:{width:1440,height:1000},timezoneId:'Europe/Rome'});page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));await enter(page);await page.screenshot({path:resolve(output,'desktop-overview.png'),fullPage:true});await audit('desktop-overview',page);
  await page.getByRole('button',{name:'Calendario',exact:true}).click();await page.screenshot({path:resolve(output,'desktop-calendar.png'),fullPage:true});

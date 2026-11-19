@@ -553,6 +553,9 @@ export function OwnerApp() {
       setTab("overview");
     }
   }, [owner.mode]);
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [tab, owner.mode]);
   const data = owner.data,
     bookings = data?.bookings || [],
     payments = data?.payments || [],
