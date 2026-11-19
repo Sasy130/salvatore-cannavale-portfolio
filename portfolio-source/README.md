@@ -1,3 +1,11 @@
+## Revisione superficie WebGL — 19 novembre 2026
+
+Apertura fotografica con progetti originali, hero VÉRA e marchio senza asterischi. Rimossi scenografia tropicale generata e bagliori dalla nuova apertura. Nuovo WarpPreview.tsx: singola superficie WebGL deformata con GLSL, passaggi tra texture allo scroll e trascinamento con ripristino. Caricamento differito, DPR limitato, sospensione fuori vista, fallback HTML e movimento ridotto. Tutti i 13 progetti, demo e backend esistenti conservati.
+
+Build statica con /one-man e cinque test Chromium superati, incluso renderer WebGL, touch CDP, menu, iframe controllato, audit axe, intro/skip/replay, cinque viewport e WebGL negato. Safari e dispositivi fisici non collaudati. Memoria sessione one-man-cinema-surface; ?intro=1 per rivedere l’apertura. Sorgente aggiornato in one-man-source.zip.
+
+---
+
 ## Aggiornamento neon tropicale — 19 novembre 2026
 
 Nuova scena originale in /one-man/assets/one-man-neon.webp (circa 208 KiB), condivisa da intro e hero. Tipografia inclinata, rosa/turchese, dettagli Art Déco e palme; cornici delle anteprime aggiornate. Tutti i 13 progetti correnti sono preservati, incluso il progetto ospitalità aggiunto successivamente, con iframe relativi allo stesso dominio. Gli altri siti e backend non vengono modificati.
