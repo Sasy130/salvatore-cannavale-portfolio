@@ -13,7 +13,9 @@
     "test:dimora": "node --test demo-sources/dimora-mia/tests/*.test.mjs && node scripts/check-dimora-local.mjs",
     "test:casa-mia": "node --test tests/casa-mia/*.test.mjs",
     "db:casa-mia": "node scripts/casa-mia/migrate.mjs",
-    "test:casa-mia:ui": "node scripts/casa-mia/test-ui.mjs"
+    "test:casa-mia:ui": "node scripts/casa-mia/test-ui.mjs",
+    "check:casa-mia": "node scripts/casa-mia/check.mjs",
+    "keys:casa-mia:push": "node scripts/casa-mia/push-keys.mjs"
   },
   "dependencies": {
     "@fontsource-variable/manrope": "latest",
@@ -24,7 +26,8 @@
     "next": "latest",
     "pg": "^8.23.1",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "web-push": "^3.6.7"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",

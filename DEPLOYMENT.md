@@ -119,3 +119,7 @@ Migrazione `004_receipts_outbox.sql`, ricevute PDF non fiscali da webhook Stripe
 ## CASA MIA — installazione visibile e avvisi in primo piano
 
 Oggi senza mini calendario duplicato; pulsante Installa app nella barra mobile e scheda dedicata, link `/casa-mia/gestione?install=1` e istruzioni Android/Chrome con copia indirizzo. Avviso nell’interfaccia per nuovi soggiorni diretti confermati, con lettura e deduplicazione per sessione. Nessuna migrazione aggiuntiva, nessun servizio push o permesso OS attivato; API ancora schema v4 e configurazione reale disabilitata.
+
+## CASA MIA — predisposizione Web Push v5
+
+Nuove tabelle `push_devices`/`push_outbox`, sottoscrizioni proprietario autenticate, VAPID server, worker protetto `/api/casa-mia/jobs/push` e service worker per notifiche generiche/click interno all’app. Migrazione aggiuntiva 005, schema minimo API v5. Variabili e istruzioni in `CASA-MIA-ATTIVAZIONE.md`. Database, VAPID e scheduler ancora da configurare; la demo offre soltanto una prova locale esplicita. Non attivare il flag condiviso prima della migrazione e del collaudo con i servizi reali. Nessun segreto o database esterno creato durante lo sviluppo.

@@ -29,6 +29,7 @@ import {
   X,
   type LucideIcon,
 } from "lucide-react";
+import { NotificationsPanel } from "./notifications";
 import { InstallPanel, useInstallCapture } from "./install";
 import { useOwner } from "./use-owner";
 import {
@@ -188,6 +189,7 @@ function SettingsPanel({
   onReset,
   demo,
   onInstall,
+  onNotifications,
 }: {
   data: OwnerData;
   busy: boolean;
@@ -195,6 +197,7 @@ function SettingsPanel({
   onReset: () => void;
   demo: boolean;
   onInstall: () => void;
+  onNotifications: () => void;
 }) {
   const [error, setError] = useState(""),
     [success, setSuccess] = useState(false),
@@ -419,6 +422,13 @@ function SettingsPanel({
               <span>Email</span>
               <b>{data.emailReady ? "Configurate" : "Da configurare"}</b>
             </div>
+            <button
+              className="cm-button cm-button-secondary"
+              onClick={onNotifications}
+            >
+              <Bell size={17} />
+              Gestisci notifiche
+            </button>
             <p className="cm-help">
               Le etichette Airbnb e Booking.com identificano inserimenti
               manuali. Non sono una sincronizzazione con i portali.
@@ -517,6 +527,7 @@ export function OwnerApp() {
       kind: "receipt" | "refund";
     } | null>(null),
     [install, setInstall] = useState(false),
+    [notifications, setNotifications] = useState(false),
     [search, setSearch] = useState(""),
     [status, setStatus] = useState("active"),
     [channel, setChannel] = useState("all"),
@@ -541,7 +552,8 @@ export function OwnerApp() {
   useEffect(() => {
     if (owner.mounted) {
       const query = new URLSearchParams(location.search);
-      if (query.get("install") === "1") setInstall(true);
+      if (query.get("notifications") === "1") setNotifications(true);
+      else if (query.get("install") === "1") setInstall(true);
       const view = query.get("view");
       if (NAV.some((n) => n.id === view)) setTab(view as Tab);
     }
@@ -1200,6 +1212,13 @@ export function OwnerApp() {
                       Stai usando l’app installata
                     </span>
                   )}
+                  <button
+                    className="cm-button cm-button-secondary"
+                    onClick={() => setNotifications(true)}
+                  >
+                    <Bell size={17} />
+                    Gestisci notifiche
+                  </button>
                   <div className="cm-notification-status">
                     <Bell size={19} />
                     <div>
@@ -1210,8 +1229,8 @@ export function OwnerApp() {
                           : "Con l’app aperta compare un avviso al prossimo aggiornamento, entro circa 30 secondi se il servizio è raggiungibile."}
                       </p>
                       <small>
-                        Notifiche push a telefono bloccato: non ancora attive.
-                        Installare l’app non le abilita.
+                        Per gli avvisi con app chiusa apri Gestisci notifiche.
+                        Servono consenso e collegamento al server.
                       </small>
                     </div>
                   </div>
@@ -1757,6 +1776,7 @@ export function OwnerApp() {
               onReset={owner.reset}
               demo={demo}
               onInstall={() => setInstall(true)}
+              onNotifications={() => setNotifications(true)}
             />
           )}
           <footer className="cm-page-footer">
@@ -1857,6 +1877,12 @@ export function OwnerApp() {
         />
       )}
       {install && <InstallPanel onClose={() => setInstall(false)} />}
+      {notifications && (
+        <NotificationsPanel
+          demo={demo}
+          onClose={() => setNotifications(false)}
+        />
+      )}
     </div>
   );
 }

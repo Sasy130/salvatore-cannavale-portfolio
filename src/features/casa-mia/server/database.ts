@@ -25,5 +25,9 @@ export function bookingEnvironment() {
     RESEND_API_KEY: process.env.CASA_MIA_RESEND_API_KEY,
     MAIL_FROM: process.env.CASA_MIA_MAIL_FROM,
     MAIL_JOB_SECRET: process.env.CASA_MIA_MAIL_JOB_SECRET,
+    PUSH_PUBLIC_KEY:process.env.CASA_MIA_PUSH_PUBLIC_KEY,
+    PUSH_PRIVATE_KEY:process.env.CASA_MIA_PUSH_PRIVATE_KEY,
+    PUSH_SUBJECT:process.env.CASA_MIA_PUSH_SUBJECT,
+    PUSH_JOB_SECRET:process.env.CASA_MIA_PUSH_JOB_SECRET,
   };
 }

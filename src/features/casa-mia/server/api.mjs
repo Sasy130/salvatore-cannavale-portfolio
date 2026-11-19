@@ -1,3 +1,9 @@
+import {
+  bookingPushStatements,
+  deliverPush,
+  handlePushAdmin,
+  disablePushEndpoint,
+} from "./push.mjs";
 import { mailJob, queueConfirmation, deliverEmails } from "./outbox.mjs";
 import { receiptPDF } from "./receipt.mjs";
 import { handleOwnerOperation, activity } from "./owner-operations.mjs";
@@ -208,6 +214,18 @@ export async function handleAPI(req, env) {
       503,
     );
   try {
+    if (p === "jobs/push") {
+      const token = req.headers.get("authorization") || "";
+      if (
+        !env.PUSH_JOB_SECRET ||
+        env.PUSH_JOB_SECRET.length < 32 ||
+        !(await same(token, "Bearer " + env.PUSH_JOB_SECRET))
+      )
+        return json({ error: "Accesso non consentito." }, 401);
+      if (!["GET", "POST"].includes(req.method))
+        return json({ error: "Metodo non consentito." }, 405);
+      return json(await deliverPush(env, { limit: 3 }));
+    }
     if (p === "jobs/email") {
       const token = req.headers.get("authorization") || "";
       if (
@@ -309,6 +327,8 @@ export async function handleAPI(req, env) {
             )
             .run();
           await mailJob(tx, snapshot, "receipt", receipt).run();
+          for (const statement of bookingPushStatements(tx, env, snapshot))
+            await statement.run();
           await activity(tx, b.id, "payment_verified", {
             receiptId: receipt.id,
             amount: b.due,
@@ -318,7 +338,10 @@ export async function handleAPI(req, env) {
           return b.id;
         });
       }
-      if (bookingId) await deliverEmails(env, { bookingId, limit: 1 });
+      if (bookingId) {
+        await deliverEmails(env, { bookingId, limit: 1 });
+        await deliverPush(env, { bookingId, limit: 2 });
+      }
       return json({ received: true });
     }
     if (p === "availability" && req.method === "GET") {
@@ -525,7 +548,9 @@ export async function handleAPI(req, env) {
               .prepare("INSERT INTO nights (date,booking_id) VALUES (?,?)")
               .bind(d, b.id),
           ),
-          ...(!online ? [mailJob(db, b)] : []),
+          ...(!online
+            ? [mailJob(db, b), ...bookingPushStatements(db, env, b)]
+            : []),
         ]);
       } catch {
         return json(
@@ -538,6 +563,7 @@ export async function handleAPI(req, env) {
       }
       if (online) return json(await openCheckout(env, b, url.origin));
       const emailSent = await mail(env, b);
+      await deliverPush(env, { bookingId: b.id, limit: 2 });
       return json(
         {
           id: b.id,
@@ -596,6 +622,8 @@ export async function handleAPI(req, env) {
           ));
       if (!session)
         return json({ error: "Accedi al pannello proprietario." }, 401);
+      if (p === "admin/push" || p.startsWith("admin/push/"))
+        return handlePushAdmin(p, req, env);
       if (p.startsWith("admin/receipts/") && req.method === "GET") {
         const receipt = await one(
           db,
@@ -664,6 +692,8 @@ export async function handleAPI(req, env) {
         });
       }
       if (p === "admin/logout" && req.method === "POST") {
+        const input = await body(req);
+        await disablePushEndpoint(db, input.pushEndpoint);
         await db
           .prepare("DELETE FROM sessions WHERE token=?")
           .bind(await sessionKey(token))

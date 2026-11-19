@@ -1,5 +1,6 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { browserPushSubscription, PUSH_DEVICE_KEY } from "./browser-push";
 import type {
   OwnerData,
   Service,
@@ -222,7 +223,14 @@ export function useOwner() {
     setNotice("Demo locale aperta. Usa solo dati inventati.");
   }
   async function logout() {
-    if (modeRef.current === "live") await ownerAPI("admin/logout", {});
+    if (modeRef.current === "live") {
+      const sub = await browserPushSubscription().catch(() => null);
+      await ownerAPI("admin/logout", { pushEndpoint: sub?.endpoint });
+      if (sub) await sub.unsubscribe().catch(() => false);
+      try {
+        localStorage.removeItem(PUSH_DEVICE_KEY);
+      } catch {}
+    }
     leave();
     setNotice("Sessione chiusa.");
   }

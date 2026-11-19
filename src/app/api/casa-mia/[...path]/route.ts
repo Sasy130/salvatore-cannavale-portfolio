@@ -12,7 +12,7 @@ async function dispatch(request: Request) {
   if (requested && configured) {
     try {
       const result = await env
-        .DB!.prepare("SELECT version FROM schema_migrations WHERE version=4")
+        .DB!.prepare("SELECT version FROM schema_migrations WHERE version=5")
         .all();
       ready = result.results.length === 1;
     } catch {}
@@ -25,7 +25,7 @@ async function dispatch(request: Request) {
         unavailable: requested && !ready,
         paymentMode: "test",
         app: "CASA MIA",
-        schemaVersion: 4,
+        schemaVersion: 5,
       },
       { headers: { "Cache-Control": "no-store" } },
     );

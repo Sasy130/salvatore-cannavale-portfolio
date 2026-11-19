@@ -291,6 +291,45 @@ try {
     ),
   ).toBe(true);
   await audit("mobile-overview", page);
+  await page.evaluate(()=>{window.__permissionRequests=0;const original=Notification.requestPermission.bind(Notification);Notification.requestPermission=(...args)=>{window.__permissionRequests++;return original(...args);};});
+  await page
+    .getByRole("button", { name: "Gestisci notifiche", exact: true })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Gli avvisi, sul tuo telefono." }),
+  ).toBeVisible();
+  expect(await page.evaluate(()=>window.__permissionRequests)).toBe(0);
+  await expect(
+    page.getByText("Non collegati nella demo", { exact: true }),
+  ).toBeVisible();
+  await mobile.grantPermissions(["notifications"], { origin });
+  await page.evaluate(() => {
+    ServiceWorkerRegistration.prototype.showNotification = async function (
+      title,
+      options,
+    ) {
+      window.__notificationTest = { title, options };
+    };
+  });
+  await page
+    .getByRole("button", { name: "Prova notifica locale", exact: true })
+    .click();
+  await expect(
+    page.getByRole("status").filter({ hasText: "Notifica locale richiesta" }),
+  ).toBeVisible();
+  expect(await page.evaluate(() => window.__notificationTest.title)).toBe(
+    "CASA MIA · prova locale",
+  );
+  await expect(
+    page.getByText("Non collegati nella demo", { exact: true }),
+  ).toBeVisible();
+  await page.screenshot({
+    path: resolve(output, "mobile-notifications.png"),
+    fullPage: true,
+  });
+  await audit("mobile-notifications-demo", page);
+  await page.keyboard.press("Escape");
+
   await expect(page.locator(".cm-mini-grid")).toHaveCount(0);
   await page.getByRole("button", { name: "Installa app", exact: true }).click();
   await expect(
@@ -411,6 +450,11 @@ try {
   ).toBeVisible();
   await expect(page.locator(".cm-booking-alert")).toHaveCount(0);
   await guest.close();
+  await page.goto(origin + "/casa-mia/gestione?notifications=1");
+  await expect(
+    page.getByRole("heading", { name: "Gli avvisi, sul tuo telefono." }),
+  ).toBeVisible();
+  await page.keyboard.press("Escape");
   await page.goto(origin + "/casa-mia/gestione?install=1");
   await expect(
     page.getByRole("heading", { name: "CASA MIA, sul tuo telefono." }),

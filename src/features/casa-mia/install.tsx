@@ -185,9 +185,7 @@ export function InstallPanel({ onClose }: { onClose: () => void }) {
         </p>
       )}
       <p className="cm-help">
-        Le notifiche push a telefono bloccato non sono ancora attive. Con l’app
-        aperta puoi ricevere gli avvisi delle nuove prenotazioni; nella demo
-        valgono solo per questo browser.
+        Dopo l’installazione puoi gestire gli avvisi nella schermata Notifiche. Il consenso del telefono e il collegamento al server sono separati dall’installazione.
       </p>
       <p className="cm-help">
         Per lavorare con dati condivisi serve internet. La demo si riapre sullo
