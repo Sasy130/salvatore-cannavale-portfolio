@@ -1,3 +1,13 @@
+## Tensione — ridisegno editoriale completo, 20 novembre 2026
+
+Nuova direzione originale dopo il riferimento ad Awwwards: carta chiara, nero e vermiglio, tipografia monumentale e opera generativa. Sistema CSS riscritto per intro, hero, ingresso, galleria, archivio, menu, schede, biografia, contatti e mobile. Rimossa l'estetica neon. Theme color e schema colore aggiornati.
+
+BrandArtwork genera 64 tracciati SVG: il pulsante Riscrivi la forma modifica realmente la geometria tramite GSAP ed è utilizzabile con touch e tastiera. Puntatore e reduced motion gestiti. È grafica vettoriale, non una simulazione fisica. Motore Next/React, renderer delle anteprime, 13 progetti, miniature, demo e backend originali conservati.
+
+TypeScript, lint, build statica con /one-man e nove scenari Chromium superati. Nuovo test touch/tastiera sul cambiamento dei tracciati; controllo dedicato della maschera d'ingresso. Audit axe negli scenari controllati, cinque viewport, fallback WebGL e intro/replay inclusi. Schermate desktop e mobile ispezionate. Safari e dispositivi fisici non collaudati. Sorgente completo aggiornato in one-man-source.zip.
+
+---
+
 ## Entrata in scena — 20 novembre 2026
 
 Nuova apertura: linea di luce, ingresso prospettico di ONE MAN e apertura di due sipari sulla homepage. Rimossa la composizione illustrata ad anello. Hero viola scuro con rosa e turchese, tipografia CREA / OSA, cornici prospettiche e taglio luminoso. Effetti realizzati con HTML/CSS e GSAP, senza filmati né nuovi canvas. Nessuna copertina di progetto in intro, hero o ingresso. Progetti, miniature, schede e demo conservati.
