@@ -1,3 +1,11 @@
+## Anteprima del marchio — 20 novembre 2026
+
+Rimossi copertine e nomi dei lavori da hero, intro e ingresso. Nuovo BrandArtwork.tsx: composizione SVG originale con sole rosa, gradiente turchese e anello cromato vettoriale. Tre varianti nella sequenza iniziale, oscillazione CSS disattivata con reduced motion e animazioni GSAP adattate al disegno. L'anello è grafica vettoriale, non una simulazione WebGL. I progetti iniziano nella sezione Progetti; tutti i 13 lavori, galleria, miniature, iframe e backend conservati.
+
+TypeScript, lint, build con /one-man e sette test Chromium superati, comprese nuove asserzioni che intro, hero e ingresso non mostrino immagini dei progetti. Schermata mobile ispezionata. Safari e dispositivi fisici non collaudati. Sorgente aggiornato in one-man-source.zip.
+
+---
+
 ## Studio delle anteprime — 20 novembre 2026
 
 Nuova composizione: copertina completa affiancata da titolo, descrizione originale e CTA su desktop; immagine e informazioni separate su telefono. Selettore di 13 miniature con stato attivo e scorrimento locale automatico. Il movimento laterale dei pannelli è sostituito da rivelazione verticale GLSL fra due superfici sovrapposte, con profondità contenuta e copertine adattate senza ritaglio. Conservati ingresso solare, hero, indice, schede, demo, navigazione touch e fallback.
