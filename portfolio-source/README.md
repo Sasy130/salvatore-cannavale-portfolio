@@ -1,3 +1,13 @@
+## Vice Cut — 20 novembre 2026
+
+Nuova homepage VicePortfolio: fotografia locale di Miami, nome SALVATORE CANNAVALE composto da 18 lettere animate e apertura interattiva con cinque tagli rosa/turchese. Il nome si può trascinare realmente con mouse o dito; pulsante e tastiera alternativi. Skip, Escape, replay, reduced motion e timeout all'uscita. L'animazione è HTML/CSS/GSAP, non un filmato. Fonte e licenza della foto in docs/FOTOGRAFIA-VICE.md e nel footer.
+
+Rimossa dalla homepage la galleria con pannello fisso: 13 lavori in una parete continua di immagini, grande immagine alternata a due mezze pagine su desktop, colonna su mobile. Scroll nativo con maschere, parallasse e tipografia; menu fisso e indice testuale. Schede e demo originali riutilizzate. Copia email reale con gestione del fallimento. Precedenti componenti conservati nel sorgente; nessuna modifica ai backend o alle altre demo.
+
+TypeScript, lint, build statica /one-man e sette scenari Chromium superati: intro/replay, progetti/demo/focus, menu e touch, reduced motion/audit axe, cinque viewport e asset, fallback senza WebGL e clipboard, trascinamento CDP sul nome. Apertura e mobile verificati nuovamente dopo il controllo delle icone. Telefoni fisici e Safari non collaudati. Sorgente aggiornato in one-man-source.zip.
+
+---
+
 ## Tensione — ridisegno editoriale completo, 20 novembre 2026
 
 Nuova direzione originale dopo il riferimento ad Awwwards: carta chiara, nero e vermiglio, tipografia monumentale e opera generativa. Sistema CSS riscritto per intro, hero, ingresso, galleria, archivio, menu, schede, biografia, contatti e mobile. Rimossa l'estetica neon. Theme color e schema colore aggiornati.
