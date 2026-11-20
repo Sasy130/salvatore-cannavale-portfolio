@@ -1,3 +1,13 @@
+## Apertura automatica e sfondo originale — 20 novembre 2026
+
+Modifica circoscritta all'intro e allo sfondo della hero. Nuova opera generata appositamente per ONE MAN: one-man-vice-art.webp, 210860 byte, rosa/magenta/turchese e texture pittoriche. La precedente fotografia non è più utilizzata. Il resto del sito, la parete dei 13 lavori, le demo e il backend sono conservati.
+
+L'apertura non richiede più trascinamenti: parte automaticamente, oppure con un tocco sullo schermo o Entra subito. Nome animato, tre tagli diagonali, progresso visibile, skip, Escape, replay, reduced motion e timer di sicurezza. L'overlay diventa visibile solo quando il codice interattivo è pronto; con script bloccati il sito resta accessibile. Memoria one-man-vice-art; ?intro=1 forza il replay.
+
+TypeScript, lint e build /one-man superati. Otto scenari Chromium superati complessivamente, incluso automatico, tocco immediato, pulsante, skip/replay, script bloccati e regressioni del sito. Il test del pulsante è stato ripetuto dopo l'adattamento all'apertura automatica. Schermata mobile ispezionata. Safari e dispositivi fisici non collaudati. Sorgente aggiornato in one-man-source.zip.
+
+---
+
 ## Vice Cut — 20 novembre 2026
 
 Nuova homepage VicePortfolio: fotografia locale di Miami, nome SALVATORE CANNAVALE composto da 18 lettere animate e apertura interattiva con cinque tagli rosa/turchese. Il nome si può trascinare realmente con mouse o dito; pulsante e tastiera alternativi. Skip, Escape, replay, reduced motion e timeout all'uscita. L'animazione è HTML/CSS/GSAP, non un filmato. Fonte e licenza della foto in docs/FOTOGRAFIA-VICE.md e nel footer.

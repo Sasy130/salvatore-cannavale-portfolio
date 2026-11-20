@@ -1,6 +1,6 @@
-:HL["/one-man/_next/static/chunks/3on_jo5lj3-87.css","style"]
+:HL["/one-man/_next/static/chunks/0ezfxhccvtoc4.css","style"]
 :HL["/one-man/_next/static/chunks/25c4w8-ozl9-y.css","style"]
 3:[["children",{"s":"__PAGE__","h":160}]]
 2:[["children",{"s":{"n":"slug","t":"d","k":"campo-rosso","s":[]},"h":65632,"c":"$Q3"}]]
 1:[["children",{"s":"progetti","h":131168,"c":"$Q2"}]]
-0:{"b":"n5Ej0QQzYYHjFUkNQFndU","t":{"t":{"s":"","h":131152,"c":"$Q1"}}}
+0:{"b":"coICG-y52AFoEnfuJE6E7","t":{"t":{"s":"","h":131152,"c":"$Q1"}}}
