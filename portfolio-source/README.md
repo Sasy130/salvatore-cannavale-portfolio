@@ -1,3 +1,11 @@
+## Entrata in scena — 20 novembre 2026
+
+Nuova apertura: linea di luce, ingresso prospettico di ONE MAN e apertura di due sipari sulla homepage. Rimossa la composizione illustrata ad anello. Hero viola scuro con rosa e turchese, tipografia CREA / OSA, cornici prospettiche e taglio luminoso. Effetti realizzati con HTML/CSS e GSAP, senza filmati né nuovi canvas. Nessuna copertina di progetto in intro, hero o ingresso. Progetti, miniature, schede e demo conservati.
+
+TypeScript, lint, build con /one-man e otto test Chromium superati: sette di regressione e un test dell'entrata in scena con titolo, sipari e termine automatico. Skip, Escape, replay e reduced motion mantenuti. Schermate desktop/mobile ispezionate. Safari e telefoni fisici non collaudati. Sorgente aggiornato in one-man-source.zip.
+
+---
+
 ## Anteprima del marchio — 20 novembre 2026
 
 Rimossi copertine e nomi dei lavori da hero, intro e ingresso. Nuovo BrandArtwork.tsx: composizione SVG originale con sole rosa, gradiente turchese e anello cromato vettoriale. Tre varianti nella sequenza iniziale, oscillazione CSS disattivata con reduced motion e animazioni GSAP adattate al disegno. L'anello è grafica vettoriale, non una simulazione WebGL. I progetti iniziano nella sezione Progetti; tutti i 13 lavori, galleria, miniature, iframe e backend conservati.
