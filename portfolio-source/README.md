@@ -1,3 +1,11 @@
+## Direzione Costa — 20 novembre 2026
+
+Palette avorio, rosa, turchese e viola scuro ispirata all’immaginario Vice City. Hero a due colonne su desktop e blocchi in sequenza su mobile: titolo, presentazione e anteprima non si sovrappongono. Grafica tropicale SVG locale, menu chiaro, passaggio tipografico allo scroll, anteprime WebGL con curvatura più marcata e passaggi direzionali. Titoli e didascalie rimangono separati dalle immagini. I 13 progetti e le demo originali sono conservati.
+
+Build statica /one-man, TypeScript, lint e cinque test Chromium superati: navigazione, renderer, touch CDP, iframe controllato, reduced motion, axe, intro/skip/replay, fallback senza WebGL e cinque viewport. Nuovo controllo geometrico contro la sovrapposizione tra titolo e immagine della hero. Safari e telefoni fisici non collaudati. Memoria sessione one-man-cinema-coast; ?intro=1 forza l’apertura. Sorgente completo aggiornato in one-man-source.zip.
+
+---
+
 ## Revisione superficie WebGL — 19 novembre 2026
 
 Apertura fotografica con progetti originali, hero VÉRA e marchio senza asterischi. Rimossi scenografia tropicale generata e bagliori dalla nuova apertura. Nuovo WarpPreview.tsx: singola superficie WebGL deformata con GLSL, passaggi tra texture allo scroll e trascinamento con ripristino. Caricamento differito, DPR limitato, sospensione fuori vista, fallback HTML e movimento ridotto. Tutti i 13 progetti, demo e backend esistenti conservati.
