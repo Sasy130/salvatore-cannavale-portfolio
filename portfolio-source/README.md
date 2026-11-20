@@ -1,3 +1,11 @@
+## Regia dei progetti — 20 novembre 2026
+
+Hero e stile Costa conservati. Nuovo ProjectEntrance: il disegno solare condiviso con la hero si espande e apre una maschera circolare sul primo lavoro. Nuovo renderer: due pannelli tridimensionali con camera prospettica, rotazione e profondità, senza passaggio fra texture o dissolvenza. Un solo canvas, geometria condivisa, due materiali riutilizzati. Titoli HTML separati dalla scena. Comandi precedente/successivo con stato agli estremi, scroll nativo e controllo touch conservati. Vista essenziale e fallback HTML indipendenti da WebGL.
+
+TypeScript, lint, build statica con /one-man e sei scenari Chromium superati (cinque di regressione e uno dedicato a ingresso, pannelli, percorso inverso e nuovi comandi). Tutti i 13 progetti, demo e backend originali conservati. Safari e telefoni fisici non collaudati. Sorgente aggiornato in one-man-source.zip.
+
+---
+
 ## Direzione Costa — 20 novembre 2026
 
 Palette avorio, rosa, turchese e viola scuro ispirata all’immaginario Vice City. Hero a due colonne su desktop e blocchi in sequenza su mobile: titolo, presentazione e anteprima non si sovrappongono. Grafica tropicale SVG locale, menu chiaro, passaggio tipografico allo scroll, anteprime WebGL con curvatura più marcata e passaggi direzionali. Titoli e didascalie rimangono separati dalle immagini. I 13 progetti e le demo originali sono conservati.
