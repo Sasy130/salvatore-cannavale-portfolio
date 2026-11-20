@@ -1,3 +1,11 @@
+## Studio delle anteprime — 20 novembre 2026
+
+Nuova composizione: copertina completa affiancata da titolo, descrizione originale e CTA su desktop; immagine e informazioni separate su telefono. Selettore di 13 miniature con stato attivo e scorrimento locale automatico. Il movimento laterale dei pannelli è sostituito da rivelazione verticale GLSL fra due superfici sovrapposte, con profondità contenuta e copertine adattate senza ritaglio. Conservati ingresso solare, hero, indice, schede, demo, navigazione touch e fallback.
+
+TypeScript, lint, build statica con prefisso /one-man e sette test Chromium superati (sei di regressione e un test touch del selettore e della separazione fra immagine e informazioni). Schermate desktop e mobile ispezionate. Safari e telefoni fisici non collaudati. Sorgente aggiornato in one-man-source.zip. Tutti i 13 progetti e il backend esistente conservati.
+
+---
+
 ## Regia dei progetti — 20 novembre 2026
 
 Hero e stile Costa conservati. Nuovo ProjectEntrance: il disegno solare condiviso con la hero si espande e apre una maschera circolare sul primo lavoro. Nuovo renderer: due pannelli tridimensionali con camera prospettica, rotazione e profondità, senza passaggio fra texture o dissolvenza. Un solo canvas, geometria condivisa, due materiali riutilizzati. Titoli HTML separati dalla scena. Comandi precedente/successivo con stato agli estremi, scroll nativo e controllo touch conservati. Vista essenziale e fallback HTML indipendenti da WebGL.
