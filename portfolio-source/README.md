@@ -1,3 +1,13 @@
+## Firma SC — 21 novembre 2026
+
+Modifica limitata all'apertura. Nuovo SignatureOpening.tsx: iniziali SC ritagliate con una maschera SVG su superficie color carta, con lo sfondo esistente visibile nelle lettere. Espansione della geometria e apertura circolare fino alla homepage. Nessun video o nuovo canvas. Hero, progetti, indice, biografia e contatti conservano lo stesso blocco sorgente, verificato tramite SHA-256; menu, 13 lavori, immagini, demo e backend mantenuti.
+
+Automatico, tocco, Entra subito, salto, Escape, replay, focus e timeout di sicurezza. Memoria one-man-signature; ?intro=1 forza l'apertura. Con reduced motion il replay richiesto mostra la versione statica senza animazioni. Con script bloccati l'overlay resta nascosto. Cleanup completo della timeline anche interrompendo l'uscita e riaprendo subito.
+
+TypeScript, lint, build statica /one-man e nove scenari Chromium superati. Movimento ridotto e axe ricontrollati sull'ultima build. Schermata mobile ispezionata. Safari e telefoni fisici non collaudati. Sorgente aggiornato in one-man-source.zip.
+
+---
+
 ## Apertura automatica e sfondo originale — 20 novembre 2026
 
 Modifica circoscritta all'intro e allo sfondo della hero. Nuova opera generata appositamente per ONE MAN: one-man-vice-art.webp, 210860 byte, rosa/magenta/turchese e texture pittoriche. La precedente fotografia non è più utilizzata. Il resto del sito, la parete dei 13 lavori, le demo e il backend sono conservati.
