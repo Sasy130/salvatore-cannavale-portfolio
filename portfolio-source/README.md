@@ -1,3 +1,11 @@
+# Sfondo tipografico — 21 novembre 2026
+
+Sostituito esclusivamente lo sfondo a nastri della hero con lettere vettoriali astratte, parallasse a tre livelli mouse/touch e reduced motion. Intro SC e resto del portfolio preservati. Nessuna nuova dipendenza. Documentazione: docs/SFONDO-TIPOGRAFICO.md nell’archivio sorgente.
+
+Verifiche: TypeScript, lint e build statica di produzione superati. Dieci scenari Playwright superati nella suite completa; scenario touch/scroll corretto nel simulatore e ripetuto con esito positivo (undici scenari verificati complessivamente). Inclusi cinque viewport, axe, intro/replay, menu, progetti, clipboard e fallback script/WebGL.
+
+---
+
 ## Firma SC — 21 novembre 2026
 
 Modifica limitata all'apertura. Nuovo SignatureOpening.tsx: iniziali SC ritagliate con una maschera SVG su superficie color carta, con lo sfondo esistente visibile nelle lettere. Espansione della geometria e apertura circolare fino alla homepage. Nessun video o nuovo canvas. Hero, progetti, indice, biografia e contatti conservano lo stesso blocco sorgente, verificato tramite SHA-256; menu, 13 lavori, immagini, demo e backend mantenuti.
