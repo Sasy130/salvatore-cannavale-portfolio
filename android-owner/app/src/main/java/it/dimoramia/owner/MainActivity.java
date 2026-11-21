@@ -38,7 +38,7 @@ public class MainActivity extends Activity {
   private LinearLayout root, body, top, nav;
   private TextView sync, title;
   private ScrollView contentScroll;
-  private String renderedTab = "", bookingFilter = "all";
+  private String renderedTab = "", renderedDate = "", bookingFilter = "all";
   private boolean animateNextRender = false;
   private JSONObject data, pushConfig;
   private String tab = "overview", query = "";
@@ -480,6 +480,13 @@ public class MainActivity extends Activity {
       }
   }
 
+  private boolean shouldRebuild(JSONObject result) {
+    return data == null
+        || stale
+        || !today().toString().equals(renderedDate)
+        || !data.toString().equals(result.toString());
+  }
+
   private void refresh(boolean visible) {
     if (loading) return;
     loading = true;
@@ -492,8 +499,7 @@ public class MainActivity extends Activity {
                 () -> {
                   if (isFinishing() || isDestroyed()) return;
                   loading = false;
-                  boolean changed =
-                      data == null || !data.toString().equals(result.toString()) || stale;
+                  boolean changed = shouldRebuild(result);
                   data = result;
                   stale = false;
                   lastSync = System.currentTimeMillis();
@@ -613,6 +619,7 @@ public class MainActivity extends Activity {
     }
     animateNextRender = false;
     renderedTab = tab;
+    renderedDate = today().toString();
   }
 
   private void navigate(String next) {

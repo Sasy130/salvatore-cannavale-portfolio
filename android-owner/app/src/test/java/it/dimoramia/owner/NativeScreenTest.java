@@ -183,4 +183,26 @@ public class NativeScreenTest {
               - intent.getLongExtra(android.provider.CalendarContract.EXTRA_EVENT_BEGIN_TIME, 0));
     }
   }
+
+  @Test
+  public void unchangedServerDataStillRefreshesTheAgendaWhenRomeDateChanges() throws Exception {
+    try (ActivityController<MainActivity> controller =
+        Robolectric.buildActivity(MainActivity.class).create().start().resume().visible()) {
+      MainActivity app = controller.get();
+      JSONObject data =
+          new JSONObject()
+              .put("bookings", new JSONArray())
+              .put("payments", new JSONArray())
+              .put("settings", new JSONObject());
+      set(app, "data", data);
+      set(app, "stale", false);
+      Method changed = MainActivity.class.getDeclaredMethod("shouldRebuild", JSONObject.class);
+      changed.setAccessible(true);
+      java.time.LocalDate today = java.time.LocalDate.now(java.time.ZoneId.of("Europe/Rome"));
+      set(app, "renderedDate", today.minusDays(1).toString());
+      assertEquals(true, changed.invoke(app, data));
+      set(app, "renderedDate", today.toString());
+      assertEquals(false, changed.invoke(app, data));
+    }
+  }
 }

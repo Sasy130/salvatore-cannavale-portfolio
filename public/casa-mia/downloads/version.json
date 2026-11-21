@@ -1,10 +1,10 @@
 {
   "versionName": "1.1.0",
-  "versionCode": 2,
+  "versionCode": 3,
   "packageName": "it.dimoramia.owner",
   "minimumAndroid": "8.0",
   "file": "/casa-mia/downloads/dimora-mia.apk",
-  "sha256": "533128e864d9669f885c44bb7a30fba708bc383c48602737c4cce51ffc0f7a92",
-  "bytes": 2247737,
+  "sha256": "c31c035896db469164f9675e38d01ea579d746a7502132c1518a4045f582b7a7",
+  "bytes": 2247749,
   "certificateSha256": "2e7d9cce31285f56435d461de488c393671f928796e12cd0607bd920f2eac1dd"
 }

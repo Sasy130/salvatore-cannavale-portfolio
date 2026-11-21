@@ -2,7 +2,7 @@ plugins { id 'com.android.application' }
 android {
  namespace 'it.dimoramia.owner'
  compileSdk 35
- defaultConfig { applicationId 'it.dimoramia.owner'; minSdk 26; targetSdk 35; versionCode 2; versionName '1.1.0' }
+ defaultConfig { applicationId 'it.dimoramia.owner'; minSdk 26; targetSdk 35; versionCode 3; versionName '1.1.0' }
  signingConfigs { release { if (System.getenv('DIMORA_KEYSTORE')) { storeFile file(System.getenv('DIMORA_KEYSTORE')); storePassword System.getenv('DIMORA_STORE_PASSWORD'); keyAlias 'dimora'; keyPassword System.getenv('DIMORA_KEY_PASSWORD') } } }
  buildTypes { release { minifyEnabled false; signingConfig signingConfigs.release } }
  testOptions { unitTests.includeAndroidResources = true }

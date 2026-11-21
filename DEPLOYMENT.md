@@ -170,10 +170,12 @@ Firebase NON ancora configurato: il proprietario ha confermato che il progetto v
 
 Build release, firma apksigner, JUnit e schermate Activity con Robolectric, lint Android e suite backend eseguiti. Non equivalgono a installazione/prova fisica sui telefoni. Chiave di firma privata fuori repo in /workspace/private/dimora-android, con backup privato da conservare dal proprietario prima di eliminare l'ambiente. GitHub Secrets non disponibili al token tecnico: nessuna falsa promessa di backup remoto. Dettagli e procedura aggiornamenti nel README Android. Pubblicazione autorizzata tramite preview → main, preservando l'attuale main d22b52d e tutti i progetti del portfolio.
 
-## DIMORA MIA — APK 1.1.0, versionCode 2
+## DIMORA MIA — APK 1.1.0, versionCode 3
 
 Nuovo monogramma DM approvato, risorsa launcher adattiva/rotonda, avvio Android 12+ e marchio in accesso/intestazione. Navigazione con icone native e stati accessibili. Feedback ripple/pressione e ingressi brevi 90–190 ms; nessuna animazione di sfondo o sui refresh, animazioni disattivate rispettate e verificate. Home senza riquadro notifiche; configurazione avvisi ancora in Regole.
 
 Agenda dei prossimi sette giorni con partenze prima degli arrivi nella stessa data, filtri locali dei soggiorni, priorità ai soggiorni attuali/futuri e ricerca su tutti i dati caricati con massimo 100 righe visibili. Classificazione stati allineata al backend: scadute/fallite/da verificare non diventano confermate o inventario attivo. Torna a oggi nel calendario; promemoria esplicito nell'app calendario del telefono tramite ACTION_INSERT, all-day UTC con fine esclusiva, senza scrittura automatica o sincronizzazione promessa. Scroll preservato durante i refresh e niente ricostruzione se i dati non cambiano; orario mostrato è quello dell'ultimo aggiornamento effettivo.
 
 Release firmata con la stessa chiave/certificato della 1.0, aggiornamento sopra la copia esistente. APK, hash, metadati e pagina download aggiornati sullo stesso URL. Test JUnit/Robolectric su importi, stati/filtri, sette giorni e cambio ora, Home senza notifiche, calendario, riduzione movimento e Intent promemoria; lint e firma verificati. Le prove fisiche sul telefono restano del proprietario. Nessuna migrazione, credenziale o configurazione Firebase modificata: notifiche native ancora da configurare, non dichiararle attive con questo aggiornamento grafico.
+
+Verifica aggiuntiva 1.1.0 (build 3): l’agenda viene ricostruita quando cambia il giorno a Roma anche se il JSON server è identico; il resto dei refresh resta senza animazioni o salto dello scroll.

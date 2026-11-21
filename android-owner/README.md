@@ -32,8 +32,10 @@ Aggiornamenti senza Play Store: incrementare versionCode/versionName, firmare se
 Build APK release firmata e verificata con apksigner; test JUnit sugli importi; test Robolectric del ciclo Activity, accesso e calendario nativi; lint Android; test PostgreSQL su auth/configurazione, token riservati, idempotenza, queue nativa, logout e soppressione dopo annullamento. I test Android headless non equivalgono a una prova fisica sul Samsung. Installazione e consegna FCM sui telefoni del proprietario ancora da collaudare. Il team Vercel rimane Hobby: adeguare il piano prima del lancio commerciale.
 
 
-## Aggiornamento 1.1.0 (versionCode 2)
+## Aggiornamento 1.1.0 (versionCode 3)
 
 Logo DM definitivo su launcher adattivo, ingresso e intestazione. Icone di navigazione native; feedback press/ripple e transizioni 90–190 ms soltanto su azioni esplicite, rispettando le animazioni disattivate di Android. Ripristino dello scroll durante refresh, nessuna ricostruzione periodica di schermate identiche. Home senza scheda notifiche; avvisi restano in Regole. Agenda sette giorni (uscite prima degli ingressi a parità di data), filtri dei soggiorni, risultati prioritari per soggiorni attuali/futuri e limite di 100 righe con ricerca completa. Stati inattivi/da verificare non presentati come confermati. Pulsante Torna a oggi e promemoria CalendarContract su richiesta, con uscita esclusiva e nessuna sincronizzazione automatica promessa. Credenziali/database/Firebase non modificati.
 
 Test aggiuntivi per filtri, agenda attraverso cambio ora, UI Home senza notifiche, motion ridotto e promemoria all-day UTC. Gli aggiornamenti APK sono sempre firmati con la chiave 1.0 originale.
+
+La ricostruzione finale 1.1.0 usa versionCode 3: include il controllo del cambio di giorno in Europe/Rome anche senza modifiche ai record server.
