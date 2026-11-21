@@ -1,3 +1,13 @@
+# Copertine dei siti e finale tipografico — 21 novembre 2026
+
+La sezione «I miei progetti» chiarisce l’autorialità personale richiesta dal titolare. Dodici nuove schermate delle pagine effettive sostituiscono le precedenti copertine; per VELMORA è conservata la schermata completa già disponibile, ricodificata WebP, perché la nuova cattura 3D in questo ambiente non è risultata affidabile. Nuova resa contain per preservare la composizione. Descrizioni dimostrative e indicazione dei redesign indipendenti preservate.
+
+Metodo rimosso dalla homepage e dal menu; vecchio #indice punta ai progetti. Nuovo finale «Facciamo il prossimo segno»: SVG originale, tipografia, firma ONE MAN, email/copia e replay. Nessuna nuova dipendenza. Dati in lib/restored-projects.ts; componente FinalContact.tsx e final-contact.css. Vedere docs/COPERTINE-E-FINALE.md nell’archivio sorgente.
+
+Verifiche: TypeScript, lint e build statica di produzione superati. Suite Playwright 13/13 passati; test finale/navigation ripetuto dopo correzione dell’offset sotto header, passato. Inclusi axe, cinque viewport, tutte le immagini HTTP 200, progetti, menu, intro/replay, touch, clipboard e fallback. Mobile verificato in emulazione Chromium.
+
+---
+
 # Metodo creativo al posto dell’elenco duplicato — 21 novembre 2026
 
 Rimosso il blocco «Scegli dove entrare» che ripeteva i progetti. Inserita la sezione «Prima l’idea. Poi il segno.»: Identità, Interazione, Sviluppo, un segno vettoriale su desktop e CTA reale ai contatti. Menu Metodo → #metodo; vecchio #indice compatibile. Sezione progetti e copertine preservate.
