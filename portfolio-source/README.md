@@ -1,3 +1,13 @@
+# Progetti: selezione editoriale — 21 novembre 2026
+
+Sostituita soltanto la galleria di copertine con un indice numerato e anteprima sticky su desktop, dettagli espandibili su mobile/tablet. Selezione mouse/tastiera/tocco, rivelazione tramite clip-path, reduced motion e dettagli HTML utilizzabili senza script. Conservati tredici lavori, copertine, demo, dialogo progetto, intro SC, hero tipografica, menu e sezioni successive. Nessuna nuova dipendenza.
+
+Componenti: components/vice/EditorialProjects.tsx, editorial-projects.css. Dati: lib/restored-projects.ts. Documentazione: docs/PROGETTI-EDITORIALI.md nell’archivio sorgente.
+
+Verifiche: TypeScript, lint e build statica di produzione superati. Suite finale Playwright: 12/12 passati, inclusi cinque viewport, axe, selezione da tastiera/mobile, fallback senza script, intro/replay, menu, anteprime e copia email. Smartphone verificato in emulazione Chromium; non è una certificazione su dispositivi fisici.
+
+---
+
 # Sfondo tipografico — 21 novembre 2026
 
 Sostituito esclusivamente lo sfondo a nastri della hero con lettere vettoriali astratte, parallasse a tre livelli mouse/touch e reduced motion. Intro SC e resto del portfolio preservati. Nessuna nuova dipendenza. Documentazione: docs/SFONDO-TIPOGRAFICO.md nell’archivio sorgente.
