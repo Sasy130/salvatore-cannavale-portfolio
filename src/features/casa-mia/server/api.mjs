@@ -1,4 +1,9 @@
 import {
+  handleNativePush,
+  disableNativeDevice,
+  deliverNativePush,
+} from "./native-push.mjs";
+import {
   bookingPushStatements,
   deliverPush,
   queueBookingPush,
@@ -225,7 +230,11 @@ export async function handleAPI(req, env) {
         return json({ error: "Accesso non consentito." }, 401);
       if (!["GET", "POST"].includes(req.method))
         return json({ error: "Metodo non consentito." }, 405);
-      return json(await deliverPush(env, { limit: 3 }));
+      const [web, native] = await Promise.all([
+        deliverPush(env, { limit: 3 }),
+        deliverNativePush(env, { limit: 3 }),
+      ]);
+      return json({ ...web, native });
     }
     if (p === "jobs/email") {
       const token = req.headers.get("authorization") || "";
@@ -623,6 +632,8 @@ export async function handleAPI(req, env) {
           ));
       if (!session)
         return json({ error: "Accedi al pannello proprietario." }, 401);
+      if (p === "admin/native/push" || p.startsWith("admin/native/push/"))
+        return handleNativePush(p, req, env);
       if (p === "admin/push" || p.startsWith("admin/push/"))
         return handlePushAdmin(p, req, env);
       if (p.startsWith("admin/receipts/") && req.method === "GET") {
@@ -695,6 +706,8 @@ export async function handleAPI(req, env) {
       if (p === "admin/logout" && req.method === "POST") {
         const input = await body(req);
         await disablePushEndpoint(db, input.pushEndpoint);
+        if (input.nativeDeviceId)
+          await disableNativeDevice(env, input.nativeDeviceId);
         await db
           .prepare("DELETE FROM sessions WHERE token=?")
           .bind(await sessionKey(token))

@@ -1,3 +1,4 @@
+import { nativeBookingStatements, deliverNativePush } from "./native-push.mjs";
 import webpush from "web-push";
 import { createHash, ECDH } from "node:crypto";
 const all = async (db, sql, ...args) =>
@@ -68,8 +69,11 @@ export function validatePushSubscription(input) {
 }
 export function bookingPushStatements(db, env, b) {
   const cfg = pushConfig(env);
-  if (!cfg || b.status !== "confirmed") return [];
+  if (b.status !== "confirmed") return [];
+  const native = nativeBookingStatements(db, env, b);
+  if (!cfg) return native;
   return [
+    ...native,
     db
       .prepare(
         "INSERT INTO push_outbox(id,dedupe_key,device_id,booking_id,kind,deadline,created) SELECT 'P-'||md5(?||':'||id),'booking:'||?||':'||id,id,?,'booking',?,? FROM push_devices WHERE active=TRUE AND key_fingerprint=? ON CONFLICT(dedupe_key) DO NOTHING",
@@ -437,11 +441,14 @@ export async function disablePushEndpoint(db, endpoint) {
 // The durable outbox remains authoritative if a provider fails or execution stops.
 export async function queueBookingPush(env, bookingId) {
   const work = async () => {
-    const results = await Promise.allSettled(
-      Array.from({ length: 4 }, () =>
+    const results = await Promise.allSettled([
+      ...Array.from({ length: 4 }, () =>
         deliverPush(env, { bookingId, limit: 3 }),
       ),
-    );
+      ...Array.from({ length: 4 }, () =>
+        deliverNativePush(env, { bookingId, limit: 3 }),
+      ),
+    ]);
     if (results.some((r) => r.status === "rejected"))
       console.error("DIMORA MIA push: invio da riprendere dalla coda");
   };

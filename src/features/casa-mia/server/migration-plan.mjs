@@ -10,6 +10,7 @@ export async function migrationPlan() {
     "003_stay_operations.sql",
     "004_receipts_outbox.sql",
     "005_web_push.sql",
+    "006_native_android.sql",
   ];
   let body = "PERFORM pg_advisory_xact_lock(51896533);\n" + initial;
   for (let i = 0; i < files.length; i++) {

@@ -8,3 +8,11 @@ work/
 .vercel/
 outputs/
 .vercel
+
+# Native Android build / private signing credentials
+android-owner/.gradle/
+android-owner/**/build/
+android-owner/local.properties
+android-owner/app/google-services.json
+*.jks
+*.keystore
