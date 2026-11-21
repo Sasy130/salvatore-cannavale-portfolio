@@ -1,0 +1,1 @@
+<resources><style name="DimoraTheme" parent="DimoraThemeBase"><item name="android:windowLightNavigationBar">true</item><item name="android:windowSplashScreenBackground">@color/logo_green</item><item name="android:windowSplashScreenAnimatedIcon">@drawable/app_icon</item></style></resources>

@@ -1,18 +1,23 @@
 package it.dimoramia.owner;
 
 import android.Manifest;
+import android.animation.*;
 import android.app.*;
 import android.content.*;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.RippleDrawable;
 import android.net.Uri;
 import android.os.*;
+import android.provider.CalendarContract;
 import android.provider.Settings;
 import android.text.*;
 import android.text.method.PasswordTransformationMethod;
 import android.view.*;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.*;
 import com.google.firebase.messaging.FirebaseMessaging;
 import java.time.*;
@@ -22,16 +27,19 @@ import java.util.concurrent.*;
 import org.json.*;
 
 public class MainActivity extends Activity {
-  private final int GREEN = Color.rgb(43, 76, 57),
+  private final int GREEN = Color.rgb(41, 74, 56),
       INK = Color.rgb(35, 57, 44),
       MUTED = Color.rgb(98, 114, 96),
-      BG = Color.rgb(244, 246, 239),
+      BG = Color.rgb(246, 245, 239),
       LINE = Color.rgb(219, 227, 214);
   private final ExecutorService executor = Executors.newSingleThreadExecutor();
   private final Handler handler = new Handler(Looper.getMainLooper());
   private Api api;
   private LinearLayout root, body, top, nav;
   private TextView sync, title;
+  private ScrollView contentScroll;
+  private String renderedTab = "", bookingFilter = "all";
+  private boolean animateNextRender = false;
   private JSONObject data, pushConfig;
   private String tab = "overview", query = "";
   private boolean stale = true, loading = false, editorOpen = false;
@@ -131,7 +139,26 @@ public class MainActivity extends Activity {
     v.setGravity(Gravity.CENTER);
     v.setMinHeight(dp(49));
     v.setPadding(dp(12), dp(11), dp(12), dp(11));
-    v.setBackground(shape(primary ? GREEN : Color.WHITE, 12));
+    v.setBackground(
+        new RippleDrawable(
+            ColorStateList.valueOf(
+                primary ? Color.argb(45, 255, 255, 255) : Color.argb(30, 41, 74, 56)),
+            shape(primary ? GREEN : Color.WHITE, 12),
+            shape(Color.WHITE, 12)));
+    if (ValueAnimator.areAnimatorsEnabled()) {
+      StateListAnimator feedback = new StateListAnimator();
+      AnimatorSet press = new AnimatorSet();
+      press.playTogether(
+          ObjectAnimator.ofFloat(v, "scaleX", .985f), ObjectAnimator.ofFloat(v, "scaleY", .985f));
+      press.setDuration(90);
+      AnimatorSet release = new AnimatorSet();
+      release.playTogether(
+          ObjectAnimator.ofFloat(v, "scaleX", 1f), ObjectAnimator.ofFloat(v, "scaleY", 1f));
+      release.setDuration(130);
+      feedback.addState(new int[] {android.R.attr.state_pressed}, press);
+      feedback.addState(new int[] {}, release);
+      v.setStateListAnimator(feedback);
+    }
     v.setClickable(true);
     v.setFocusable(true);
     v.setOnClickListener(w -> action.run());
@@ -286,20 +313,26 @@ public class MainActivity extends Activity {
     inset(root);
     top = row();
     top.setPadding(dp(20), dp(13), dp(16), dp(13));
-    TextView mark = text("DM", 19, Color.WHITE, true);
-    mark.setGravity(Gravity.CENTER);
+    ImageView mark = new ImageView(this);
+    mark.setImageResource(R.drawable.app_icon);
+    mark.setContentDescription("Logo DIMORA MIA");
+    mark.setScaleType(ImageView.ScaleType.FIT_CENTER);
+    mark.setClipToOutline(true);
     mark.setBackground(shape(GREEN, 12));
-    top.addView(mark, new LinearLayout.LayoutParams(dp(43), dp(45)));
+    top.addView(mark, new LinearLayout.LayoutParams(dp(46), dp(46)));
     LinearLayout brand = column();
     brand.setPadding(dp(12), 0, 0, 0);
     brand.addView(text("DIMORA MIA", 13, INK, true));
     sync = text("GESTIONE PRIVATA", 10, MUTED, false);
     brand.addView(sync);
     top.addView(brand, new LinearLayout.LayoutParams(0, -2, 1));
-    top.addView(
-        button("↻", false, () -> refresh(true)), new LinearLayout.LayoutParams(dp(48), dp(48)));
+    TextView refreshAction = button("↻", false, () -> refresh(true));
+    refreshAction.setTextSize(24);
+    refreshAction.setContentDescription("Aggiorna calendario");
+    top.addView(refreshAction, new LinearLayout.LayoutParams(dp(48), dp(48)));
     root.addView(top);
     ScrollView scroll = new ScrollView(this);
+    contentScroll = scroll;
     scroll.setFillViewport(true);
     body = column();
     body.setPadding(dp(18), dp(13), dp(18), dp(24));
@@ -312,18 +345,40 @@ public class MainActivity extends Activity {
         ids = {"overview", "calendar", "reservations", "finance", "settings"};
     for (int i = 0; i < names.length; i++) {
       final String id = ids[i];
-      TextView b =
-          button(
-              names[i],
-              tab.equals(id),
-              () -> {
-                tab = id;
-                rangeStart = rangeEnd = null;
-                render();
-              });
-      b.setTextSize(11);
-      b.setPadding(dp(2), dp(11), dp(2), dp(11));
-      nav.addView(b, new LinearLayout.LayoutParams(0, -2, 1));
+      boolean selected = tab.equals(id);
+      LinearLayout item = column();
+      item.setGravity(Gravity.CENTER);
+      item.setPadding(dp(2), dp(8), dp(2), dp(8));
+      item.setMinimumHeight(dp(62));
+      item.setContentDescription(names[i]);
+      item.setSelected(selected);
+      item.setFocusable(true);
+      item.setClickable(true);
+      item.setBackground(
+          new RippleDrawable(
+              ColorStateList.valueOf(Color.argb(30, 41, 74, 56)),
+              shape(selected ? Color.rgb(233, 239, 226) : Color.WHITE, 14),
+              shape(Color.WHITE, 14)));
+      item.setAccessibilityDelegate(
+          new View.AccessibilityDelegate() {
+            @Override
+            public void onInitializeAccessibilityNodeInfo(
+                View host, android.view.accessibility.AccessibilityNodeInfo info) {
+              super.onInitializeAccessibilityNodeInfo(host, info);
+              info.setClassName(Button.class.getName());
+            }
+          });
+      item.addView(
+          new NavIcon(this, id, selected ? GREEN : MUTED),
+          new LinearLayout.LayoutParams(dp(22), dp(22)));
+      space(item, 4);
+      TextView caption = text(names[i], 10, selected ? GREEN : MUTED, selected);
+      caption.setGravity(Gravity.CENTER);
+      caption.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+      item.addView(caption, new LinearLayout.LayoutParams(-1, -2));
+      item.setOnClickListener(v -> navigate(id));
+      caption.setOnClickListener(v -> navigate(id));
+      nav.addView(item, new LinearLayout.LayoutParams(0, -2, 1));
     }
     root.addView(nav);
     title = text("", 27, INK, true);
@@ -341,7 +396,15 @@ public class MainActivity extends Activity {
     box.setPadding(dp(28), dp(60), dp(28), dp(40));
     sc.addView(box);
     root.addView(sc, new LinearLayout.LayoutParams(-1, -1));
-    box.addView(text("DIMORA MIA / ANDROID", 12, GREEN, true));
+    ImageView entryLogo = new ImageView(this);
+    entryLogo.setImageResource(R.drawable.app_icon);
+    entryLogo.setScaleType(ImageView.ScaleType.FIT_CENTER);
+    entryLogo.setContentDescription("Logo DIMORA MIA");
+    entryLogo.setBackground(shape(GREEN, 18));
+    entryLogo.setClipToOutline(true);
+    box.addView(entryLogo, new LinearLayout.LayoutParams(dp(76), dp(76)));
+    space(box, 22);
+    box.addView(text("DIMORA MIA / GESTIONE PRIVATA", 12, GREEN, true));
     space(box, 38);
     box.addView(text("La tua casa.\nTutto al suo posto.", 35, INK, true));
     space(box, 14);
@@ -429,12 +492,20 @@ public class MainActivity extends Activity {
                 () -> {
                   if (isFinishing() || isDestroyed()) return;
                   loading = false;
+                  boolean changed =
+                      data == null || !data.toString().equals(result.toString()) || stale;
                   data = result;
                   stale = false;
                   lastSync = System.currentTimeMillis();
-                  if (!editorOpen && !typing()) render();
+                  if (changed && !editorOpen && !typing()) render();
+                  else if (sync != null)
+                    sync.setText(
+                        "AGGIORNATO ALLE "
+                            + java.time.Instant.ofEpochMilli(lastSync)
+                                .atZone(ZoneId.systemDefault())
+                                .format(DateTimeFormatter.ofPattern("HH:mm")));
                   openNotificationBooking();
-                  loadPush();
+                  if (tab.equals("settings") || pushConfig == null) loadPush();
                 });
           } catch (Exception e) {
             runOnUiThread(
@@ -463,8 +534,7 @@ public class MainActivity extends Activity {
   }
 
   private boolean active(JSONObject b) {
-    return !b.optString("status").startsWith("cancelled")
-        && !b.optString("status").equals("expired");
+    return NativeRules.active(b.optString("status"));
   }
 
   private boolean block(JSONObject b) {
@@ -495,12 +565,16 @@ public class MainActivity extends Activity {
 
   private void render() {
     if (data == null) return;
+    int previousScroll = contentScroll == null ? 0 : contentScroll.getScrollY();
+    boolean sameTab = tab.equals(renderedTab);
     frame();
     sync.setText(
         stale
             ? "NON AGGIORNATO · TOCCA ↻"
             : "AGGIORNATO ALLE "
-                + java.time.LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")));
+                + java.time.Instant.ofEpochMilli(lastSync)
+                    .atZone(ZoneId.systemDefault())
+                    .format(DateTimeFormatter.ofPattern("HH:mm")));
     if (stale) {
       LinearLayout c = card("");
       c.addView(
@@ -526,6 +600,27 @@ public class MainActivity extends Activity {
       default:
         overview();
     }
+    contentScroll.post(() -> contentScroll.scrollTo(0, sameTab ? previousScroll : 0));
+    if (animateNextRender && ValueAnimator.areAnimatorsEnabled()) {
+      body.setAlpha(.55f);
+      body.setTranslationY(dp(8));
+      body.animate()
+          .alpha(1f)
+          .translationY(0)
+          .setDuration(190)
+          .setInterpolator(new DecelerateInterpolator())
+          .start();
+    }
+    animateNextRender = false;
+    renderedTab = tab;
+  }
+
+  private void navigate(String next) {
+    if (tab.equals(next)) return;
+    tab = next;
+    rangeStart = rangeEnd = null;
+    animateNextRender = true;
+    render();
   }
 
   private void heading(String s) {
@@ -550,9 +645,7 @@ public class MainActivity extends Activity {
     heading("Oggi, nella tua dimora.");
     actionRow();
     String t = today().toString();
-    List<JSONObject> arrivals = new ArrayList<>(),
-        departures = new ArrayList<>(),
-        upcoming = new ArrayList<>();
+    List<JSONObject> arrivals = new ArrayList<>(), departures = new ArrayList<>();
     long due = 0;
     int in = 0;
     for (JSONObject b : bookings())
@@ -560,9 +653,10 @@ public class MainActivity extends Activity {
         due += balance(b);
         if (b.optString("checkin").compareTo(t) <= 0 && b.optString("checkout").compareTo(t) > 0)
           in++;
-        if (b.optString("checkin").equals(t)) arrivals.add(b);
-        if (b.optString("checkout").equals(t)) departures.add(b);
-        if (b.optString("checkin").compareTo(t) >= 0) upcoming.add(b);
+        if (b.optString("status").equals("confirmed") && b.optString("checkin").equals(t))
+          arrivals.add(b);
+        if (b.optString("status").equals("confirmed") && b.optString("checkout").equals(t))
+          departures.add(b);
       }
     LinearLayout metrics = card("");
     metrics.addView(text(in + " soggiorni in corso", 22, INK, true));
@@ -579,17 +673,69 @@ public class MainActivity extends Activity {
       priorities.addView(text("Nessun arrivo o partenza oggi.", 14, MUTED, false));
     for (JSONObject b : arrivals) bookingRow(priorities, b, "ARRIVO OGGI");
     for (JSONObject b : departures) bookingRow(priorities, b, "PARTENZA OGGI");
-    LinearLayout notifications = card("Avvisi sul telefono");
-    notifications.addView(text(pushDescription(), 14, MUTED, false));
-    space(notifications, 12);
-    notifications.addView(button("Gestisci notifiche →", false, this::notificationPanel));
-    LinearLayout c = card("I prossimi arrivi");
-    int shown = 0;
-    for (JSONObject b : upcoming) {
-      bookingRow(c, b, "");
-      if (++shown == 4) break;
+    LinearLayout agenda = card("I prossimi 7 giorni");
+    List<StayEvent> events = agendaEvents();
+    for (int i = 0; i < Math.min(4, events.size()); i++) {
+      StayEvent event = events.get(i);
+      bookingRow(
+          agenda,
+          event.booking,
+          (event.departure ? "PARTENZA · " : "ARRIVO · ") + date(event.date));
     }
-    if (shown == 0) c.addView(text("I nuovi soggiorni compariranno qui.", 14, MUTED, false));
+    if (events.isEmpty())
+      agenda.addView(
+          text("Nessun movimento previsto nei prossimi sette giorni.", 14, MUTED, false));
+    else {
+      space(agenda, 12);
+      agenda.addView(button("Apri agenda completa →", false, this::agendaPanel));
+    }
+  }
+
+  private static final class StayEvent {
+    final JSONObject booking;
+    final String date;
+    final boolean departure;
+
+    StayEvent(JSONObject b, String d, boolean out) {
+      booking = b;
+      date = d;
+      departure = out;
+    }
+  }
+
+  private List<StayEvent> agendaEvents() {
+    List<StayEvent> events = new ArrayList<>();
+    String t = today().toString();
+    for (JSONObject b : bookings())
+      if (b.optString("status").equals("confirmed") && !block(b)) {
+        if (NativeRules.withinWeek(b.optString("checkin"), t))
+          events.add(new StayEvent(b, b.optString("checkin"), false));
+        if (NativeRules.withinWeek(b.optString("checkout"), t))
+          events.add(new StayEvent(b, b.optString("checkout"), true));
+      }
+    events.sort(
+        Comparator.comparing((StayEvent e) -> e.date).thenComparingInt(e -> e.departure ? 0 : 1));
+    return events;
+  }
+
+  private void agendaPanel() {
+    LinearLayout box = column();
+    String last = "";
+    for (StayEvent event : agendaEvents()) {
+      if (!last.equals(event.date)) {
+        space(box, 12);
+        box.addView(
+            text(
+                LocalDate.parse(event.date)
+                    .format(DateTimeFormatter.ofPattern("EEEE d MMMM", Locale.ITALIAN)),
+                15,
+                GREEN,
+                true));
+        last = event.date;
+      }
+      bookingRow(box, event.booking, event.departure ? "PARTENZA" : "ARRIVO");
+    }
+    form("Agenda dei prossimi 7 giorni", box);
   }
 
   private void bookingRow(LinearLayout parent, JSONObject b, String tag) {
@@ -607,20 +753,19 @@ public class MainActivity extends Activity {
             13,
             MUTED,
             false));
-    String state =
-        block(b)
-            ? "Non disponibile"
-            : b.optString("status").startsWith("cancelled")
-                ? "Annullata"
-                : b.optString("status").equals("awaiting_payment")
-                    ? "Pagamento in attesa"
-                    : "Confermata";
+    String state = NativeRules.statusLabel(b.optString("status"));
     c.addView(
         text(state + (block(b) ? "" : "  ·  " + money(balance(b)) + " residuo"), 12, GREEN, true));
-    c.setBackgroundResource(android.R.drawable.list_selector_background);
+    c.setBackground(
+        new RippleDrawable(
+            ColorStateList.valueOf(Color.argb(25, 41, 74, 56)), null, shape(Color.WHITE, 10)));
     c.setClickable(true);
     c.setFocusable(true);
-    c.setOnClickListener(v -> detail(b));
+    c.setOnClickListener(
+        v -> {
+          if (activeDialog != null) activeDialog.dismiss();
+          detail(b);
+        });
     parent.addView(c);
     View line = new View(this);
     line.setBackgroundColor(LINE);
@@ -653,6 +798,17 @@ public class MainActivity extends Activity {
             }),
         new LinearLayout.LayoutParams(dp(48), dp(48)));
     body.addView(tools);
+    space(body, 8);
+    body.addView(
+        button(
+            "Torna a oggi",
+            false,
+            () -> {
+              month = YearMonth.from(today());
+              rangeStart = rangeEnd = null;
+              animateNextRender = true;
+              render();
+            }));
     space(body, 14);
     LinearLayout box = card("");
     GridLayout grid = new GridLayout(this);
@@ -757,27 +913,92 @@ public class MainActivity extends Activity {
     search.setText(query);
     body.addView(search, new LinearLayout.LayoutParams(-1, dp(52)));
     space(body, 10);
+    HorizontalScrollView filters = new HorizontalScrollView(this);
+    filters.setHorizontalScrollBarEnabled(false);
+    LinearLayout chips = row();
+    String[] labels = {"Tutti", "Prossimi", "In casa", "Saldi aperti", "Blocchi", "Storico"},
+        values = {"all", "upcoming", "inhouse", "dues", "blocks", "history"};
+    TextView[] chipViews = new TextView[labels.length];
+    for (int i = 0; i < labels.length; i++) {
+      final String key = values[i];
+      TextView chip = button(labels[i], bookingFilter.equals(key), () -> {});
+      chip.setTextSize(12);
+      chip.setTag(key);
+      chip.setSelected(bookingFilter.equals(key));
+      chipViews[i] = chip;
+      LinearLayout.LayoutParams cp = new LinearLayout.LayoutParams(-2, dp(44));
+      cp.rightMargin = dp(8);
+      chips.addView(chip, cp);
+    }
+    filters.addView(chips);
+    body.addView(filters);
+    space(body, 14);
     LinearLayout list = card("");
     Runnable fill =
         () -> {
           list.removeAllViews();
           String needle = search.getText().toString().trim().toLowerCase(Locale.ITALIAN);
           int count = 0;
-          for (JSONObject b : bookings())
-            if ((b.optString("name")
-                    + " "
-                    + b.optString("email")
-                    + " "
-                    + b.optString("phone")
-                    + " "
-                    + b.optString("id"))
-                .toLowerCase(Locale.ITALIAN)
-                .contains(needle)) {
+          List<JSONObject> ordered = bookings();
+          String now = today().toString();
+          ordered.sort(
+              (a, b) -> {
+                boolean nearA = active(a) && a.optString("checkout").compareTo(now) > 0,
+                    nearB = active(b) && b.optString("checkout").compareTo(now) > 0;
+                if (nearA != nearB) return nearA ? -1 : 1;
+                return nearA
+                    ? a.optString("checkin").compareTo(b.optString("checkin"))
+                    : b.optString("checkin").compareTo(a.optString("checkin"));
+              });
+          for (JSONObject b : ordered)
+            if (NativeRules.matches(
+                    bookingFilter,
+                    b.optString("status"),
+                    block(b),
+                    b.optString("checkin"),
+                    b.optString("checkout"),
+                    now,
+                    balance(b))
+                && (b.optString("name")
+                        + " "
+                        + b.optString("email")
+                        + " "
+                        + b.optString("phone")
+                        + " "
+                        + b.optString("id"))
+                    .toLowerCase(Locale.ITALIAN)
+                    .contains(needle)) {
               bookingRow(list, b, "");
-              count++;
+              if (++count == 100) {
+                list.addView(
+                    text(
+                        "Mostrati i primi 100 risultati. Usa ricerca e filtri per trovare un"
+                            + " soggiorno.",
+                        12,
+                        MUTED,
+                        false));
+                break;
+              }
             }
-          if (count == 0) list.addView(text("Nessun risultato.", 15, MUTED, false));
+          if (count == 0)
+            list.addView(text("Nessun soggiorno con questi filtri.", 15, MUTED, false));
         };
+    for (TextView chip : chipViews)
+      chip.setOnClickListener(
+          v -> {
+            bookingFilter = chip.getTag().toString();
+            for (TextView other : chipViews) {
+              boolean selected = bookingFilter.equals(other.getTag());
+              other.setSelected(selected);
+              other.setTextColor(selected ? Color.WHITE : GREEN);
+              other.setBackground(
+                  new RippleDrawable(
+                      ColorStateList.valueOf(Color.argb(30, 41, 74, 56)),
+                      shape(selected ? GREEN : Color.WHITE, 12),
+                      shape(Color.WHITE, 12)));
+            }
+            fill.run();
+          });
     fill.run();
     search.addTextChangedListener(
         new TextWatcher() {
@@ -854,12 +1075,11 @@ public class MainActivity extends Activity {
       edit.setEnabled(!stale);
       rules.addView(edit);
     }
-    LinearLayout info = card("DIMORA MIA · Android 1.0.0");
+    LinearLayout info = card("DIMORA MIA · 1.1.0");
     info.addView(
         text(
-            "App Android installata tramite APK. Nessun browser necessario per la gestione."
-                + " Calendario condiviso in Europe/Rome · capienza 4 ospiti. Per aggiornare dati e"
-                + " avvisi serve una connessione internet.",
+            "Una sola casa, un calendario condiviso con il sito. Fuso orario Europe/Rome · 4"
+                + " ospiti.",
             13,
             MUTED,
             false));
@@ -946,6 +1166,9 @@ public class MainActivity extends Activity {
           if (activeDialog == dialog) activeDialog = null;
         });
     dialog.show();
+    if (ValueAnimator.areAnimatorsEnabled())
+      dialog.getWindow().setWindowAnimations(R.style.DimoraDialogMotion);
+    dialog.getWindow().setBackgroundDrawable(shape(Color.WHITE, 22));
     activeDialog = dialog;
     return dialog;
   }
@@ -1165,7 +1388,7 @@ public class MainActivity extends Activity {
     space(box, 12);
     box.addView(
         text(
-            "Riferimento " + b.optString("id") + "\nCanale: " + b.optString("source"),
+            "Riferimento " + b.optString("id") + "\nCanale: " + sourceLabel(b.optString("source")),
             12,
             MUTED,
             false));
@@ -1221,6 +1444,10 @@ public class MainActivity extends Activity {
                   notice("Configura un’app email per scrivere all’ospite.");
                 }
               }));
+    }
+    if (!block(b) && active(b)) {
+      space(box, 12);
+      box.addView(button("Aggiungi al calendario del telefono", false, () -> calendarReminder(b)));
     }
     AlertDialog dialog = form(b.optString("name"), box);
     if (active(b) && !stale) {
@@ -1330,6 +1557,52 @@ public class MainActivity extends Activity {
                 dialog.dismiss();
                 payment(b, true);
               }));
+    }
+  }
+
+  private String sourceLabel(String value) {
+    switch (value) {
+      case "direct":
+        return "Sito diretto";
+      case "booking":
+        return "Booking.com · inserimento manuale";
+      case "airbnb":
+        return "Airbnb · inserimento manuale";
+      default:
+        return "Telefono / messaggio";
+    }
+  }
+
+  private void calendarReminder(JSONObject b) {
+    try {
+      Intent event =
+          new Intent(Intent.ACTION_INSERT)
+              .setData(CalendarContract.Events.CONTENT_URI)
+              .putExtra(CalendarContract.Events.TITLE, "DIMORA MIA · " + b.optString("name"))
+              .putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true)
+              .putExtra(
+                  CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+                  LocalDate.parse(b.optString("checkin"))
+                      .atStartOfDay(ZoneOffset.UTC)
+                      .toInstant()
+                      .toEpochMilli())
+              .putExtra(
+                  CalendarContract.EXTRA_EVENT_END_TIME,
+                  LocalDate.parse(b.optString("checkout"))
+                      .atStartOfDay(ZoneOffset.UTC)
+                      .toInstant()
+                      .toEpochMilli())
+              .putExtra(
+                  CalendarContract.Events.DESCRIPTION,
+                  "Soggiorno dal "
+                      + b.optString("checkin")
+                      + " al "
+                      + b.optString("checkout")
+                      + " (giorno di uscita). Le modifiche successive nell’app non aggiornano"
+                      + " automaticamente questo promemoria.");
+      startActivity(event);
+    } catch (Exception e) {
+      notice("Nessuna app calendario disponibile su questo telefono.");
     }
   }
 
@@ -1466,7 +1739,8 @@ public class MainActivity extends Activity {
                       pushConfig == null
                           || pushConfig.optBoolean("configured") != config.optBoolean("configured");
                   pushConfig = config;
-                  if (changed && data != null && !editorOpen && !typing()) render();
+                  if (changed && tab.equals("settings") && data != null && !editorOpen && !typing())
+                    render();
                 });
           } catch (Exception ignored) {
           }
