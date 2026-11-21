@@ -47,8 +47,12 @@ try{
   await page.locator('.editorial-gallery [data-gallery]').click();
   await expect(page.locator('.booking-dock')).toHaveAttribute('aria-hidden','true');
   await page.locator('#gallery-dialog .close-dialog').click();
-  await expect(page.locator('.booking-dock')).toHaveAttribute('aria-hidden','false');
-  await page.locator('.booking-dock a').click();
+  await expect(page.locator('.booking-dock')).toHaveAttribute('aria-hidden','true');
+  await expect(page.locator('.image-card')).toHaveCount(2);
+  if(width<700)expect(await page.locator('.image-grid').evaluate(e=>e.scrollWidth<=e.clientWidth)).toBe(true);
+  await page.locator('.editorial-gallery').scrollIntoViewIfNeeded();
+  await page.screenshot({path:`${output}/${name}-diptych.png`});
+  await page.locator('.nav .book-link').click();
   await expect(page.locator('.booking-dock')).toHaveAttribute('aria-hidden','true');
   await page.waitForTimeout(1000);
   expect(await page.locator('#booking-title').evaluate(e=>getComputedStyle(e).color)).toBe('rgb(52, 57, 46)');
@@ -79,6 +83,11 @@ try{
   expect(requests.filter(r=>r.path==='book')).toHaveLength(1);
   expect(requests.find(r=>r.path==='book').input.expectedTotal).toBe(60000);
   await page.screenshot({path:`${output}/${name}-confirmation.png`});
+  // A single compositor panel reveals the room; no per-frame rounded mask.
+  await page.evaluate(()=>scrollTo({top:document.querySelector('.journey').offsetTop+(document.querySelector('.journey').offsetHeight-innerHeight)*.48,behavior:'instant'}));
+  await page.waitForTimeout(700);
+  expect(await page.locator('.bedroom').evaluate(e=>getComputedStyle(e).clipPath)).toBe('none');
+  await page.screenshot({path:`${output}/${name}-bedroom.png`});
   // Day/night follows the curve in both directions, with no jump at the start.
   await page.evaluate(()=>scrollTo({top:document.querySelector('.journey').offsetTop+(document.querySelector('.journey').offsetHeight-innerHeight)*.9,behavior:'instant'}));
   await page.waitForTimeout(800);
@@ -90,6 +99,9 @@ try{
   // Reverse scroll must restore the arrival, not leave the final copy over the hero.
   await page.evaluate(()=>scrollTo({top:0,behavior:'instant'}));await page.waitForTimeout(1000);
   expect(await page.locator('.copy-booking').evaluate(e=>getComputedStyle(e).visibility)).toBe('hidden');
+  await page.locator('.closing-copy').scrollIntoViewIfNeeded();
+  await expect(page.locator('.booking-dock')).toHaveAttribute('aria-hidden','true');
+  await page.screenshot({path:`${output}/${name}-closing.png`});
   await page.close();
  }
  const reducedContext=await browser.newContext({viewport:{width:390,height:844},reducedMotion:'reduce',locale:'it-IT'});

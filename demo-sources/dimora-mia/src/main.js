@@ -3,6 +3,7 @@ import {localAPI} from './local-api.js';
 import './style.css';
 import './experience.css';
 import './booking-design.css';
+import './editorial.css';
 import {animateBookingDesign,initBookingDesign} from './booking-design.js';
 import {initExperience,augmentTimeline} from './experience.js';
 import gsap from 'gsap';
@@ -24,6 +25,7 @@ function setupMotion(){
  if(!motion)return;
  const mobile=matchMedia('(max-width:700px)').matches;
  context=gsap.context(()=>{
+ gsap.set('.bedroom',{clipPath:'none',yPercent:100});
  const light={phase:0},orb=$('.light-orb');
  orb.setAttribute('cx','12');orb.setAttribute('cy','65');
  const wrap=$('.portal-wrap'), rect={left:wrap.offsetLeft,top:wrap.offsetTop,width:wrap.offsetWidth,height:wrap.offsetHeight}, scale=Math.max(innerWidth/rect.width,innerHeight/rect.height)*1.05;
@@ -42,12 +44,14 @@ function setupMotion(){
  .to('.scene-index,.chapter-label',{opacity:1,duration:.5},1.7)
  .to('.copy-living',{autoAlpha:0,y:-20,duration:.5},3)
  .set('.bedroom',{visibility:'visible'},3)
- .to('.bedroom',{clipPath:'inset(0% 0% 0% 0% round 0% 0% 0% 0%)',duration:1.7,ease:'power2.inOut'},3)
- .fromTo('.bedroom .scene-image',{scale:1.1,xPercent:2},{scale:1.01,xPercent:0,duration:2.3,ease:'none'},3)
+ .to('.bedroom',{yPercent:0,duration:1.5,ease:'power2.inOut'},3)
+ .fromTo('.bedroom .scene-image',{scale:1.04,yPercent:-4},{scale:1,yPercent:0,duration:2,ease:'none'},3)
+ .set('.portal-wrap',{visibility:'hidden'},4.5)
  .fromTo('.copy-bedroom',{y:24},{autoAlpha:1,y:0,duration:.7},4.1)
  .to('.copy-bedroom',{autoAlpha:0,y:-20,duration:.5},5.5)
  .set('.terrace',{visibility:'visible'},5.5)
  .to('.terrace',{clipPath:'inset(0% 0% 0% 0%)',duration:1.2,ease:'power2.inOut'},5.5)
+ .set('.bedroom',{autoAlpha:0},6.75)
  .fromTo('.terrace-composite',{scale:1.12},{scale:1.02,duration:3.6,ease:'none'},5.5)
  .fromTo('.copy-terrace',{y:20},{autoAlpha:1,y:0,duration:.7},6.3)
  .to('.sunset-sky',{opacity:1,duration:1.6},6.8)

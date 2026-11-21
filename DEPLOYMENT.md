@@ -209,3 +209,11 @@ Rimossi pulsante Esplora e relativo dialogo/codice, monogramma stellato e asteri
 Arco della luce SVG con punto che segue la curva, fasi La luce/L’ora dorata/La quiete collegate alla timeline reversibile. Tolto filtro fotografico animato per ridurre i costi di rendering; composizione cielo/luci mantenuta. Scrub più reattivo, percorso mobile più breve e nessuna ricostruzione della regia per i soli cambi di altezza della barra del browser mobile. Motion ridotto rispettato; nessuna nuova dipendenza.
 
 Suite browser aggiornata per galleria senza menù, compattezza mobile sotto 250px, curva della luce reversibile, date/prezzo/checkout, tre viewport e audit della prenotazione senza violazioni. Dodici test demo, asset/collegamenti, typecheck e build passati. Nessuna prenotazione reale creata o modifica alla gestione, al database, ad Android o agli altri progetti.
+
+## DIMORA MIA — dittico fotografico e camera più leggera
+
+Galleria finale riprogettata come due fotografie complete: camera in un’apertura ad arco e terrazza orizzontale, composizione asimmetrica su desktop e sequenza verticale su mobile. Rimossi carosello orizzontale, maschere animate e trasformazioni sovrapposte delle fotografie; nessuna animazione di rendering nello scroll della galleria mobile. Nuova chiusura verde profondo, tipografia e richiamo architettonico DM. Scorciatoia inferiore nascosta in galleria/chiusura, Prenota sempre nella navbar. Indicazione fotografie dimostrative conservata.
+
+Raccordo camera da letto attraverso un pannello a tutta larghezza animato soltanto via transform; immagine con dolly minimo e caricamento anticipato. Scene coperte nascoste e cornici sovrapposte disattivate su mobile. Niente blur della navbar durante lo scroll mobile. Foto camera ricompressa WebP da 525720 a 274184 byte, mantenendo 1800×1200 pixel. Miglioramenti di costo/rendering verificati nel codice e nel browser; fluidità fisica Samsung da confermare dal proprietario.
+
+Test browser su 1440/390/360 pixel: dittico senza overflow laterale, apertura galleria, footer con CTA libera, camera senza maschera per-frame, percorso date/totale/prenotazione simulato, inversione dello scroll e movimento ridotto; audit prenotazione senza violazioni. Dodici test demo, asset, typecheck e build passati. Nessuna prenotazione reale creata, backend/app Android/altre sezioni del portfolio preservati.

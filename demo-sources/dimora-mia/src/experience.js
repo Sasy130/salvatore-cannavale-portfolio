@@ -6,7 +6,8 @@ export function augmentTimeline(timeline,mobile){
  .to('.floor-grid',{yPercent:50,autoAlpha:0,duration:1.4},0)
  .fromTo('.spatial-word',{xPercent:30,autoAlpha:0},{xPercent:-5,autoAlpha:.22,duration:.7},1.6)
  .to('.spatial-word',{xPercent:-40,autoAlpha:0,duration:1.3},2.6)
- .fromTo('.threshold-frames i',{scale:.55,opacity:0,rotation:mobile?0:7},{scale:1.2,opacity:.7,rotation:0,stagger:.1,duration:.65,ease:'power2.inOut'},2.75)
+;
+ if(!mobile)timeline.fromTo('.threshold-frames i',{scale:.55,opacity:0,rotation:mobile?0:7},{scale:1.2,opacity:.7,rotation:0,stagger:.1,duration:.65,ease:'power2.inOut'},2.75)
  .to('.threshold-frames i',{scale:3,opacity:0,stagger:.09,duration:1.25,ease:'power2.in'},3.3);
 }
 export function initExperience({isMotion}){
