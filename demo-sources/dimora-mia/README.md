@@ -1,13 +1,19 @@
-# CASA MIA sul portfolio
+# DIMORA MIA sul portfolio
 
 URL: https://www.salvatorecannavale.it/demos/dimora-mia/
 
 La copia portfolio è autonoma: HTML, CSS, JS, WebP, GSAP e font sono serviti dallo stesso dominio. Non incorpora iframe o endpoint ChatGPT/Sites.
 
-Il booking della copia è una **simulazione locale**: usa solo localStorage del visitatore, senza calendario condiviso, database remoto, email o Stripe. Il pannello demo è volutamente privo di autenticazione reale e non contiene credenziali. Non usare dati personali. I prezzi non sono preventivi contrattuali. I limiti sono indicati nell’interfaccia.
+Il sito controlla `/api/casa-mia/status`. In produzione, con servizio abilitato, disponibilità, prezzi e prenotazioni usano il database condiviso con la gestione e l’APK. I pagamenti restano in ambiente test e le configurazioni email/push vanno verificate separatamente. Non ripiega su salvataggi locali se il servizio condiviso è dichiarato indisponibile.
 
-Il motore originale, con prezzi server-side, inventario atomico, autenticazione e verifica Stripe, resta conservato in `server/` e `drizzle/` per un futuro hosting con database; non è presentato come attivo in questa copia statica. Il Site originale non viene modificato.
+La demo esplicita `?demo=1` simula soltanto nel browser tramite localStorage, senza prenotazioni reali, email o pagamenti; i test UI non scrivono prenotazioni in produzione. Il pannello demo è privo di autenticazione reale e non contiene credenziali. Non usare dati personali nei test.
 
 Ricostruzione: `npm ci`, poi `npm run build:portfolio`. L’output viene scritto soltanto in `../../public/demos/dimora-mia/`. Le fotografie sono dimostrative Unsplash, non della proprietà reale; crediti nel README e nell’interfaccia.
 
 Il documento BACKEND.md descrive il progetto originale; le relative funzionalità server non sono attive nella copia portfolio.
+
+## Prenotazione diretta e regia visiva
+
+Invito esplicito in hero e navbar, scorciatoia durante l’esplorazione nascosta durante prenotazione/dialoghi, raccordo finale dalla terrazza al soggiorno, ingresso della scheda con movimento controllato dallo scroll e reveal architettonici delle fotografie. Percorso date → totale → prenotazione con caratteri/campi più leggibili. Endpoint arrivo/partenza etichettati, checkout consentito su giorno di nuovo arrivo perché la notte di uscita è esclusa. Preventivi obsoleti e risposte calendario fuori ordine ignorati. Movimenti ridotti, tastiera e focus nel checkout verificati.
+
+Verifica browser: `node scripts/casa-mia/test-guest-design.mjs`, con dev server sulla porta 4175. Tre viewport, API simulate, nessuna prenotazione vera creata.

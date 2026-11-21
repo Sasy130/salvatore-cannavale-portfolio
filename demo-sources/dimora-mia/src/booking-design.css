@@ -1,0 +1,63 @@
+/* Direct booking is part of the experience, never hidden behind it. */
+:root{--forest:#263e33;--champagne:#d1ba91}
+.nav .book-link{border:0;background:var(--forest);color:#fff8eb;border-radius:3px;padding:14px 20px;font-size:11px;min-height:44px;gap:20px;transition:background .25s,box-shadow .25s}
+.nav.over-scene .book-link{background:#eee7d8;color:var(--forest)}
+.nav .book-link:hover{box-shadow:0 5px 20px #10261b20;background:#3e5648;color:white}
+.hero-actions{display:flex;align-items:center;gap:22px;margin-top:24px;pointer-events:auto}
+.direct-cta{display:flex;align-items:center;justify-content:space-between;gap:27px;padding:17px 20px;color:#fff8eb;background:var(--forest);font-size:11px;min-height:50px;border-radius:3px;overflow:hidden;position:relative;isolation:isolate}
+.direct-cta:before,.scene-book-link:before{content:'';position:absolute;inset:0;background:#4c6654;transform:translateY(102%);transition:transform .4s cubic-bezier(.2,.7,.2,1);z-index:-1}
+.direct-cta:hover:before,.scene-book-link:hover:before{transform:translateY(0)}
+.direct-cta>span,.booking-dock a>span{font-size:20px;transition:transform .35s}
+.direct-cta:hover>span,.booking-dock a:hover>span{transform:translate(3px,-3px)}
+.hero-actions .round-link{margin-top:0;font-size:10px;gap:10px}
+.hero-booking-note{display:block;margin-top:12px;font-size:9px;color:#58604f;letter-spacing:.1px}
+.copy-booking{top:34%;left:10%;max-width:82%;padding:32px 0;border-top:1px solid #e6dcc577}
+.copy-booking h2{font-size:clamp(52px,6vw,96px)}
+.scene-book-link{display:inline-flex;position:relative;isolation:isolate;overflow:hidden;align-items:center;gap:45px;padding:17px 22px;background:#ede5d4;color:#263e33;font-size:12px;margin-top:5px}
+.scene-book-link:hover{color:#fff8eb}.scene-book-link span{font-size:22px}
+.booking-section{padding:110px 8%;gap:7%;background:#e6e3d8;align-items:start;border-top:1px solid #c4c6b7}
+.booking-section:before{left:-22vw;top:8%;height:75vw;width:55vw;border-color:#9ba28c3b}
+.booking-heading{padding-top:26px}.booking-heading h2{font-size:clamp(58px,5.6vw,88px);line-height:1.02;margin:25px 0}
+.booking-heading>.eyebrow{font-size:9px;color:#405543;letter-spacing:2px}
+.booking-heading>p{font-size:14px;color:#5b6457;line-height:1.9}
+.booking-steps{padding:0;margin:36px 0 30px;list-style:none;display:grid;gap:22px}
+.booking-steps li{display:flex;gap:17px;align-items:start}.booking-steps li>span{font-size:10px;color:#54654f;padding-top:4px;border-top:1px solid #a3ab96;min-width:27px}
+.booking-steps strong{font-weight:600;font-size:13px}.booking-steps p{font-size:11px;color:#586450;line-height:1.7;margin-top:5px;max-width:270px}
+.booking-trust{border-top:1px solid #b9bfae;padding-top:22px;margin-top:28px;font-size:10px;color:#41563f;line-height:1.6}
+.booking-heading small{font-size:9px;letter-spacing:.15px;line-height:1.8;margin-top:24px;max-width:330px;color:#58614f}
+.booking-card{max-width:520px;background:#faf7ef;border:1px solid #d0d1c3;border-radius:8px 8px 3px 3px;padding:30px;box-shadow:0 24px 70px #293c2510}
+.card-top{font-size:30px;gap:12px;margin-bottom:26px}.status-dot{font-size:8px;letter-spacing:.5px;white-space:nowrap;color:#425a3e}
+.booking-card label{font-size:10px;letter-spacing:1px}.date-fields{gap:10px}.date-fields input{font-size:14px;min-height:44px;padding-top:8px}
+.guest-field select{font-size:13px;min-height:44px}.calendar-top{font-size:13px;margin:20px 0 12px}.calendar-top button{min-width:44px;min-height:44px;border:1px solid #d8dbcc;border-radius:50%;transition:background .2s,transform .2s}
+.calendar-top button:hover:not(:disabled){background:#e7eadf;transform:scale(1.05)}
+.calendar-help{font-size:11px;line-height:1.6;color:#58634f;margin-bottom:18px;min-height:18px}
+.calendar-week{font-size:10px;color:#5d6955;margin-bottom:12px}.calendar{gap:3px}.calendar button{min-height:43px;font-size:12px;border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;transition:background .15s,color .15s}
+.calendar button small{font-size:7px;font-weight:600;letter-spacing:.3px;line-height:1.1}.calendar button.selected{background:var(--forest);color:#fff8eb;opacity:1}
+.calendar button.inrange{background:#e3e8d9}.calendar button.off.checkout-option{background:linear-gradient(135deg,#f6f5eb 50%,#e8e7df 50%);text-decoration:none;color:#374a33}
+.calendar button.selected:hover{background:#354d3c}.calendar button.off.selected{background:var(--forest);color:#fff8eb;text-decoration:none}
+.calendar-key{font-size:9px;color:#58624e;line-height:1.6;flex-wrap:wrap}.quote{font-size:12px;line-height:1.8;margin-top:24px;padding-top:20px}.quote-total{font-size:17px;margin-top:12px;padding-top:14px;color:#263e33}
+.booking-card .primary{background:var(--forest);font-size:13px;min-height:56px;border-radius:3px;padding:18px 20px;transition:background .25s,box-shadow .25s}.booking-card .primary:hover{background:#3c5848;box-shadow:0 8px 22px #263e3320}
+.booking-card .primary[aria-busy=true] span{animation:bookingBusy 1s ease-in-out infinite}.booking-card .primary[aria-busy=true]{opacity:.75}
+#booking-message{font-size:12px;color:#725033;line-height:1.7}.card-foot{font-size:10px;line-height:1.6;color:#59634f}
+#checkout h3{font-size:36px;line-height:1.1}.checkout-note{font-size:12px;line-height:1.8;color:#58624f}#checkout label{margin:18px 0 8px}#checkout input,#checkout select{font-size:14px;min-height:46px;border-radius:3px;background:#fffdf7}#checkout .check-label{font-size:11px!important;gap:10px;align-items:center}#checkout .check-label input{min-height:20px;width:20px!important}.back-button{min-height:44px;font-size:12px}
+.booking-dock{position:fixed;left:50%;bottom:max(22px,env(safe-area-inset-bottom));transform:translate(-50%,0);z-index:35;display:flex;align-items:center;gap:32px;background:#f7f3e9f5;border:1px solid #d4d5c4;border-radius:6px;padding:11px 12px 11px 22px;box-shadow:0 10px 50px #172b2422;max-width:calc(100vw - 30px);transition:opacity .25s,transform .35s,visibility .25s}
+.booking-dock[aria-hidden=true]{opacity:0;visibility:hidden;transform:translate(-50%,24px);pointer-events:none}
+.booking-dock>div{display:grid;gap:5px}.dock-kicker{font-size:7px;letter-spacing:1.7px;color:#58624f}.dock-summary{font-size:11px;white-space:nowrap}.booking-dock a{padding:14px 18px;display:flex;align-items:center;gap:25px;white-space:nowrap;font-size:12px;background:var(--forest);color:#fff9ec;border-radius:3px;min-height:48px}
+.editorial-gallery .image-card{overflow:hidden}.editorial-gallery .image-card img{transform-origin:center;transition:filter .5s}.editorial-gallery .image-card:hover img{filter:saturate(.8)}
+@keyframes bookingBusy{50%{transform:translate(2px,-2px);opacity:.4}}
+@media(min-width:701px) and (max-height:800px){.hero-actions{margin-top:17px}.hero-actions .direct-cta{min-height:44px;padding:12px 16px}.hero-copy h1{margin-bottom:16px}.hero-copy{top:20%}.arrival-line{display:none}}
+@media(max-width:1050px){.hero-actions{gap:15px}.hero-actions .round-link{font-size:9px;gap:8px}.hero-actions .circle{width:30px;height:30px}.direct-cta{gap:18px;font-size:10px;padding:14px}.booking-section{gap:5%;padding:80px 6%}.booking-card{padding:24px}.booking-heading h2{font-size:61px}}
+@media(max-width:700px){.nav .book-link{font-size:9px;padding:10px 12px;gap:10px}.hero-actions{display:grid;justify-items:start;gap:13px;margin-top:20px}.hero-actions .round-link{font-size:9px;margin-top:0}.hero-actions .direct-cta{padding:14px 17px;font-size:11px;min-height:47px;gap:24px}.hero-copy p{font-size:11px}.hero-booking-note{max-width:140px;font-size:8px;line-height:1.7;margin-top:10px}.hero-copy{top:19%}.hero-copy h1{font-size:16vw;line-height:.87;margin-top:24px;margin-bottom:18px}.arrival-line{display:none}.hero-bottom{bottom:22px}.copy-booking{top:33%;left:8%;padding-top:24px}.copy-booking h2{font-size:13vw;line-height:1.07}.scene-book-link{font-size:12px;gap:30px}.booking-section{display:flex;flex-direction:column;gap:35px;padding:64px 6% 70px}.booking-heading{padding:0}.booking-heading h2{font-size:59px;margin:24px 0 20px}.booking-heading>p{font-size:13px}.booking-steps{gap:17px;margin-top:26px}.booking-heading>.eyebrow{font-size:8px}.booking-trust{display:none}.booking-heading small{font-size:9px;margin-top:20px}.booking-card{align-self:center;max-width:520px;padding:24px 20px}.calendar button{min-height:43px}.booking-dock{bottom:max(12px,env(safe-area-inset-bottom));padding:8px 8px 8px 14px;gap:16px;width:calc(100% - 24px);justify-content:space-between}.dock-kicker{font-size:6px;letter-spacing:1.2px}.dock-summary{font-size:10px;white-space:normal;max-width:135px;line-height:1.5}.booking-dock a{padding:12px 14px;font-size:11px;gap:15px}.footer-bottom{padding-bottom:85px}}
+@media(max-width:370px){.hero-copy h1{font-size:16vw}.hero-copy{top:19%}.hero-actions{gap:9px;margin-top:15px}.hero-actions .direct-cta{min-height:43px;padding:11px 13px}.hero-booking-note{display:none}.nav .book-link{font-size:8px;padding:9px}.booking-card{padding:20px 15px}.booking-heading h2{font-size:53px}.card-top{font-size:27px}.date-fields input{font-size:12px}.booking-dock a{font-size:10px;gap:10px}}
+@media(prefers-reduced-motion:reduce){.booking-dock,.direct-cta:before,.scene-book-link:before,.calendar button,.calendar-top button{transition:none!important}.booking-card .primary[aria-busy=true] span{animation:none!important}.copy-booking{display:none!important}}
+body.reduced .copy-booking{display:none!important}body.reduced .booking-card .primary[aria-busy=true] span{animation:none}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+html:has(body.reduced){scroll-behavior:auto}
+.booking-section{color:var(--ink)}
+.nav .book-link{white-space:nowrap;flex-shrink:0}
+@media(max-width:700px){.nav .wordmark{font-size:20px;letter-spacing:2px}.nav-right{gap:10px}.explore-toggle{padding:10px 11px}}
+/* Drawn symbols stay crisp and never become colored emoji on Android. */
+.book-link>span,.direct-cta>span,.scene-book-link>span,.booking-dock a>span,.round-link .circle,.text-link>span,.menu-book>span,.chapter-menu i{font-size:0!important;flex-shrink:0}
+.book-link>span:after,.direct-cta>span:after,.scene-book-link>span:after,.booking-dock a>span:after,.round-link .circle:after,.text-link>span:after,.menu-book>span:after,.chapter-menu i:after{content:'';display:block;width:18px;height:18px;background:currentColor;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 19 19 5M5 5h14v14' fill='none' stroke='black' stroke-width='1.4'/%3E%3C/svg%3E") center/contain no-repeat}
+.hero-seal>span{font-size:0!important}.hero-seal>span:after{content:'';display:block;width:32px;height:32px;background:#687653;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M20 2v36M2 20h36M7 7l26 26M7 33 33 7' stroke='black' stroke-width='2'/%3E%3C/svg%3E") center/contain no-repeat}
+@media(max-width:380px){.nav .explore-toggle>span{display:none}.nav .explore-toggle{width:44px;height:44px;justify-content:center;padding:12px;flex-shrink:0}}
