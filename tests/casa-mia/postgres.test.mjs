@@ -131,3 +131,32 @@ test('native logout revokes biometric access as well as the current session',asy
 test('invalid biometric attempts are limited separately from password access',async()=>{
  await bioSetup();for(let i=0;i<30;i++)assert.equal((await call('auth/native/refresh',{credential:'x'.repeat(43)})).status,401);assert.equal((await call('auth/native/refresh',{credential:'x'.repeat(43)})).status,429);assert.equal((await call('admin/login',{password:env.ADMIN_PASSWORD})).status,200);
 });
+
+test('Firebase Android download config selects this package and token rotation replaces only the previous phone',async()=>{
+ const {cookie,token}=await nativeSetup();
+ const normalized=JSON.parse(env.FIREBASE_ANDROID_CONFIG);
+ env.FIREBASE_ANDROID_CONFIG=JSON.stringify({project_info:{project_id:normalized.projectId,project_number:normalized.senderId},client:[{client_info:{android_client_info:{package_name:'other.app'},mobilesdk_app_id:'wrong'}},{client_info:{android_client_info:{package_name:'it.dimoramia.owner'},mobilesdk_app_id:normalized.applicationId},api_key:[{current_key:normalized.apiKey}]}]});
+ assert.equal((await call('admin/native/push',undefined,{cookie})).body.configured,true);
+ const first=(await call('admin/native/push/register',{token},{cookie})).body;
+ const second=(await call('admin/native/push/register',{token:token+'B'},{cookie})).body;
+ const rotated=await call('admin/native/push/register',{token:token+'C',replaceId:first.id},{cookie});assert.equal(rotated.status,201);
+ const devices=(await call('admin/native/push',undefined,{cookie})).body.devices;
+ assert.equal(devices.find(d=>d.id===first.id).active,false);assert.equal(devices.find(d=>d.id===second.id).active,true);
+ let sent=[];env.NATIVE_PUSH_SEND=async(t)=>sent.push(t);await call('book',guest());assert.deepEqual(sent.sort(),[token+'B',token+'C'].sort());
+});
+test('FCM sends a system-displayable private notification with booking routing and no guest details',async()=>{
+ const {cookie,token}=await nativeSetup();await call('admin/native/push/register',{token},{cookie});
+ const original=globalThis.fetch;let message;
+ globalThis.fetch=async(url,options)=>{
+  if(String(url)==='https://oauth2.googleapis.com/token')return Response.json({access_token:'test-only-fcm-bearer',expires_in:3600});
+  assert.match(String(url),/^https:\/\/fcm.googleapis.com\/v1\/projects\/dimora-test\/messages:send$/);
+  message=JSON.parse(options.body).message;return Response.json({name:'projects/dimora-test/messages/test'});
+ };
+ try {const booking=await call('book',guest());assert.equal(booking.status,201);
+  assert.equal(message.token,token);assert.equal(message.data.bookingId,booking.body.id);
+  assert.equal(message.android.notification.channel_id,'prenotazioni');assert.equal(message.android.notification.visibility,'PRIVATE');
+  assert.equal(message.android.notification.tag,message.data.eventId);assert.ok(message.notification.title.includes('nuova prenotazione'));
+  assert.ok(!JSON.stringify(message).includes('Ospite test'));assert.ok(!JSON.stringify(message).includes('demo@example.test'));
+  assert.equal((await pg.query('SELECT status FROM native_push_outbox')).rows[0].status,'accepted');
+ } finally {globalThis.fetch=original;}
+});

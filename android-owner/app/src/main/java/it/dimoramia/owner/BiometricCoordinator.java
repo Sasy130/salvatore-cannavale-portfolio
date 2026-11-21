@@ -23,6 +23,7 @@ final class BiometricCoordinator {
   private final ExecutorService executor;
   private final Listener listener;
   private final BiometricVault vault;
+  private final AccessWindow accessWindow;
   private boolean locked, busy;
   private long generation;
   private CancellationSignal signal;
@@ -33,7 +34,8 @@ final class BiometricCoordinator {
     this.executor = executor;
     this.listener = listener;
     vault = new BiometricVault(activity);
-    locked = vault.enabled();
+    accessWindow = ((DimoraApp) activity.getApplication()).accessWindow;
+    locked = vault.enabled() && !accessWindow.open();
   }
 
   boolean enabled() {
@@ -98,16 +100,30 @@ final class BiometricCoordinator {
       signal.cancel();
       signal = null;
     }
-    if (vault.enabled()) locked = true;
+    accessWindow.background();
+    if (vault.enabled()) locked = !accessWindow.open();
+  }
+
+  void resumed() {
+    if (vault.enabled()) locked = !accessWindow.resume();
+  }
+
+  void lockNow() {
+    accessWindow.clear();
+    stopped();
+    locked = vault.enabled();
+    listener.locked("Gestione bloccata. Sblocca con l’impronta o usa la password.");
   }
 
   void passwordAccepted(JSONObject data) {
+    accessWindow.authenticated();
     busy = false;
     locked = false;
     listener.unlocked(data);
   }
 
   void unauthorized() {
+    accessWindow.clear();
     new SessionStore(activity).clear();
     if (vault.enabled()) {
       locked = true;
@@ -116,6 +132,7 @@ final class BiometricCoordinator {
   }
 
   void clearLocal() {
+    accessWindow.clear();
     generation++;
     if (signal != null) signal.cancel();
     signal = null;
@@ -168,10 +185,11 @@ final class BiometricCoordinator {
                               }
                               try {
                                 vault.store(id, credential, cipher);
+                                accessWindow.authenticated();
                                 listener.changed();
                                 listener.message(
-                                    "Impronta attivata. Al prossimo ingresso potrai sbloccare la"
-                                        + " gestione senza riscrivere la password.");
+                                    "Impronta attivata. Dopo 10 minuti in background potrai"
+                                        + " sbloccare la gestione senza riscrivere la password.");
                               } catch (Exception e) {
                                 vault.clear();
                                 revoke(id);
@@ -276,6 +294,7 @@ final class BiometricCoordinator {
                                 busy = false;
                                 if (alive(ticket)) {
                                   locked = false;
+                                  accessWindow.authenticated();
                                   listener.unlocked(data);
                                 }
                               });

@@ -310,12 +310,19 @@ public class MainActivity extends Activity {
   protected void onResume() {
     super.onResume();
     handler.removeCallbacks(poll);
+    shouldSyncPush = true;
+    if (bio != null) bio.resumed();
     if (bio != null && bio.locked()) {
       if (!passwordEntry && !lockScreenVisible) showLocked("");
       return;
     }
     handler.postDelayed(poll, 30000);
     if (data != null && !editorOpen) refresh(false);
+    else if (bio != null && bio.enabled() && !passwordEntry && !lockScreenVisible) {
+      loading = false;
+      frame();
+      refresh(true);
+    }
   }
 
   @Override
@@ -329,6 +336,8 @@ public class MainActivity extends Activity {
     super.onStop();
     if (bio != null) {
       bio.stopped();
+      connectingNotifications = false;
+      loading = false;
       if (bio.enabled()) {
         data = null;
         passwordEntry = false;
@@ -356,6 +365,7 @@ public class MainActivity extends Activity {
   protected void onNewIntent(Intent intent) {
     super.onNewIntent(intent);
     setIntent(intent);
+    if (bio != null) bio.resumed();
     if (intent.hasExtra("view")) tab = intent.getStringExtra("view");
     if (bio != null && bio.locked()) {
       if (!passwordEntry) showLocked("");
@@ -625,12 +635,7 @@ public class MainActivity extends Activity {
                   runOnUiThread(
                       () -> {
                         password.setText("");
-                        if (isFinishing() || isDestroyed()) return;
-                        if (bio.enabled() && ticket != bio.generation()) {
-                          showLocked("");
-                          return;
-                        }
-                        bio.passwordAccepted(result);
+                        completePasswordLogin(result, ticket);
                       });
                 } catch (Exception e) {
                   runOnUiThread(
@@ -663,8 +668,21 @@ public class MainActivity extends Activity {
             false));
   }
 
+  private void completePasswordLogin(JSONObject result, long ticket) {
+    if (isFinishing() || isDestroyed()) return;
+    if (ticket != bio.generation()) {
+      if (bio.enabled()) showLocked("");
+      return;
+    }
+    bio.passwordAccepted(result);
+  }
+
   private void openNotificationBooking() {
     String id = getIntent().getStringExtra("bookingId");
+    if (id != null && !id.matches("[a-zA-Z0-9-]{1,80}")) {
+      getIntent().removeExtra("bookingId");
+      return;
+    }
     if (id == null || editorOpen) return;
     getIntent().removeExtra("bookingId");
     for (JSONObject b : bookings())
@@ -1314,7 +1332,8 @@ public class MainActivity extends Activity {
     security.addView(
         text(
             "La biometria forte di Android protegge una credenziale cifrata. La password resta"
-                + " sempre disponibile e i dati della casa vengono nascosti quando lasci l’app.",
+                + " sempre disponibile. Puoi rientrare entro 10 minuti senza risbloccare; dopo la"
+                + " chiusura completa dell’app è richiesto un nuovo accesso.",
             13,
             MUTED,
             false));
@@ -1347,6 +1366,10 @@ public class MainActivity extends Activity {
               MUTED,
               false));
     }
+    if (bio.enabled()) {
+      space(security, 12);
+      security.addView(button("Blocca adesso", false, () -> bio.lockNow()));
+    }
     LinearLayout p = card("Notifiche Android");
     p.addView(text(pushDescription(), 14, MUTED, false));
     space(p, 12);
@@ -1374,7 +1397,7 @@ public class MainActivity extends Activity {
       edit.setEnabled(!stale);
       rules.addView(edit);
     }
-    LinearLayout info = card("DIMORA MIA · 1.2.0");
+    LinearLayout info = card("DIMORA MIA · 1.3.0");
     info.addView(
         text(
             "Una sola casa, un calendario condiviso con il sito. Fuso orario Europe/Rome · 4"
@@ -2031,23 +2054,45 @@ public class MainActivity extends Activity {
         });
   }
 
+  private boolean shouldSyncPush = true;
+
   private void loadPush() {
+    final long ticket = bio.generation();
     executor.execute(
         () -> {
           try {
             JSONObject config = api.call("admin/native/push", null);
             runOnUiThread(
                 () -> {
+                  if (isFinishing() || isDestroyed() || ticket != bio.generation() || bio.locked())
+                    return;
                   boolean changed =
                       pushConfig == null
                           || pushConfig.optBoolean("configured") != config.optBoolean("configured");
                   pushConfig = config;
+                  if (shouldSyncPush
+                      && config.optBoolean("configured")
+                      && notificationPermission()
+                      && channelEnabled()
+                      && (getSharedPreferences("native", 0).getBoolean("pushWanted", false)
+                          || !getSharedPreferences("native", 0)
+                              .getString("deviceId", "")
+                              .isEmpty())) {
+                    shouldSyncPush = false;
+                    activateNotifications(false);
+                  }
                   if (changed && tab.equals("settings") && data != null && !editorOpen && !typing())
                     render();
                 });
           } catch (Exception ignored) {
           }
         });
+  }
+
+  private boolean channelEnabled() {
+    NotificationChannel channel =
+        getSystemService(NotificationManager.class).getNotificationChannel("prenotazioni");
+    return channel == null || channel.getImportance() != NotificationManager.IMPORTANCE_NONE;
   }
 
   private boolean notificationPermission() {
@@ -2064,6 +2109,8 @@ public class MainActivity extends Activity {
     if (!notificationPermission()
         || !getSystemService(NotificationManager.class).areNotificationsEnabled())
       return "Consenti gli avvisi Android per questo dispositivo.";
+    if (!channelEnabled())
+      return "Il canale Prenotazioni è disattivato nelle impostazioni Android.";
     String id = getSharedPreferences("native", 0).getString("deviceId", "");
     JSONArray devices = pushConfig.optJSONArray("devices");
     if (devices != null)
@@ -2133,6 +2180,89 @@ public class MainActivity extends Activity {
                     13,
                     MUTED,
                     false));
+          String linkedId = getSharedPreferences("native", 0).getString("deviceId", "");
+          if (!linkedId.isEmpty()) {
+            space(box, 12);
+            box.addView(
+                button(
+                    "Disattiva avvisi su questo telefono",
+                    false,
+                    () -> {
+                      new AlertDialog.Builder(this)
+                          .setTitle("Disattivare gli avvisi?")
+                          .setMessage(
+                              "Le prenotazioni restano nel calendario. Questo telefono non riceverà"
+                                  + " nuovi invii finché non lo ricolleghi.")
+                          .setNegativeButton("Mantieni", null)
+                          .setPositiveButton(
+                              "Disattiva",
+                              (d, w) ->
+                                  request(
+                                      () ->
+                                          api.call(
+                                              "admin/native/push/disable", obj("id", linkedId)),
+                                      result -> {
+                                        shouldSyncPush = false;
+                                        getSharedPreferences("native", 0)
+                                            .edit()
+                                            .putBoolean("pushWanted", false)
+                                            .remove("deviceId")
+                                            .remove("fcmToken")
+                                            .apply();
+                                        if (!com.google.firebase.FirebaseApp.getApps(this)
+                                            .isEmpty()) {
+                                          FirebaseMessaging.getInstance().setAutoInitEnabled(false);
+                                          FirebaseMessaging.getInstance().deleteToken();
+                                        }
+                                        dialog.dismiss();
+                                        loadPush();
+                                        notice("Avvisi disattivati su questo telefono.");
+                                      }))
+                          .show();
+                    }));
+            JSONArray deliveries = config.optJSONArray("deliveries");
+            if (deliveries != null) {
+              int count = 0;
+              for (int i = 0; i < deliveries.length() && count < 4; i++) {
+                JSONObject entry = deliveries.optJSONObject(i);
+                if (entry == null || !linkedId.equals(entry.optString("device_id"))) continue;
+                if (count++ == 0) {
+                  space(box, 20);
+                  box.addView(text("Ultimi invii a questo telefono", 14, INK, true));
+                }
+                String status = entry.optString("status");
+                String label =
+                    status.equals("accepted")
+                        ? "Accettato da Firebase"
+                        : status.equals("queued") || status.equals("sending")
+                            ? "Invio in attesa"
+                            : status.equals("superseded")
+                                ? "Invio annullato"
+                                : status.equals("expired")
+                                    ? "Invio scaduto"
+                                    : "Invio da verificare";
+                space(box, 8);
+                box.addView(
+                    text(
+                        (entry.optString("kind").equals("test") ? "Prova" : "Prenotazione")
+                            + " · "
+                            + label,
+                        12,
+                        MUTED,
+                        false));
+              }
+              if (count > 0) {
+                space(box, 8);
+                box.addView(
+                    text(
+                        "Accettato indica la presa in carico del servizio. La ricezione si verifica"
+                            + " sul telefono.",
+                        12,
+                        MUTED,
+                        false));
+              }
+            }
+          }
           space(box, 10);
           box.addView(
               button(
@@ -2140,17 +2270,24 @@ public class MainActivity extends Activity {
                   false,
                   () ->
                       startActivity(
-                          new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
-                              .putExtra(Settings.EXTRA_APP_PACKAGE, getPackageName()))));
+                          new Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
+                              .putExtra(Settings.EXTRA_APP_PACKAGE, getPackageName())
+                              .putExtra(Settings.EXTRA_CHANNEL_ID, "prenotazioni"))));
         });
   }
 
   private void activateNotifications() {
+    activateNotifications(true);
+  }
+
+  private void activateNotifications(boolean explicit) {
+    if (!explicit && !notificationPermission()) return;
     if (Build.VERSION.SDK_INT >= 33 && !notificationPermission()) {
       requestPermissions(new String[] {Manifest.permission.POST_NOTIFICATIONS}, 44);
       return;
     }
-    if (!getSystemService(NotificationManager.class).areNotificationsEnabled()) {
+    if (!getSystemService(NotificationManager.class).areNotificationsEnabled()
+        || !channelEnabled()) {
       notice("Abilita le notifiche nelle impostazioni Android dell’app.");
       return;
     }
@@ -2159,7 +2296,11 @@ public class MainActivity extends Activity {
       return;
     }
     connectingNotifications = true;
-    Toast.makeText(this, "Collegamento alle notifiche Android…", Toast.LENGTH_LONG).show();
+    shouldSyncPush = false;
+    final long ticket = bio.generation();
+    if (explicit) getSharedPreferences("native", 0).edit().putBoolean("pushWanted", true).apply();
+    if (explicit)
+      Toast.makeText(this, "Collegamento alle notifiche Android…", Toast.LENGTH_LONG).show();
     request(
         () -> api.call("admin/native/push", null),
         config -> {
@@ -2178,6 +2319,7 @@ public class MainActivity extends Activity {
           Runnable deadline =
               () -> {
                 if (completed.compareAndSet(false, true)) {
+                  if (ticket != bio.generation() || bio.locked()) return;
                   connectingNotifications = false;
                   notice(
                       "Il servizio Android non ha risposto in tempo. Riprova quando la connessione"
@@ -2191,7 +2333,10 @@ public class MainActivity extends Activity {
                   task -> {
                     if (!completed.compareAndSet(false, true)) return;
                     handler.removeCallbacks(deadline);
-                    if (isFinishing() || isDestroyed()) return;
+                    if (isFinishing()
+                        || isDestroyed()
+                        || ticket != bio.generation()
+                        || bio.locked()) return;
                     if (!task.isSuccessful()) {
                       connectingNotifications = false;
                       notice(
@@ -2209,7 +2354,9 @@ public class MainActivity extends Activity {
                                     "token",
                                     token,
                                     "label",
-                                    Build.MANUFACTURER + " " + Build.MODEL)),
+                                    Build.MANUFACTURER + " " + Build.MODEL,
+                                    "replaceId",
+                                    getSharedPreferences("native", 0).getString("deviceId", ""))),
                         result -> {
                           connectingNotifications = false;
                           getSharedPreferences("native", 0)
@@ -2217,7 +2364,8 @@ public class MainActivity extends Activity {
                               .putString("deviceId", result.getString("id"))
                               .apply();
                           loadPush();
-                          notice("Telefono collegato. Ora invia la prova dal server.");
+                          if (explicit)
+                            notice("Telefono collegato. Ora invia la prova dal server.");
                         });
                   });
         });

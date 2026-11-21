@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
       source: "/casa-mia/downloads/dimora-mia.apk",
       headers: [
         { key: "Content-Type", value: "application/vnd.android.package-archive" },
-        { key: "Content-Disposition", value: 'attachment; filename="DIMORA-MIA-1.2.0.apk"' },
+        { key: "Content-Disposition", value: 'attachment; filename="DIMORA-MIA-1.3.0.apk"' },
         { key: "Cache-Control", value: "public, max-age=0, must-revalidate" },
         { key: "X-Content-Type-Options", value: "nosniff" },
       ],

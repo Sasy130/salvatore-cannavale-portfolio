@@ -12,6 +12,10 @@ import org.json.JSONObject;
 public class DimoraMessagingService extends FirebaseMessagingService {
   @Override
   public void onNewToken(String token) {
+    if (!getSharedPreferences("native", 0)
+        .getBoolean(
+            "pushWanted", !getSharedPreferences("native", 0).getString("deviceId", "").isEmpty()))
+      return;
     getSharedPreferences("native", 0).edit().putString("fcmToken", token).apply();
     if (new SessionStore(this).get().isEmpty()) return;
     new Thread(
@@ -20,7 +24,10 @@ public class DimoraMessagingService extends FirebaseMessagingService {
                 JSONObject b =
                     new JSONObject()
                         .put("token", token)
-                        .put("label", Build.MANUFACTURER + " " + Build.MODEL);
+                        .put("label", Build.MANUFACTURER + " " + Build.MODEL)
+                        .put(
+                            "replaceId",
+                            getSharedPreferences("native", 0).getString("deviceId", ""));
                 JSONObject r = new Api(this).call("admin/native/push/register", b);
                 getSharedPreferences("native", 0)
                     .edit()

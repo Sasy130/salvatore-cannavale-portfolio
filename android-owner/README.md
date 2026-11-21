@@ -1,6 +1,6 @@
 # DIMORA MIA — Android privato
 
-App Android nativa Java, package `it.dimoramia.owner`, minSdk 26, target/compile 35, versione 1.2.0. Nessuna WebView, browser incorporato, TWA o URL remoto usato come interfaccia. Le schermate sono widget Android e chiamano le API HTTPS del portfolio. La rete rimane necessaria per dati condivisi e push.
+App Android nativa Java, package `it.dimoramia.owner`, minSdk 26, target/compile 35, versione 1.3.0. Nessuna WebView, browser incorporato, TWA o URL remoto usato come interfaccia. Le schermate sono widget Android e chiamano le API HTTPS del portfolio. La rete rimane necessaria per dati condivisi e push.
 
 ## Implementato
 
@@ -13,7 +13,7 @@ La configurazione Firebase Android viene letta dal server dopo l'accesso e inizi
 ## Configurazione notifiche ancora esterna
 
 1. Creare progetto Firebase Spark, Analytics facoltativo/disattivabile. Registrare app Android con package **it.dimoramia.owner**.
-2. Dal google-services.json ricavare solo i valori pubblici: `project_info.project_id` → projectId; `project_info.project_number` → senderId; client di questo package `client_info.mobilesdk_app_id` → applicationId e `api_key[0].current_key` → apiKey. Salvare questo oggetto JSON in **CASA_MIA_FIREBASE_ANDROID_CONFIG**, Production, su Vercel.
+2. È possibile salvare direttamente l’intero google-services.json in CASA_MIA_FIREBASE_ANDROID_CONFIG: viene selezionato soltanto il client con package it.dimoramia.owner. In alternativa, ricavare solo i valori pubblici: `project_info.project_id` → projectId; `project_info.project_number` → senderId; client di questo package `client_info.mobilesdk_app_id` → applicationId e `api_key[0].current_key` → apiKey. Salvare questo oggetto JSON in **CASA_MIA_FIREBASE_ANDROID_CONFIG**, Production, su Vercel.
 3. Creare credenziali server per Firebase Cloud Messaging HTTP v1 nel proprio progetto, con permesso di invio FCM. Salvare il JSON dell'account di servizio come variabile **sensibile CASA_MIA_FIREBASE_SERVICE_ACCOUNT**, Production. Mai nel repository, APK o chat. Cloud Messaging HTTP v1 deve essere abilitata. Project ID dei due valori deve coincidere. Ripubblicare dopo aver salvato le variabili.
 4. Nell'APK accedere → Regole → Notifiche Android → Attiva → consentire il permesso Android → prova server. Verificare il messaggio sul telefono e poi una prenotazione di prova. Non dichiarare consegna fisica dal solo accepted di Firebase.
 
@@ -49,3 +49,11 @@ Con biometria attiva, passaggio in background e nuovo avvio nascondono i dati; r
 Nuova intestazione verde profondo, gerarchia avorio/champagne, schede e stati più leggibili. Indicatore di sincronizzazione Canvas, animato soltanto durante aggiornamenti visibili, rispettando animazioni di sistema disattivate. Nessun riquadro notifiche in Home.
 
 14 test Android/JUnit/Robolectric, lint release e 64 test backend passati. Test hardware di consenso/riconoscimento biometrico sul Samsung da completare dal proprietario: Robolectric verifica blocco, fallback e protezione da intent, non il sensore fisico. Firebase resta da configurare; questo aggiornamento non dichiara attive le push native.
+
+## Aggiornamento 1.3.0 (versionCode 5)
+
+Finestra di rientro di 10 minuti in background misurata con elapsedRealtime, soltanto in memoria del processo. Dopo login o biometria riusciti, rientri brevi non richiedono un nuovo consenso; ogni uscita successiva apre una nuova finestra. Scadenza, logout, sessione server non valida, blocco manuale o riavvio del processo richiedono autenticazione. Dati caricati scartati in background e riletti dal server al rientro; guardie di generazione preservate, nessun servizio permanente o bypass persistente. Pulsante Blocca adesso in Regole.
+
+FCM invia notification+data: Android può mostrare l’avviso anche quando il processo non è attivo; in primo piano viene costruito localmente. Tag evento stabile, messaggi generici e canale privato Prenotazioni, tap verso il soggiorno soltanto dopo autenticazione. Configurazione accetta anche google-services.json originale, selezionando il package corretto. Riconciliazione token dopo rientro/accesso se già abilitati, sostituzione del vecchio dispositivo senza avvisi doppi; consenso mai richiesto automaticamente. Canale Android disattivato rilevato, collegamento diretto alle sue impostazioni, ultimi invii in Regole, disattivazione esplicita del telefono con revoca server.
+
+Verifica fisica di ricezione indispensabile: Firebase accepted significa preso in carico, non ricevuto dal telefono. Configurazione account Firebase e variabili server richiesta prima di dichiarare attive le notifiche. Retry con coda persistente e worker protetto già esistenti; scheduler esterno periodico ancora da configurare, nessuna garanzia di consegna assoluta in assenza di rete/permessi o con app forzatamente arrestata.

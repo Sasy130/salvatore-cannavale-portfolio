@@ -310,4 +310,96 @@ public class NativeScreenTest {
       assertNull(animation.get(indicator));
     }
   }
+
+  @Test
+  public void returningWithinGraceKeepsAccessButExpiredNotificationIntentLocksIt()
+      throws Exception {
+    android.content.SharedPreferences prefs =
+        org.robolectric.RuntimeEnvironment.getApplication().getSharedPreferences("biometric", 0);
+    DimoraApp application = (DimoraApp) org.robolectric.RuntimeEnvironment.getApplication();
+    try (ActivityController<MainActivity> controller =
+        Robolectric.buildActivity(MainActivity.class).create().start().resume().visible()) {
+      MainActivity app = controller.get();
+      prefs
+          .edit()
+          .putString("id", "protected-device")
+          .putString("vault", "encrypted-placeholder")
+          .commit();
+      application.accessWindow.authenticated();
+      controller.pause().stop();
+      Field bioField = MainActivity.class.getDeclaredField("bio");
+      bioField.setAccessible(true);
+      BiometricCoordinator coordinator = (BiometricCoordinator) bioField.get(app);
+      org.robolectric.shadows.ShadowSystemClock.advanceBy(java.time.Duration.ofMinutes(9));
+      coordinator.resumed();
+      assertFalse(coordinator.locked());
+      coordinator.stopped();
+      org.robolectric.shadows.ShadowSystemClock.advanceBy(java.time.Duration.ofMinutes(10));
+      app.onNewIntent(
+          new android.content.Intent(app, MainActivity.class)
+              .putExtra("bookingId", "CM-private-booking"));
+      assertTrue(coordinator.locked());
+      assertNotNull(find(app.getWindow().getDecorView(), "Usa la password"));
+      assertNull(find(app.getWindow().getDecorView(), "Tutti i soggiorni."));
+    } finally {
+      prefs.edit().clear().commit();
+      application.accessWindow.clear();
+    }
+  }
+
+  @Test
+  public void disabledBookingChannelIsReportedEvenWhenAppPermissionIsEnabled() throws Exception {
+    try (ActivityController<MainActivity> controller =
+        Robolectric.buildActivity(MainActivity.class).create().start().resume().visible()) {
+      MainActivity app = controller.get();
+      android.app.NotificationManager manager =
+          app.getSystemService(android.app.NotificationManager.class);
+      manager.deleteNotificationChannel("prenotazioni");
+      manager.createNotificationChannel(
+          new android.app.NotificationChannel(
+              "prenotazioni", "Prenotazioni", android.app.NotificationManager.IMPORTANCE_NONE));
+      set(app, "pushConfig", new JSONObject().put("configured", true));
+      Method description = MainActivity.class.getDeclaredMethod("pushDescription");
+      description.setAccessible(true);
+      assertTrue(description.invoke(app).toString().contains("canale Prenotazioni"));
+    }
+  }
+
+  @Test
+  public void passwordFallbackCanFinishWhileBiometricGateIsLocked() throws Exception {
+    android.content.SharedPreferences prefs =
+        org.robolectric.RuntimeEnvironment.getApplication().getSharedPreferences("biometric", 0);
+    prefs
+        .edit()
+        .putString("id", "protected-device")
+        .putString("vault", "encrypted-placeholder")
+        .commit();
+    DimoraApp application = (DimoraApp) org.robolectric.RuntimeEnvironment.getApplication();
+    try (ActivityController<MainActivity> controller =
+        Robolectric.buildActivity(MainActivity.class).create().start().resume().visible()) {
+      MainActivity app = controller.get();
+      find(app.getWindow().getDecorView(), "Usa la password").performClick();
+      Field bioField = MainActivity.class.getDeclaredField("bio");
+      bioField.setAccessible(true);
+      BiometricCoordinator coordinator = (BiometricCoordinator) bioField.get(app);
+      assertTrue(coordinator.locked());
+      Method accept =
+          MainActivity.class.getDeclaredMethod(
+              "completePasswordLogin", JSONObject.class, long.class);
+      accept.setAccessible(true);
+      accept.invoke(
+          app,
+          new JSONObject()
+              .put("bookings", new JSONArray())
+              .put("payments", new JSONArray())
+              .put("settings", new JSONObject()),
+          coordinator.generation());
+      assertFalse(coordinator.locked());
+      assertTrue(application.accessWindow.open());
+      assertNotNull(find(app.getWindow().getDecorView(), "Oggi, nella tua dimora."));
+    } finally {
+      prefs.edit().clear().commit();
+      application.accessWindow.clear();
+    }
+  }
 }

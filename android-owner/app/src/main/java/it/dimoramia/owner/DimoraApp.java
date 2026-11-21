@@ -6,6 +6,8 @@ import com.google.firebase.*;
 import org.json.JSONObject;
 
 public class DimoraApp extends Application {
+  final AccessWindow accessWindow = new AccessWindow();
+
   @Override
   public void onCreate() {
     super.onCreate();

@@ -18,7 +18,14 @@ const hash = (s) => createHash("sha256").update(s).digest("hex");
 const cache = new Map();
 export function nativeConfig(env) {
   try {
-    const client = JSON.parse(env.FIREBASE_ANDROID_CONFIG || "null"),
+    const raw = JSON.parse(env.FIREBASE_ANDROID_CONFIG || "null"),
+      android = raw?.client?.find(c => c.client_info?.android_client_info?.package_name === "it.dimoramia.owner"),
+      client = raw?.project_info ? {
+        projectId: raw.project_info.project_id,
+        senderId: raw.project_info.project_number,
+        applicationId: android?.client_info?.mobilesdk_app_id,
+        apiKey: android?.api_key?.[0]?.current_key,
+      } : raw,
       service = JSON.parse(env.FIREBASE_SERVICE_ACCOUNT || "null");
     if (
       !client ||
@@ -121,10 +128,20 @@ async function send(cfg, token, payload) {
         message: {
           token,
           data: payload,
+          notification: {
+            title: payload.kind === "test" ? "DIMORA MIA · prova" : "DIMORA MIA · nuova prenotazione",
+            body: payload.kind === "test" ? "Il collegamento nativo con il server funziona." : "Hai ricevuto una prenotazione. Apri l’app per i dettagli.",
+          },
           android: {
             priority: "HIGH",
             ttl: "3600s",
-            collapse_key: payload.eventId,
+            notification: {
+              channel_id: "prenotazioni",
+              icon: "ic_notification",
+              tag: payload.eventId,
+              visibility: "PRIVATE",
+              default_sound: true,
+            },
           },
         },
       }),
@@ -316,6 +333,12 @@ export async function handleNativePush(path, req, env) {
               tokenHash,
             )
           )[0];
+          if (typeof input.replaceId === "string" && input.replaceId !== prior?.id) {
+            await tx.prepare("UPDATE native_devices SET active=FALSE WHERE id=? AND project_id=?")
+              .bind(input.replaceId, cfg.client.projectId).run();
+            await tx.prepare("UPDATE native_push_outbox SET status='superseded',locked_until=NULL WHERE device_id=? AND status='queued'")
+              .bind(input.replaceId).run();
+          }
           const count = Number(
             (
               await all(
