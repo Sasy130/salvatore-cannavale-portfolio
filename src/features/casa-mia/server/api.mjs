@@ -1,4 +1,9 @@
 import {
+  nativeRefresh,
+  handleNativeAuth,
+  revokeNativeAuth,
+} from "./native-auth.mjs";
+import {
   handleNativePush,
   disableNativeDevice,
   deliverNativePush,
@@ -253,6 +258,7 @@ export async function handleAPI(req, env) {
       if (!origin || origin !== url.origin)
         return json({ error: "Origine richiesta non consentita." }, 403);
     }
+    if (p === "auth/native/refresh") return nativeRefresh(req, env);
     if (p === "stripe/webhook" && req.method === "POST") {
       const event = await verifyWebhook(req, env),
         session = event.data?.object;
@@ -632,6 +638,8 @@ export async function handleAPI(req, env) {
           ));
       if (!session)
         return json({ error: "Accedi al pannello proprietario." }, 401);
+      if (p === "admin/native/auth" || p.startsWith("admin/native/auth/"))
+        return handleNativeAuth(p, req, env);
       if (p === "admin/native/push" || p.startsWith("admin/native/push/"))
         return handleNativePush(p, req, env);
       if (p === "admin/push" || p.startsWith("admin/push/"))
@@ -708,6 +716,7 @@ export async function handleAPI(req, env) {
         await disablePushEndpoint(db, input.pushEndpoint);
         if (input.nativeDeviceId)
           await disableNativeDevice(env, input.nativeDeviceId);
+        if (input.nativeAuthId) await revokeNativeAuth(env, input.nativeAuthId);
         await db
           .prepare("DELETE FROM sessions WHERE token=?")
           .bind(await sessionKey(token))

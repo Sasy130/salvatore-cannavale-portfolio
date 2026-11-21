@@ -8,7 +8,10 @@ import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.RippleDrawable;
 import android.net.Uri;
 import android.os.*;
@@ -35,6 +38,13 @@ public class MainActivity extends Activity {
   private final ExecutorService executor = Executors.newSingleThreadExecutor();
   private final Handler handler = new Handler(Looper.getMainLooper());
   private Api api;
+  private BiometricCoordinator bio;
+  private boolean passwordEntry = false, lockScreenVisible = false;
+  private TextView lockStatus;
+  private SyncIndicator syncIndicator, lockProgress;
+  private final int DEEP = Color.rgb(22, 55, 40),
+      IVORY = Color.rgb(246, 241, 226),
+      GOLD = Color.rgb(220, 188, 138);
   private LinearLayout root, body, top, nav;
   private TextView sync, title;
   private ScrollView contentScroll;
@@ -201,13 +211,17 @@ public class MainActivity extends Activity {
   }
 
   private void request(Work work, Done done) {
+    final long requestGeneration = bio.generation();
     executor.execute(
         () -> {
           try {
             JSONObject result = work.run();
             runOnUiThread(
                 () -> {
-                  if (isFinishing() || isDestroyed()) return;
+                  if (isFinishing()
+                      || isDestroyed()
+                      || requestGeneration != bio.generation()
+                      || bio.locked()) return;
                   try {
                     done.accept(result);
                   } catch (Exception e) {
@@ -217,14 +231,17 @@ public class MainActivity extends Activity {
           } catch (Exception e) {
             runOnUiThread(
                 () -> {
-                  if (isFinishing() || isDestroyed()) return;
+                  if (isFinishing()
+                      || isDestroyed()
+                      || requestGeneration != bio.generation()
+                      || bio.locked()) return;
                   loading = false;
+                  if (syncIndicator != null) syncIndicator.setBusy(false);
                   connectingNotifications = false;
                   if (activeDialog != null) enableActions(activeDialog.getWindow().getDecorView());
                   if (e instanceof Api.Failure && ((Api.Failure) e).status == 401) {
-                    new SessionStore(this).clear();
                     data = null;
-                    login("Sessione scaduta. Accedi di nuovo.");
+                    bio.unauthorized();
                   } else
                     notice(
                         e.getMessage() == null
@@ -239,12 +256,48 @@ public class MainActivity extends Activity {
   public void onCreate(Bundle saved) {
     super.onCreate(saved);
     api = new Api(this);
+    bio =
+        new BiometricCoordinator(
+            this,
+            api,
+            executor,
+            new BiometricCoordinator.Listener() {
+              public void unlocked(JSONObject value) {
+                acceptAuthenticated(value);
+              }
+
+              public void locked(String reason) {
+                showLocked(reason);
+              }
+
+              public void password(String reason) {
+                data = null;
+                login(reason);
+              }
+
+              public void changed() {
+                updatePrivacy();
+                if (bio.enabled() && !bio.locked() && data != null && !editorOpen) render();
+              }
+
+              public void message(String text) {
+                if (bio.locked() && lockStatus != null) {
+                  lockStatus.setText(text);
+                  if (lockProgress != null) {
+                    lockProgress.setVisibility(View.VISIBLE);
+                    lockProgress.setBusy(true);
+                  }
+                } else notice(text);
+              }
+            });
+    updatePrivacy();
     if (saved != null) {
       tab = saved.getString("tab", "overview");
       month = YearMonth.parse(saved.getString("month", month.toString()));
     }
     if (getIntent().hasExtra("view")) tab = getIntent().getStringExtra("view");
-    if (new SessionStore(this).get().isEmpty()) login("");
+    if (bio.locked()) showLocked("");
+    else if (new SessionStore(this).get().isEmpty()) login("");
     else {
       frame();
       title.setText("La tua dimora, sotto controllo.");
@@ -257,6 +310,10 @@ public class MainActivity extends Activity {
   protected void onResume() {
     super.onResume();
     handler.removeCallbacks(poll);
+    if (bio != null && bio.locked()) {
+      if (!passwordEntry && !lockScreenVisible) showLocked("");
+      return;
+    }
     handler.postDelayed(poll, 30000);
     if (data != null && !editorOpen) refresh(false);
   }
@@ -265,6 +322,20 @@ public class MainActivity extends Activity {
   protected void onPause() {
     super.onPause();
     handler.removeCallbacks(poll);
+  }
+
+  @Override
+  protected void onStop() {
+    super.onStop();
+    if (bio != null) {
+      bio.stopped();
+      if (bio.enabled()) {
+        data = null;
+        passwordEntry = false;
+        lockScreenVisible = false;
+        if (activeDialog != null) activeDialog.dismiss();
+      }
+    }
   }
 
   @Override
@@ -286,6 +357,10 @@ public class MainActivity extends Activity {
     super.onNewIntent(intent);
     setIntent(intent);
     if (intent.hasExtra("view")) tab = intent.getStringExtra("view");
+    if (bio != null && bio.locked()) {
+      if (!passwordEntry) showLocked("");
+      return;
+    }
     if (data != null) {
       render();
       refresh(false);
@@ -293,25 +368,121 @@ public class MainActivity extends Activity {
   }
 
   private void inset(View v) {
+    inset(v, false);
+  }
+
+  private void inset(View v, boolean darkHeader) {
+    int flags = getWindow().getDecorView().getSystemUiVisibility();
+    getWindow()
+        .getDecorView()
+        .setSystemUiVisibility(
+            darkHeader
+                ? flags & ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                : flags | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+    getWindow().setStatusBarColor(darkHeader ? DEEP : BG);
     v.setOnApplyWindowInsetsListener(
         (view, insets) -> {
+          int top, bottom;
           if (Build.VERSION.SDK_INT >= 30) {
             android.graphics.Insets i = insets.getInsets(WindowInsets.Type.systemBars());
-            view.setPadding(0, i.top, 0, i.bottom);
-          } else
-            view.setPadding(
-                0, insets.getSystemWindowInsetTop(), 0, insets.getSystemWindowInsetBottom());
+            top = i.top;
+            bottom = i.bottom;
+          } else {
+            top = insets.getSystemWindowInsetTop();
+            bottom = insets.getSystemWindowInsetBottom();
+          }
+          view.setPadding(0, top, 0, bottom);
+          if (darkHeader) {
+            LayerDrawable surface =
+                new LayerDrawable(new Drawable[] {new ColorDrawable(BG), new ColorDrawable(DEEP)});
+            surface.setLayerHeight(1, top);
+            surface.setLayerGravity(1, Gravity.TOP);
+            view.setBackground(surface);
+          } else view.setBackgroundColor(BG);
           return insets;
         });
     v.requestApplyInsets();
+  }
+
+  private void updatePrivacy() {
+    if (bio != null && bio.enabled()) getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+    else getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
+  }
+
+  private void acceptAuthenticated(JSONObject value) {
+    passwordEntry = false;
+    lockScreenVisible = false;
+    lockStatus = null;
+    loading = false;
+    data = value;
+    stale = false;
+    lastSync = System.currentTimeMillis();
+    updatePrivacy();
+    render();
+    openNotificationBooking();
+    loadPush();
+  }
+
+  private void showLocked(String reason) {
+    data = null;
+    editorOpen = false;
+    if (activeDialog != null) activeDialog.dismiss();
+    passwordEntry = false;
+    lockScreenVisible = true;
+    syncIndicator = null;
+    root = column();
+    root.setBackgroundColor(BG);
+    setContentView(root);
+    inset(root);
+    updatePrivacy();
+    ScrollView scroll = new ScrollView(this);
+    LinearLayout box = column();
+    box.setPadding(dp(28), dp(52), dp(28), dp(32));
+    scroll.addView(box);
+    root.addView(scroll, new LinearLayout.LayoutParams(-1, -1));
+    ImageView mark = new ImageView(this);
+    mark.setImageResource(R.drawable.app_icon);
+    mark.setContentDescription("Logo DIMORA MIA");
+    box.addView(mark, new LinearLayout.LayoutParams(dp(90), dp(90)));
+    space(box, 28);
+    box.addView(text("DIMORA MIA / ACCESSO PROTETTO", 11, GREEN, true));
+    space(box, 18);
+    box.addView(text("La tua dimora.\nSolo per te.", 35, INK, true));
+    space(box, 16);
+    box.addView(
+        text(
+            "Sblocca la gestione con l’impronta registrata su questo telefono.", 16, MUTED, false));
+    space(box, 26);
+    lockStatus = text(reason, 14, MUTED, false);
+    box.addView(lockStatus);
+    space(box, 12);
+    lockProgress = new SyncIndicator(this);
+    lockProgress.setBackground(shape(GREEN, 14));
+    lockProgress.setVisibility(View.GONE);
+    box.addView(lockProgress, new LinearLayout.LayoutParams(dp(48), dp(48)));
+    space(box, 16);
+    TextView unlock = button("Entra con l’impronta", true, () -> bio.unlock());
+    unlock.setEnabled(bio.available());
+    box.addView(unlock);
+    space(box, 12);
+    box.addView(button("Usa la password", false, () -> login("")));
+    space(box, 24);
+    box.addView(
+        text(
+            "L’impronta resta su Android. Per verificare l’accesso e aggiornare le prenotazioni"
+                + " serve internet.",
+            12,
+            MUTED,
+            false));
   }
 
   private void frame() {
     root = column();
     root.setBackgroundColor(BG);
     setContentView(root);
-    inset(root);
+    inset(root, true);
     top = row();
+    top.setBackgroundColor(DEEP);
     top.setPadding(dp(20), dp(13), dp(16), dp(13));
     ImageView mark = new ImageView(this);
     mark.setImageResource(R.drawable.app_icon);
@@ -322,14 +493,19 @@ public class MainActivity extends Activity {
     top.addView(mark, new LinearLayout.LayoutParams(dp(46), dp(46)));
     LinearLayout brand = column();
     brand.setPadding(dp(12), 0, 0, 0);
-    brand.addView(text("DIMORA MIA", 13, INK, true));
-    sync = text("GESTIONE PRIVATA", 10, MUTED, false);
+    brand.addView(text("DIMORA MIA", 13, IVORY, true));
+    sync = text("GESTIONE PRIVATA", 10, Color.rgb(196, 207, 188), false);
     brand.addView(sync);
     top.addView(brand, new LinearLayout.LayoutParams(0, -2, 1));
-    TextView refreshAction = button("↻", false, () -> refresh(true));
-    refreshAction.setTextSize(24);
-    refreshAction.setContentDescription("Aggiorna calendario");
-    top.addView(refreshAction, new LinearLayout.LayoutParams(dp(48), dp(48)));
+    syncIndicator = new SyncIndicator(this);
+    syncIndicator.setBackground(
+        new RippleDrawable(
+            ColorStateList.valueOf(Color.argb(35, 255, 255, 255)),
+            shape(Color.argb(15, 255, 255, 255), 14),
+            shape(Color.WHITE, 14)));
+    syncIndicator.setOnClickListener(v -> refresh(true));
+    syncIndicator.setBusy(loading);
+    top.addView(syncIndicator, new LinearLayout.LayoutParams(dp(48), dp(48)));
     root.addView(top);
     ScrollView scroll = new ScrollView(this);
     contentScroll = scroll;
@@ -387,6 +563,12 @@ public class MainActivity extends Activity {
   }
 
   private void login(String error) {
+    data = null;
+    passwordEntry = true;
+    lockScreenVisible = false;
+    lockStatus = null;
+    syncIndicator = null;
+    updatePrivacy();
     root = column();
     root.setBackgroundColor(BG);
     setContentView(root);
@@ -434,6 +616,7 @@ public class MainActivity extends Activity {
           }
           go.setEnabled(false);
           go.setText("Accesso in corso…");
+          final long ticket = bio.generation();
           executor.execute(
               () -> {
                 try {
@@ -442,12 +625,12 @@ public class MainActivity extends Activity {
                   runOnUiThread(
                       () -> {
                         password.setText("");
-                        data = result;
-                        stale = false;
-                        lastSync = System.currentTimeMillis();
-                        render();
-                        openNotificationBooking();
-                        loadPush();
+                        if (isFinishing() || isDestroyed()) return;
+                        if (bio.enabled() && ticket != bio.generation()) {
+                          showLocked("");
+                          return;
+                        }
+                        bio.passwordAccepted(result);
                       });
                 } catch (Exception e) {
                   runOnUiThread(
@@ -459,6 +642,17 @@ public class MainActivity extends Activity {
                 }
               });
         });
+    if (bio.enabled()) {
+      space(box, 12);
+      box.addView(
+          button(
+              "Entra con l’impronta",
+              false,
+              () -> {
+                showLocked("");
+                bio.unlock();
+              }));
+    }
     space(box, 20);
     box.addView(
         text(
@@ -488,8 +682,10 @@ public class MainActivity extends Activity {
   }
 
   private void refresh(boolean visible) {
-    if (loading) return;
+    if (loading || (bio != null && bio.locked())) return;
     loading = true;
+    final long refreshGeneration = bio.generation();
+    if (syncIndicator != null) syncIndicator.setBusy(true);
     if (visible && sync != null) sync.setText("AGGIORNAMENTO…");
     executor.execute(
         () -> {
@@ -497,8 +693,12 @@ public class MainActivity extends Activity {
             JSONObject result = api.call("admin/console", null);
             runOnUiThread(
                 () -> {
-                  if (isFinishing() || isDestroyed()) return;
+                  if (isFinishing()
+                      || isDestroyed()
+                      || refreshGeneration != bio.generation()
+                      || bio.locked()) return;
                   loading = false;
+                  if (syncIndicator != null) syncIndicator.setBusy(false);
                   boolean changed = shouldRebuild(result);
                   data = result;
                   stale = false;
@@ -516,12 +716,16 @@ public class MainActivity extends Activity {
           } catch (Exception e) {
             runOnUiThread(
                 () -> {
+                  if (isFinishing()
+                      || isDestroyed()
+                      || refreshGeneration != bio.generation()
+                      || bio.locked()) return;
                   loading = false;
+                  if (syncIndicator != null) syncIndicator.setBusy(false);
                   stale = true;
                   if (e instanceof Api.Failure && ((Api.Failure) e).status == 401) {
                     data = null;
-                    new SessionStore(this).clear();
-                    login("Sessione scaduta. Accedi di nuovo.");
+                    bio.unauthorized();
                   } else {
                     if (data != null && !editorOpen) render();
                     if (visible) notice("Calendario non aggiornato. Controlla internet e riprova.");
@@ -570,7 +774,7 @@ public class MainActivity extends Activity {
   }
 
   private void render() {
-    if (data == null) return;
+    if (data == null || (bio != null && bio.locked())) return;
     int previousScroll = contentScroll == null ? 0 : contentScroll.getScrollY();
     boolean sameTab = tab.equals(renderedTab);
     frame();
@@ -658,23 +862,27 @@ public class MainActivity extends Activity {
     for (JSONObject b : bookings())
       if (active(b) && !block(b)) {
         due += balance(b);
-        if (b.optString("checkin").compareTo(t) <= 0 && b.optString("checkout").compareTo(t) > 0)
-          in++;
+        if (b.optString("status").equals("confirmed")
+            && b.optString("checkin").compareTo(t) <= 0
+            && b.optString("checkout").compareTo(t) > 0) in++;
         if (b.optString("status").equals("confirmed") && b.optString("checkin").equals(t))
           arrivals.add(b);
         if (b.optString("status").equals("confirmed") && b.optString("checkout").equals(t))
           departures.add(b);
       }
     LinearLayout metrics = card("");
-    metrics.addView(text(in + " soggiorni in corso", 22, INK, true));
+    metrics.setBackground(shape(DEEP, 22));
+    metrics.addView(text("LA CASA, OGGI", 10, GOLD, true));
+    space(metrics, 12);
+    metrics.addView(text(in + " soggiorni in corso", 27, IVORY, true));
     metrics.addView(
         text(
             arrivals.size() + " arrivi oggi  ·  " + departures.size() + " partenze",
             14,
-            MUTED,
+            Color.rgb(195, 207, 188),
             false));
     space(metrics, 10);
-    metrics.addView(text(money(due) + " da registrare", 18, GREEN, true));
+    metrics.addView(text(money(due) + " da registrare", 20, GOLD, true));
     LinearLayout priorities = card("Da seguire oggi");
     if (arrivals.isEmpty() && departures.isEmpty())
       priorities.addView(text("Nessun arrivo o partenza oggi.", 14, MUTED, false));
@@ -747,25 +955,65 @@ public class MainActivity extends Activity {
 
   private void bookingRow(LinearLayout parent, JSONObject b, String tag) {
     LinearLayout c = column();
-    c.setPadding(0, dp(13), 0, dp(13));
-    if (!tag.isEmpty()) c.addView(text(tag, 10, GREEN, true));
-    c.addView(text(b.optString("name", "Soggiorno"), 16, INK, true));
+    c.setPadding(0, dp(14), 0, dp(14));
+    if (!tag.isEmpty()) {
+      c.addView(text(tag, 10, GREEN, true));
+      space(c, 7);
+    }
+    LinearLayout line = row();
+    TextView name = text(b.optString("name", "Soggiorno"), 17, INK, true);
+    line.addView(name, new LinearLayout.LayoutParams(0, -2, 1));
+    String status = b.optString("status"), label = NativeRules.statusLabel(status);
+    boolean warning = status.contains("payment") || status.contains("refund");
+    if (status.startsWith("cancelled") && paid(b) > 0) {
+      label = "Rimborso da valutare";
+      warning = true;
+    }
+    int chipColor =
+        warning
+            ? Color.rgb(248, 236, 215)
+            : block(b)
+                ? Color.rgb(239, 232, 220)
+                : active(b) ? Color.rgb(232, 239, 224) : Color.rgb(239, 238, 233);
+    TextView badge = text(label, 10, warning ? Color.rgb(123, 82, 32) : GREEN, true);
+    badge.setPadding(dp(9), dp(5), dp(9), dp(5));
+    badge.setMaxWidth(dp(130));
+    badge.setBackground(shape(chipColor, 8));
+    LinearLayout.LayoutParams bp = new LinearLayout.LayoutParams(-2, -2);
+    bp.leftMargin = dp(9);
+    line.addView(badge, bp);
+    c.addView(line);
+    space(c, 7);
     c.addView(
+        text(date(b.optString("checkin")) + " → " + date(b.optString("checkout")), 14, INK, false));
+    space(c, 5);
+    LinearLayout footer = row();
+    boolean largeText = getResources().getConfiguration().fontScale > 1.3f;
+    if (largeText) footer.setOrientation(LinearLayout.VERTICAL);
+    footer.addView(
         text(
-            date(b.optString("checkin"))
-                + " → "
-                + date(b.optString("checkout"))
-                + "  ·  "
-                + (block(b) ? "Date bloccate" : b.optInt("guests") + " ospiti"),
-            13,
+            block(b)
+                ? "Periodo non disponibile"
+                : b.optInt("guests") + " ospiti · " + sourceLabel(b.optString("source")),
+            11,
             MUTED,
-            false));
-    String state = NativeRules.statusLabel(b.optString("status"));
-    c.addView(
-        text(state + (block(b) ? "" : "  ·  " + money(balance(b)) + " residuo"), 12, GREEN, true));
+            false),
+        largeText
+            ? new LinearLayout.LayoutParams(-1, -2)
+            : new LinearLayout.LayoutParams(0, -2, 1));
+    if (!block(b) && active(b)) {
+      long remaining = balance(b);
+      footer.addView(
+          text(
+              remaining > 0 ? money(remaining) + " residuo" : "Saldo chiuso",
+              remaining > 0 ? 14 : 11,
+              GREEN,
+              true));
+    }
+    c.addView(footer);
     c.setBackground(
         new RippleDrawable(
-            ColorStateList.valueOf(Color.argb(25, 41, 74, 56)), null, shape(Color.WHITE, 10)));
+            ColorStateList.valueOf(Color.argb(25, 41, 74, 56)), null, shape(Color.WHITE, 12)));
     c.setClickable(true);
     c.setFocusable(true);
     c.setOnClickListener(
@@ -774,9 +1022,9 @@ public class MainActivity extends Activity {
           detail(b);
         });
     parent.addView(c);
-    View line = new View(this);
-    line.setBackgroundColor(LINE);
-    parent.addView(line, new LinearLayout.LayoutParams(-1, dp(1)));
+    View divider = new View(this);
+    divider.setBackgroundColor(LINE);
+    parent.addView(divider, new LinearLayout.LayoutParams(-1, dp(1)));
   }
 
   private void calendar() {
@@ -1055,6 +1303,50 @@ public class MainActivity extends Activity {
 
   private void settings() {
     heading("La tua gestione.");
+    LinearLayout security = card("Accesso e privacy");
+    security.addView(
+        text(
+            bio.enabled() ? "Impronta attiva su questo telefono" : "Accedi con l’impronta",
+            17,
+            INK,
+            true));
+    space(security, 10);
+    security.addView(
+        text(
+            "La biometria forte di Android protegge una credenziale cifrata. La password resta"
+                + " sempre disponibile e i dati della casa vengono nascosti quando lasci l’app.",
+            13,
+            MUTED,
+            false));
+    space(security, 16);
+    TextView bioAction =
+        button(
+            bio.enabled() ? "Disattiva accesso con impronta" : "Attiva accesso con impronta",
+            !bio.enabled(),
+            () -> {
+              if (bio.enabled())
+                new AlertDialog.Builder(this)
+                    .setTitle("Disattivare l’impronta?")
+                    .setMessage(
+                        "L’accesso protetto di questo telefono verrà revocato. Poi accederai con la"
+                            + " password.")
+                    .setNegativeButton("Mantieni", null)
+                    .setPositiveButton("Disattiva", (d, w) -> bio.disable())
+                    .show();
+              else bio.enable();
+            });
+    bioAction.setEnabled(!stale && (bio.enabled() || bio.available()));
+    security.addView(bioAction);
+    if (!bio.enabled() && !bio.available()) {
+      space(security, 10);
+      security.addView(
+          text(
+              "Registra un’impronta in Android per attivare questa funzione. È richiesto Android 9"
+                  + " o successivo.",
+              12,
+              MUTED,
+              false));
+    }
     LinearLayout p = card("Notifiche Android");
     p.addView(text(pushDescription(), 14, MUTED, false));
     space(p, 12);
@@ -1082,7 +1374,7 @@ public class MainActivity extends Activity {
       edit.setEnabled(!stale);
       rules.addView(edit);
     }
-    LinearLayout info = card("DIMORA MIA · 1.1.0");
+    LinearLayout info = card("DIMORA MIA · 1.2.0");
     info.addView(
         text(
             "Una sola casa, un calendario condiviso con il sito. Fuso orario Europe/Rome · 4"
@@ -1108,11 +1400,15 @@ public class MainActivity extends Activity {
                           JSONObject input =
                               obj(
                                   "nativeDeviceId",
-                                  getSharedPreferences("native", 0).getString("deviceId", ""));
+                                  getSharedPreferences("native", 0).getString("deviceId", ""),
+                                  "nativeAuthId",
+                                  bio.id());
                           request(
                               () -> api.call("admin/logout", input),
                               r -> {
                                 getSharedPreferences("native", 0).edit().remove("deviceId").apply();
+                                bio.clearLocal();
+                                updatePrivacy();
                                 new SessionStore(this).clear();
                                 if (!com.google.firebase.FirebaseApp.getApps(this).isEmpty()) {
                                   FirebaseMessaging.getInstance().setAutoInitEnabled(false);

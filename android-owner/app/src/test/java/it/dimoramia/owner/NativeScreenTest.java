@@ -205,4 +205,109 @@ public class NativeScreenTest {
       assertEquals(false, changed.invoke(app, data));
     }
   }
+
+  @Test
+  public void enabledBiometricAccessCannotRevealPrivateViewsThroughRenderOrNotificationIntent()
+      throws Exception {
+    android.content.SharedPreferences prefs =
+        org.robolectric.RuntimeEnvironment.getApplication().getSharedPreferences("biometric", 0);
+    prefs
+        .edit()
+        .putString("id", "protected-device")
+        .putString("vault", "encrypted-placeholder")
+        .commit();
+    try (ActivityController<MainActivity> controller =
+        Robolectric.buildActivity(MainActivity.class).create().start().resume().visible()) {
+      MainActivity app = controller.get();
+      View root = app.getWindow().getDecorView();
+      assertNotNull(find(root, "Usa la password"));
+      assertNull(find(root, "Oggi, nella tua dimora."));
+      assertTrue(
+          (app.getWindow().getAttributes().flags & WindowManager.LayoutParams.FLAG_SECURE) != 0);
+      set(
+          app,
+          "data",
+          new JSONObject()
+              .put("bookings", new JSONArray())
+              .put("payments", new JSONArray())
+              .put("settings", new JSONObject()));
+      Method render = MainActivity.class.getDeclaredMethod("render");
+      render.setAccessible(true);
+      render.invoke(app);
+      app.onNewIntent(
+          new android.content.Intent(app, MainActivity.class).putExtra("view", "reservations"));
+      assertNull(find(app.getWindow().getDecorView(), "Tutti i soggiorni."));
+      assertNotNull(find(app.getWindow().getDecorView(), "Usa la password"));
+      find(app.getWindow().getDecorView(), "Usa la password").performClick();
+      assertNotNull(find(app.getWindow().getDecorView(), "Accedi alla gestione →"));
+    } finally {
+      prefs.edit().clear().commit();
+    }
+  }
+
+  @Test
+  public void backgroundingEnabledBiometricsLocksAgainAndDiscardsGuestData() throws Exception {
+    android.content.SharedPreferences prefs =
+        org.robolectric.RuntimeEnvironment.getApplication().getSharedPreferences("biometric", 0);
+    try (ActivityController<MainActivity> controller =
+        Robolectric.buildActivity(MainActivity.class).create().start().resume().visible()) {
+      MainActivity app = controller.get();
+      set(
+          app,
+          "data",
+          new JSONObject()
+              .put("bookings", new JSONArray())
+              .put("payments", new JSONArray())
+              .put("settings", new JSONObject()));
+      Method render = MainActivity.class.getDeclaredMethod("render");
+      render.setAccessible(true);
+      render.invoke(app);
+      prefs
+          .edit()
+          .putString("id", "protected-device")
+          .putString("vault", "encrypted-placeholder")
+          .commit();
+      controller.pause().stop();
+      Field field = MainActivity.class.getDeclaredField("data");
+      field.setAccessible(true);
+      assertNull(field.get(app));
+      controller.start().resume().visible();
+      assertNotNull(find(app.getWindow().getDecorView(), "Usa la password"));
+      assertNull(find(app.getWindow().getDecorView(), "Oggi, nella tua dimora."));
+    } finally {
+      prefs.edit().clear().commit();
+    }
+  }
+
+  @Test
+  public void refreshControlIsGraphicAndReturnsToIdleWithoutLeavingAnAnimation() throws Exception {
+    try (ActivityController<MainActivity> controller =
+        Robolectric.buildActivity(MainActivity.class).create().start().resume().visible()) {
+      MainActivity app = controller.get();
+      set(
+          app,
+          "data",
+          new JSONObject()
+              .put("bookings", new JSONArray())
+              .put("payments", new JSONArray())
+              .put("settings", new JSONObject()));
+      Method render = MainActivity.class.getDeclaredMethod("render");
+      render.setAccessible(true);
+      render.invoke(app);
+      assertNull(find(app.getWindow().getDecorView(), "↻"));
+      Field field = MainActivity.class.getDeclaredField("syncIndicator");
+      field.setAccessible(true);
+      SyncIndicator indicator = (SyncIndicator) field.get(app);
+      assertNotNull(indicator);
+      indicator.setBusy(true);
+      assertFalse(indicator.isEnabled());
+      assertEquals("Aggiornamento calendario in corso", indicator.getContentDescription());
+      indicator.setBusy(false);
+      assertTrue(indicator.isEnabled());
+      assertEquals("Aggiorna calendario", indicator.getContentDescription());
+      Field animation = SyncIndicator.class.getDeclaredField("animator");
+      animation.setAccessible(true);
+      assertNull(animation.get(indicator));
+    }
+  }
 }

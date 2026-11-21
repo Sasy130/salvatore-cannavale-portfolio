@@ -1,8 +1,8 @@
 import test,{before,beforeEach,after} from 'node:test';import assert from 'node:assert/strict';import {readFile} from 'node:fs/promises';import {PGlite} from '@electric-sql/pglite';import {postgresAdapter} from '../../src/features/casa-mia/server/postgres-adapter.mjs';import {handleAPI} from '../../src/features/casa-mia/server/api.mjs';
 let pg,db,env,queue=Promise.resolve();
 const year=new Date().getUTCFullYear()+1,arrival=`${year}-02-10`,departure=`${year}-02-13`;
-before(async()=>{pg=new PGlite();await pg.exec(await readFile(new URL('../../src/features/casa-mia/server/schema.sql',import.meta.url),'utf8'));await pg.exec(await readFile(new URL('../../src/features/casa-mia/server/migrations/002_owner_operations.sql',import.meta.url),'utf8'));await pg.exec(await readFile(new URL('../../src/features/casa-mia/server/migrations/003_stay_operations.sql',import.meta.url),'utf8'));await pg.exec(await readFile(new URL('../../src/features/casa-mia/server/migrations/004_receipts_outbox.sql',import.meta.url),'utf8'));await pg.exec(await readFile(new URL('../../src/features/casa-mia/server/migrations/005_web_push.sql',import.meta.url),'utf8'));await pg.exec(await readFile(new URL('../../src/features/casa-mia/server/migrations/006_native_android.sql',import.meta.url),'utf8'));const pool={async connect(){let unlock;const previous=queue;const gate=new Promise(r=>unlock=r);queue=previous.then(()=>gate);await previous;return {query:(s,a)=>pg.query(s,a),release:()=>unlock()}},async query(s,a){const c=await this.connect();try{return await c.query(s,a)}finally{c.release()}}};db=postgresAdapter(pool);env={DB:db,ADMIN_PASSWORD:'test-owner-password-123'};});
-beforeEach(async()=>{env={DB:db,ADMIN_PASSWORD:'test-owner-password-123'};await pg.exec('TRUNCATE casa_mia.nights,casa_mia.bookings,casa_mia.settings,casa_mia.sessions,casa_mia.attempts,casa_mia.push_devices,casa_mia.native_devices CASCADE')});after(async()=>pg.close());
+before(async()=>{pg=new PGlite();await pg.exec(await readFile(new URL('../../src/features/casa-mia/server/schema.sql',import.meta.url),'utf8'));await pg.exec(await readFile(new URL('../../src/features/casa-mia/server/migrations/002_owner_operations.sql',import.meta.url),'utf8'));await pg.exec(await readFile(new URL('../../src/features/casa-mia/server/migrations/003_stay_operations.sql',import.meta.url),'utf8'));await pg.exec(await readFile(new URL('../../src/features/casa-mia/server/migrations/004_receipts_outbox.sql',import.meta.url),'utf8'));await pg.exec(await readFile(new URL('../../src/features/casa-mia/server/migrations/005_web_push.sql',import.meta.url),'utf8'));await pg.exec(await readFile(new URL('../../src/features/casa-mia/server/migrations/006_native_android.sql',import.meta.url),'utf8'));await pg.exec(await readFile(new URL('../../src/features/casa-mia/server/migrations/007_native_biometric_auth.sql',import.meta.url),'utf8'));const pool={async connect(){let unlock;const previous=queue;const gate=new Promise(r=>unlock=r);queue=previous.then(()=>gate);await previous;return {query:(s,a)=>pg.query(s,a),release:()=>unlock()}},async query(s,a){const c=await this.connect();try{return await c.query(s,a)}finally{c.release()}}};db=postgresAdapter(pool);env={DB:db,ADMIN_PASSWORD:'test-owner-password-123'};});
+beforeEach(async()=>{env={DB:db,ADMIN_PASSWORD:'test-owner-password-123'};await pg.exec('TRUNCATE casa_mia.nights,casa_mia.bookings,casa_mia.settings,casa_mia.sessions,casa_mia.attempts,casa_mia.push_devices,casa_mia.native_devices,casa_mia.native_auth_devices CASCADE')});after(async()=>pg.close());
 const guest=()=>({checkin:arrival,checkout:departure,guests:2,name:'Ospite test',email:'demo@example.test',payment:'arrival',expectedTotal:60000,idempotency:crypto.randomUUID()});
 async function call(path,input,headers={}){const r=await handleAPI(new Request('https://casa.test/api/casa-mia/'+path,{method:input?'POST':'GET',headers:{origin:'https://casa.test','content-type':'application/json',...headers},body:input?JSON.stringify(input):undefined}),env);return {status:r.status,body:await r.json(),headers:r.headers}}
 async function login(){const r=await call('admin/login',{password:env.ADMIN_PASSWORD});assert.equal(r.status,200);return r.headers.get('set-cookie').split(';')[0]}
@@ -98,4 +98,36 @@ test('native failed deliveries remain durable and cancelled bookings suppress st
  const b=(await call('book',guest())).body;assert.equal((await pg.query('SELECT status FROM native_push_outbox')).rows[0].status,'queued');
  const snapshot=(await pg.query('SELECT * FROM bookings WHERE id=$1',[b.id])).rows[0];await call('admin/actions',{id:b.id,revision:snapshot.revision,action:'cancel',idempotency:crypto.randomUUID()},{cookie});
  await pg.query('UPDATE native_push_outbox SET next_attempt=0');const {deliverNativePush}=await import('../../src/features/casa-mia/server/native-push.mjs');await deliverNativePush(env);assert.equal((await pg.query('SELECT status FROM native_push_outbox')).rows[0].status,'superseded');
+});
+
+async function bioSetup(){env.NATIVE_AUTH_SECRET='biometric-server-secret-'.repeat(3);const cookie=await login();return {cookie};}
+const cookieOf=response=>response.headers.get('set-cookie').split(';')[0];
+test('biometric enrollment is owner-only, Origin-protected, stores only keyed hashes and never exposes credentials in device lists',async()=>{
+ assert.equal((await call('admin/native/auth/enroll',{label:'Samsung'})).status,401);const {cookie}=await bioSetup();
+ assert.equal((await call('admin/native/auth/enroll',{label:'Samsung'},{cookie,origin:'https://other.test'})).status,403);
+ const enrollment=await call('admin/native/auth/enroll',{label:'Samsung'},{cookie});assert.equal(enrollment.status,201);assert.match(enrollment.body.credential,/^[\w-]{43}$/);
+ const saved=(await pg.query('SELECT * FROM native_auth_devices')).rows[0];assert.notEqual(saved.credential_hash,enrollment.body.credential);assert.ok(!JSON.stringify(saved).includes(env.ADMIN_PASSWORD));
+ const list=await call('admin/native/auth',undefined,{cookie});assert.equal(list.body.configured,true);assert.ok(!JSON.stringify(list.body).includes(enrollment.body.credential));assert.ok(!JSON.stringify(list.body).includes('credential_hash'));assert.ok(!JSON.stringify(list.body).includes('password_fingerprint'));
+});
+test('biometric refresh creates real protected sessions; concurrent unlocks remain valid and revocation closes all linked sessions',async()=>{
+ const {cookie}=await bioSetup();const e=(await call('admin/native/auth/enroll',{label:'Telefono'},{cookie})).body;
+ const [a,b]=await Promise.all([call('auth/native/refresh',{credential:e.credential}),call('auth/native/refresh',{credential:e.credential})]);assert.equal(a.status,200);assert.equal(b.status,200);
+ for(const r of [a,b]){assert.match(r.headers.get('set-cookie'),/HttpOnly/);assert.match(r.headers.get('set-cookie'),/Secure/);assert.match(r.headers.get('set-cookie'),/SameSite=Strict/);assert.equal((await call('admin/console',undefined,{cookie:cookieOf(r)})).status,200);}
+ assert.equal((await call('admin/native/auth/revoke',{id:e.id},{cookie})).status,200);
+ for(const r of [a,b])assert.equal((await call('admin/console',undefined,{cookie:cookieOf(r)})).status,401);
+ assert.equal((await call('auth/native/refresh',{credential:e.credential})).status,401);
+});
+test('expired, tampered or password-invalidated biometric credentials cannot bypass owner access',async()=>{
+ const {cookie}=await bioSetup();const e=(await call('admin/native/auth/enroll',{label:'Telefono'},{cookie})).body;
+ assert.equal((await call('auth/native/refresh',{credential:e.credential},{origin:'https://other.test'})).status,403);
+ assert.equal((await call('auth/native/refresh',{credential:'A'.repeat(43)})).status,401);
+ await pg.query('UPDATE native_auth_devices SET expires=$1 WHERE id=$2',[Date.now()-1,e.id]);assert.equal((await call('auth/native/refresh',{credential:e.credential})).status,401);
+ await pg.query('UPDATE native_auth_devices SET expires=$1 WHERE id=$2',[Date.now()+100000,e.id]);env.ADMIN_PASSWORD='changed-password-123456';assert.equal((await call('auth/native/refresh',{credential:e.credential})).status,401);
+});
+test('native logout revokes biometric access as well as the current session',async()=>{
+ const {cookie}=await bioSetup();const e=(await call('admin/native/auth/enroll',{label:'Telefono'},{cookie})).body;const r=await call('auth/native/refresh',{credential:e.credential});const live=cookieOf(r);
+ assert.equal((await call('admin/logout',{nativeAuthId:e.id},{cookie:live})).status,200);assert.equal((await call('admin/console',undefined,{cookie:live})).status,401);assert.equal((await call('auth/native/refresh',{credential:e.credential})).status,401);
+});
+test('invalid biometric attempts are limited separately from password access',async()=>{
+ await bioSetup();for(let i=0;i<30;i++)assert.equal((await call('auth/native/refresh',{credential:'x'.repeat(43)})).status,401);assert.equal((await call('auth/native/refresh',{credential:'x'.repeat(43)})).status,429);assert.equal((await call('admin/login',{password:env.ADMIN_PASSWORD})).status,200);
 });

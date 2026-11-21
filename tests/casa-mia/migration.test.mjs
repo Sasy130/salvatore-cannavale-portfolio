@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { PGlite } from "@electric-sql/pglite";
 import { migrationPlan } from "../../src/features/casa-mia/server/migration-plan.mjs";
-test("the shared migration block creates schema v6 atomically and can be rerun without changing records", async () => {
+test("the shared migration block creates schema v7 atomically and can be rerun without changing records", async () => {
   const pg = new PGlite();
   try {
     const plan = await migrationPlan();
@@ -13,7 +13,7 @@ test("the shared migration block creates schema v6 atomically and can be rerun w
     );
     assert.deepEqual(
       versions.rows.map((r) => r.version),
-      [1, 2, 3, 4, 5, 6],
+      [1, 2, 3, 4, 5, 6, 7],
     );
     assert.equal(
       Number(

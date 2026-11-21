@@ -1,6 +1,6 @@
 # DIMORA MIA — Android privato
 
-App Android nativa Java, package `it.dimoramia.owner`, minSdk 26, target/compile 35, versione 1.1.0. Nessuna WebView, browser incorporato, TWA o URL remoto usato come interfaccia. Le schermate sono widget Android e chiamano le API HTTPS del portfolio. La rete rimane necessaria per dati condivisi e push.
+App Android nativa Java, package `it.dimoramia.owner`, minSdk 26, target/compile 35, versione 1.2.0. Nessuna WebView, browser incorporato, TWA o URL remoto usato come interfaccia. Le schermate sono widget Android e chiamano le API HTTPS del portfolio. La rete rimane necessaria per dati condivisi e push.
 
 ## Implementato
 
@@ -39,3 +39,13 @@ Logo DM definitivo su launcher adattivo, ingresso e intestazione. Icone di navig
 Test aggiuntivi per filtri, agenda attraverso cambio ora, UI Home senza notifiche, motion ridotto e promemoria all-day UTC. Gli aggiornamenti APK sono sempre firmati con la chiave 1.0 originale.
 
 La ricostruzione finale 1.1.0 usa versionCode 3: include il controllo del cambio di giorno in Europe/Rome anche senza modifiche ai record server.
+
+## Aggiornamento 1.2.0 (versionCode 4)
+
+Accesso biometrico opzionale da Regole → Accesso e privacy, Android 9+ con biometria forte. Primo accesso sempre con password. BiometricPrompt usa CryptoObject e Android Keystore con autenticazione per ogni utilizzo; nessuna impronta o password viene conservata. Una credenziale casuale server di durata 90 giorni è cifrata AES-GCM sul dispositivo. Il server conserva soltanto HMAC con CASA_MIA_NATIVE_AUTH_SECRET (almeno 32 caratteri), distinto dalla password. La migrazione 007 collega le sessioni al dispositivo per revocarle tutte insieme. Revoca, scadenza, cambio password o segreto impediscono nuovi accessi biometrici. Modifiche alle impronte possono invalidare la chiave locale: resta il percorso password.
+
+Con biometria attiva, passaggio in background e nuovo avvio nascondono i dati; risposte di rete precedenti al blocco vengono ignorate. FLAG_SECURE protegge schermate e anteprima recenti. Rete necessaria per verificare la credenziale e caricare le prenotazioni. Disconnessione revoca credenziale e sessioni collegate; disattivazione impronta torna alla password.
+
+Nuova intestazione verde profondo, gerarchia avorio/champagne, schede e stati più leggibili. Indicatore di sincronizzazione Canvas, animato soltanto durante aggiornamenti visibili, rispettando animazioni di sistema disattivate. Nessun riquadro notifiche in Home.
+
+14 test Android/JUnit/Robolectric, lint release e 64 test backend passati. Test hardware di consenso/riconoscimento biometrico sul Samsung da completare dal proprietario: Robolectric verifica blocco, fallback e protezione da intent, non il sensore fisico. Firebase resta da configurare; questo aggiornamento non dichiara attive le push native.

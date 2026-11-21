@@ -11,6 +11,7 @@ export async function migrationPlan() {
     "004_receipts_outbox.sql",
     "005_web_push.sql",
     "006_native_android.sql",
+    "007_native_biometric_auth.sql",
   ];
   let body = "PERFORM pg_advisory_xact_lock(51896533);\n" + initial;
   for (let i = 0; i < files.length; i++) {

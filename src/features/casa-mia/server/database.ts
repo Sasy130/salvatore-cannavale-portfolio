@@ -19,6 +19,7 @@ export function getDatabase() {
 export function bookingEnvironment() {
   return {
     DB: getDatabase(),
+    NATIVE_AUTH_SECRET: process.env.CASA_MIA_NATIVE_AUTH_SECRET,
     ADMIN_PASSWORD: process.env.CASA_MIA_ADMIN_PASSWORD,
     STRIPE_SECRET_KEY: process.env.CASA_MIA_STRIPE_SECRET_KEY,
     STRIPE_WEBHOOK_SECRET: process.env.CASA_MIA_STRIPE_WEBHOOK_SECRET,

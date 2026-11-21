@@ -179,3 +179,9 @@ Agenda dei prossimi sette giorni con partenze prima degli arrivi nella stessa da
 Release firmata con la stessa chiave/certificato della 1.0, aggiornamento sopra la copia esistente. APK, hash, metadati e pagina download aggiornati sullo stesso URL. Test JUnit/Robolectric su importi, stati/filtri, sette giorni e cambio ora, Home senza notifiche, calendario, riduzione movimento e Intent promemoria; lint e firma verificati. Le prove fisiche sul telefono restano del proprietario. Nessuna migrazione, credenziale o configurazione Firebase modificata: notifiche native ancora da configurare, non dichiararle attive con questo aggiornamento grafico.
 
 Verifica aggiuntiva 1.1.0 (build 3): l’agenda viene ricostruita quando cambia il giorno a Roma anche se il JSON server è identico; il resto dei refresh resta senza animazioni o salto dello scroll.
+
+## DIMORA MIA — APK 1.2.0, versionCode 4
+
+Accesso biometrico opzionale nativo con CryptoObject e credenziale server casuale cifrata per uso tramite Android Keystore; password alternativa. Blocco in background, dati rimossi dalle viste, FLAG_SECURE e guardia di generazione sulle risposte asincrone. Revoca server di tutte le sessioni biometriche collegate, durata credenziale 90 giorni, invalidazione al cambio password/segreto. Nessuna impronta o password salvata. Migrazione additiva 007 applicata a Neon; CASA_MIA_NATIVE_AUTH_SECRET configurato sensibile in Production, valore fuori repository.
+
+Nuovo stile verde profondo/avorio/champagne e indicatore Canvas con lifecycle/reduced-motion. APK stessa firma originale e package, aggiornabile senza disinstallare. Test Android 14, backend 64, lint e build release; riconoscimento fisico Samsung resta da provare. Firebase, email, Stripe live e retry periodici mantengono le limitazioni già documentate.
