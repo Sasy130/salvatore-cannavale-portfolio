@@ -41,15 +41,22 @@ try{
   // A booking shortcut remains available in the cinematic sequence, and hides in dialogs.
   await page.evaluate(()=>scrollTo({top:innerHeight*2,behavior:'instant'}));
   await expect(page.locator('.booking-dock')).toHaveAttribute('aria-hidden','false');
-  await page.locator('.explore-toggle').click();
+  await expect(page.locator('.explore-toggle')).toHaveCount(0);
+  await expect(page.locator('.hero-seal')).toHaveCount(0);
+  await expect(page.locator('.nav .book-link')).toHaveText(/^Prenota/);
+  await page.locator('.editorial-gallery [data-gallery]').click();
   await expect(page.locator('.booking-dock')).toHaveAttribute('aria-hidden','true');
-  await page.locator('.menu-close').click();
+  await page.locator('#gallery-dialog .close-dialog').click();
   await expect(page.locator('.booking-dock')).toHaveAttribute('aria-hidden','false');
   await page.locator('.booking-dock a').click();
   await expect(page.locator('.booking-dock')).toHaveAttribute('aria-hidden','true');
   await page.waitForTimeout(1000);
   expect(await page.locator('#booking-title').evaluate(e=>getComputedStyle(e).color)).toBe('rgb(52, 57, 46)');
   await page.screenshot({path:`${output}/${name}-booking.png`});
+  if(width<700){
+    const introHeight=await page.locator('.booking-heading').evaluate(element=>element.getBoundingClientRect().height);
+    expect(introHeight).toBeLessThan(250);
+  }
   await page.locator('[name=checkin]').fill(start);await page.locator('[name=checkin]').dispatchEvent('change');
   const date=new Date();const months=(year-date.getFullYear())*12+1-date.getMonth();
   for(let i=0;i<months;i++)await page.locator('#next-month').click();
@@ -72,6 +79,14 @@ try{
   expect(requests.filter(r=>r.path==='book')).toHaveLength(1);
   expect(requests.find(r=>r.path==='book').input.expectedTotal).toBe(60000);
   await page.screenshot({path:`${output}/${name}-confirmation.png`});
+  // Day/night follows the curve in both directions, with no jump at the start.
+  await page.evaluate(()=>scrollTo({top:document.querySelector('.journey').offsetTop+(document.querySelector('.journey').offsetHeight-innerHeight)*.9,behavior:'instant'}));
+  await page.waitForTimeout(800);
+  const late=Number(await page.locator('.light-orb').getAttribute('cx'));
+  await page.screenshot({path:`${output}/${name}-evening.png`});
+  await page.evaluate(()=>scrollTo({top:document.querySelector('.journey').offsetTop+(document.querySelector('.journey').offsetHeight-innerHeight)*.72,behavior:'instant'}));
+  await page.waitForTimeout(800);
+  expect(Number(await page.locator('.light-orb').getAttribute('cx'))).toBeLessThan(late);
   // Reverse scroll must restore the arrival, not leave the final copy over the hero.
   await page.evaluate(()=>scrollTo({top:0,behavior:'instant'}));await page.waitForTimeout(1000);
   expect(await page.locator('.copy-booking').evaluate(e=>getComputedStyle(e).visibility)).toBe('hidden');

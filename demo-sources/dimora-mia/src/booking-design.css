@@ -61,3 +61,16 @@ html:has(body.reduced){scroll-behavior:auto}
 .book-link>span:after,.direct-cta>span:after,.scene-book-link>span:after,.booking-dock a>span:after,.round-link .circle:after,.text-link>span:after,.menu-book>span:after,.chapter-menu i:after{content:'';display:block;width:18px;height:18px;background:currentColor;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 19 19 5M5 5h14v14' fill='none' stroke='black' stroke-width='1.4'/%3E%3C/svg%3E") center/contain no-repeat}
 .hero-seal>span{font-size:0!important}.hero-seal>span:after{content:'';display:block;width:32px;height:32px;background:#687653;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M20 2v36M2 20h36M7 7l26 26M7 33 33 7' stroke='black' stroke-width='2'/%3E%3C/svg%3E") center/contain no-repeat}
 @media(max-width:380px){.nav .explore-toggle>span{display:none}.nav .explore-toggle{width:44px;height:44px;justify-content:center;padding:12px;flex-shrink:0}}
+/* Compact booking, with the dates before the explanation. */
+.booking-section{padding:64px 8%;gap:6%;align-items:center}
+.booking-heading{padding:0}.booking-heading h2{font-size:clamp(48px,4.7vw,72px);margin:17px 0 15px;line-height:1.02}.booking-heading>p{font-size:13px}.booking-heading small{margin-top:18px;font-size:9px;max-width:340px}
+.booking-card{padding:24px;max-width:490px}.card-top{font-size:27px;margin-bottom:18px}.date-fields{padding-bottom:12px}.guest-field{padding:8px 0}.calendar-top{margin:12px 0 8px}.calendar-help{margin-bottom:10px}.quote{margin-top:16px;padding:14px 0 12px}.card-foot{margin-top:12px}
+.light-clock{width:min(270px,72vw);color:#f2ddba;margin-top:24px}.light-clock svg{width:100%;height:auto;display:block;overflow:visible}.light-stages{display:flex;justify-content:space-between;gap:12px;font-size:8px;letter-spacing:.9px;margin-top:9px}.light-gold,.light-evening{opacity:.4}
+.hero-seal,.little-star{display:none}.amenities{justify-content:space-between;gap:20px}.manifesto-strip{gap:6vw}.manifesto-strip>span+span:before{content:'—';padding-right:6vw;font-style:normal;opacity:.4}
+.nav .nav-right{gap:0}.nav .book-link{padding:13px 22px;gap:25px;font-size:11px}.hero-copy .round-link{display:none}
+@media(max-width:700px){.journey{height:590svh}.booking-section{padding:32px 6% 42px;gap:20px}.booking-heading{width:100%}.booking-heading>.eyebrow{font-size:8px;letter-spacing:1.4px}.booking-heading h2{font-size:43px;margin:12px 0 10px;letter-spacing:-1.8px}.booking-heading>p{font-size:12px;line-height:1.7}.booking-heading small{margin:12px 0 0;font-size:8px;line-height:1.7;max-width:none}.booking-card{padding:20px 18px}.calendar button{min-height:40px}.calendar-key{margin-top:10px}.nav .book-link{font-size:11px;padding:12px 18px;gap:18px}.light-clock{width:230px;margin-top:24px}.light-stages{font-size:8px}.copy-terrace{top:29%}.copy-terrace h2{font-size:13vw}.hero-actions{margin-top:18px}.hero-booking-note{max-width:150px}.scene-image{will-change:auto}}
+@media(max-width:370px){.booking-heading h2{font-size:39px}.booking-card{padding:18px 15px}.nav .book-link{padding:12px 16px}.calendar button{min-height:39px}}
+@media(prefers-reduced-motion:reduce){.light-clock{display:none}}
+body.reduced .light-clock{display:none}
+
+html{scroll-padding-top:80px}
