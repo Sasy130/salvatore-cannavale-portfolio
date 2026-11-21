@@ -1,3 +1,13 @@
+# Metodo creativo al posto dell’elenco duplicato — 21 novembre 2026
+
+Rimosso il blocco «Scegli dove entrare» che ripeteva i progetti. Inserita la sezione «Prima l’idea. Poi il segno.»: Identità, Interazione, Sviluppo, un segno vettoriale su desktop e CTA reale ai contatti. Menu Metodo → #metodo; vecchio #indice compatibile. Sezione progetti e copertine preservate.
+
+Componenti: components/vice/CreativeMethod.tsx e creative-method.css. Documentazione: docs/METODO-CREATIVO.md nell’archivio sorgente. Nessuna nuova dipendenza.
+
+Verifiche: TypeScript, lint e build statica di produzione superati; 13/13 scenari Playwright passati, inclusi axe, menu Metodo, CTA contatti, formati 320/390/768/1440, regressioni intro/progetti e touch. Mobile verificato in emulazione Chromium.
+
+---
+
 # Progetti: selezione editoriale — 21 novembre 2026
 
 Sostituita soltanto la galleria di copertine con un indice numerato e anteprima sticky su desktop, dettagli espandibili su mobile/tablet. Selezione mouse/tastiera/tocco, rivelazione tramite clip-path, reduced motion e dettagli HTML utilizzabili senza script. Conservati tredici lavori, copertine, demo, dialogo progetto, intro SC, hero tipografica, menu e sezioni successive. Nessuna nuova dipendenza.
