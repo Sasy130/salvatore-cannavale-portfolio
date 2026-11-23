@@ -1,3 +1,13 @@
+# Dalla mappa al sito — 23 novembre 2026
+
+Nuova sezione dedicata alla serie personale di redesign del territorio, pensata per Instagram. A&J Rent Car e Rent Car Station sono spostati qui dall’indice principale: undici progetti personali e due proposte nella serie, senza duplicati. Menu «La serie», ancora #dalla-mappa-al-sito, copertine e dialoghi/demo esistenti riutilizzati. Proposte indipendenti, nessuna collaborazione o pubblicazione Instagram inventata.
+
+Configurazione: lib/local-series.ts (testi, ordine degli slug, eventuale URL Instagram futuro). Componente LocalRedesignSeries.tsx, stile local-redesign-series.css; guida docs/SERIE-TERRITORIO.md nell’archivio sorgente. Nessuna nuova dipendenza o API Maps.
+
+Verifiche: TypeScript, lint e build statica di produzione superati; suite Playwright 14/14 passati, inclusi i due casi della serie con apertura/chiusura e focus, menu, axe e formati 320/390/768/1440, oltre alle regressioni intro e portfolio. Mobile verificato in emulazione Chromium. Le altre applicazioni e i backend nel repository sono preservati.
+
+---
+
 # Copertine dei siti e finale tipografico — 21 novembre 2026
 
 La sezione «I miei progetti» chiarisce l’autorialità personale richiesta dal titolare. Dodici nuove schermate delle pagine effettive sostituiscono le precedenti copertine; per VELMORA è conservata la schermata completa già disponibile, ricodificata WebP, perché la nuova cattura 3D in questo ambiente non è risultata affidabile. Nuova resa contain per preservare la composizione. Descrizioni dimostrative e indicazione dei redesign indipendenti preservate.
